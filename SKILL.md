@@ -55,7 +55,7 @@ SpecForge arbeitet **ausschließlich** mit:
 
 1. **Session-Kontext**: Informationen aus der **aktuellen** Konversation
 2. **Eigenrecherche via Web Search**: Regulatorische Vorgaben, Standards, Domänenwissen — eigenständig recherchiert
-3. **Skill-eigene Referenzen**: Dateien in `references/`
+3. **Skill-eigene Referenzen**: Anhänge A–I (inline am Ende dieser Datei)
 
 **VERBOTEN:** Memories, Vorwissen über Nutzer/Projekte/Organisationen, Annahmen ohne Session-Grundlage.
 
@@ -109,7 +109,7 @@ design/                  ← Design-Dokumente, Wireframes, Datenmodelle
 tech-debt-tracker.md     ← Schuldenregister mit IDs und Verantwortlichen
 ```
 
-Siehe `references/folder-convention.md` für Details und Namenskonventionen.
+Siehe Anhang G (Folder Convention) für Details und Namenskonventionen.
 
 ---
 
@@ -130,7 +130,7 @@ Jede `constitution.md` enthält die Golden Principles als enforceable Regeln. Sp
 | GP-09 | Abhängigkeitsrichtung | Consumer ≠ Provider-Interna | Review Agents |
 | GP-10 | Schulden-Tracking | Debt in tech-debt-tracker.md | Harness Auditor |
 
-Siehe `references/golden-principles.md` für Details und Beispiele.
+Siehe Anhang F (Golden Principles) für Details und Beispiele.
 
 ---
 
@@ -211,17 +211,17 @@ Wenn noch keine Projektprinzipien existieren:
 2. `constitution.md` erzeugen mit: Projektprinzipien, Golden Principles (GP-01–GP-10), regulatorischem Rahmen (KRITIS/NIS2/DSGVO), Sicherheits-Baseline, Definition of Done auf Spec-Ebene
 3. Lücken gezielt erfragen — maximal 3 Fragen pro Runde
 
-Siehe `references/constitution-template.md` für das vollständige Template.
+Siehe Anhang B (Constitution Template) für das vollständige Template.
 
 **Phase 1b: Spec erstellen**
 
 1. **Kontexterfassung** — Max. 3 Fragen zu Domäne, Nutzergruppe, Systemgrenzen
 2. **Web-Recherche** — Eigenständig regulatorische/domänenspezifische Anforderungen recherchieren
 3. **Stakeholder-Simulation** — Mind. 3 Perspektiven durchspielen (siehe Modus 3)
-4. **Spec schreiben** — Im Spec-Kit-Format `spec.md` (siehe `references/spec-template.md`)
-5. **EARS-Formulierung** — Jedes Requirement in EARS-Syntax (siehe `references/ears-syntax.md`)
-6. **KRITIS-NFR-Scan** — Automatisch gegen Checkliste (siehe `references/kritis-nfr-checklist.md`)
-7. **STRIDE-Analyse** — Security-Review gegen alle 6 Kategorien (siehe `references/stride-checklist.md`)
+4. **Spec schreiben** — Im Spec-Kit-Format `spec.md` (siehe Anhang A)
+5. **EARS-Formulierung** — Jedes Requirement in EARS-Syntax (siehe Anhang C)
+6. **KRITIS-NFR-Scan** — Automatisch gegen Checkliste (siehe Anhang D)
+7. **STRIDE-Analyse** — Security-Review gegen alle 6 Kategorien (siehe Anhang E)
 8. **Self-Assessment** — Spec gegen Constitution + Golden Principles prüfen
 9. **Validierung** — Nutzer einmal fragen: "Deckt das dein Szenario ab?"
 
@@ -792,7 +792,9 @@ Ablauf:
 **Delta:** Arbeitsrichtung ist umgekehrt zu Modus 1 (Specify). Statt von einer Idee vorwärts wird von bestehendem System rückwärts gearbeitet. Der Anspruch an die erzeugte spec.md ist identisch — EARS, Gherkin, STRIDE, KRITIS, Golden Principles gelten vollständig.
 **Verify:** Beschreibt die erzeugte spec.md das bestehende System vollständig und korrekt? Würde ein Entwickler ohne Vorkenntnisse das System allein aus der Spec nachbauen?
 
-**Trigger:** Nutzer übergibt bestehenden Code, Systemdokumentation, Architekturdiagramme oder beschreibt ein existierendes System. Erkennbare Phrasen: "dokumentiere den Bestand", "reverse-engineer die Spec", "was macht dieses System", "erstelle eine Spec aus dem Code", "Bestandsaufnahme", "As-Is-Dokumentation".
+**Trigger:** Nutzer übergibt bestehenden Code, Systemdokumentation, Architekturdiagramme, kompilierte Artefakte (IPA, APK, Binary, WAR, Docker Image) oder beschreibt ein existierendes System. Erkennbare Phrasen: "dokumentiere den Bestand", "reverse-engineer die Spec", "was macht dieses System", "erstelle eine Spec aus dem Code", "Bestandsaufnahme", "As-Is-Dokumentation".
+
+**Enforcement:** Modus 9 folgt dem Reverse-Engineering-Pfad der State Machine (Anhang I). Phase Gates: G0 → G1-RE → G2-RE (5W-Pflichtblock) → G3-RE → G4 → G5 → G6 → G7 → G8. Die **5W-Analyse** (WER/WAS/WARUM/WIE/WANN) ist das erste Pflicht-Artefakt — Details und Template siehe Anhang I.4.
 
 **Wann einsetzen:**
 - Bestehendes System ohne oder mit veralteter Dokumentation
@@ -927,7 +929,7 @@ Nach Vollständigkeit folgt Qualitätssicherung der Spec selbst (identisch zu Mo
 
 ## Output-Format: User Story
 
-Siehe `references/spec-template.md` für das vollständige Template. Kurzform:
+Siehe Anhang A (Spec Template) für das vollständige Template. Kurzform:
 
 ```markdown
 ### [SF-XXX-NNN] [Titel]
@@ -1017,12 +1019,14 @@ migration-delta.md           ← Modus 9 Phase 9e (Optional: Ist/Soll-Delta)
 17. **Aktivieren-Eingrenzen-Prüfen-Muster durchgängig nutzen** — etablierte Methodiken aktivieren statt ad-hoc beschreiben
 18. **Morphological Box + Pugh Matrix bei Technologieentscheidungen mit 3+ Alternativen**
 19. **Discover-Modus bei Bestandssystemen empfehlen** — zwei QS-Schleifen (Vollständigkeit + Konsistenz/Stringenz) sind Pflicht, kein Abkürzen
+20. **Enforcement Engine (Anhang I) bei jedem Output prüfen** — Phase Gates sind Pflicht, kein Überspringen ohne Skip-Protokoll
+21. **5W-Pflichtblock bei Reverse-Engineering** — vor constitution.md und spec.md (Anhang I.4)
 
 ---
 
 ## Referenzen (inline)
 
-Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–H am Ende der Datei.
+Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–I am Ende der Datei.
 
 ---
 
@@ -1050,6 +1054,10 @@ Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–H am Ende
 20. **Stakeholder-Review als Devil's Advocate** — Steelmanning statt Strohmann
 21. **Discover: Zwei QS-Schleifen sind Pflicht** — Schleife 1 (Vollständigkeit) und Schleife 2 (Konsistenz/Stringenz) dürfen nicht übersprungen oder zusammengefasst werden
 22. **Discover: Rückwärts-Validierung** — Jede Story muss auf ein korrespondierendes Verhalten im Bestandssystem rückverfolgbar sein
+23. **Phase Gates sind Pflicht** — kein Phasenübergang ohne bestandenes Gate (Anhang I.2), Überspringen nur mit Skip-Protokoll
+24. **Artefakt-Vollständigkeits-Check vor COMPLETE** — Enforcement Engine (Anhang I.5) prüft die gesamte Artefaktkette
+25. **5W-Analyse bei Reverse-Engineering vor Spec** — Pflicht-Artefakt mit Evidenz und Konfidenz (Anhang I.4)
+26. **Anti-Pattern-Erkennung per Enforcement Engine** — 7 Anti-Patterns werden automatisch bei jeder Story geprüft (Anhang I.3)
 
 ---
 ---
@@ -2466,5 +2474,460 @@ SpecForge kann die Einhaltung der Spec-First Chain für abgeschlossene Tasks pr�
 
 **Chain-Compliance:** 1/3 Tasks vollständig (33%)
 **Fehlende Schritte:** Fixture (1x), Breaking Change Log (1x), ARCHITECTURE.md (1x), Consumer (1x)
+```
+
+---
+
+## Anhang I: Enforcement Engine — Phase Gates & State Machine
+
+**Wann konsultieren:** IMMER — dieser Anhang wird VOR jeder Ausgabe geprüft. Er ist kein optionaler Anhang, sondern der Governance-Compiler von SpecForge.
+
+**Leitprinzip:** Governance ist ein Compiler, kein Komitee. Dieser Anhang implementiert den Compiler.
+
+---
+
+### I.1 Interne State Machine
+
+SpecForge führt intern einen **Pipeline-State** mit. Jede Session beginnt im Zustand `INIT`. Übergänge sind nur über Phase Gates möglich. Überspringen ist **nur** mit expliziter Begründung und Nutzer-Bestätigung erlaubt — SpecForge fragt aktiv nach.
+
+```
+State Machine:
+
+  INIT
+   │
+   ▼ [Gate G0: Modus-Erkennung]
+  MODE_DETECTED ──────────────────┐
+   │                               │
+   ├─ Forward-Engineering          ├─ Reverse-Engineering
+   │                               │
+   ▼ [Gate G1]                     ▼ [Gate G1-RE]
+  CYNEFIN_DONE                   INPUT_ANALYZED
+   │                               │
+   ▼ [Gate G2]                     ▼ [Gate G2-RE]
+  CONSTITUTION_DONE              5W_EXTRACTED
+   │                               │
+   ▼ [Gate G3]                     ▼ [Gate G3-RE]
+  SPEC_DONE                      SPEC_DONE
+   │                               │
+   ▼ [Gate G4]                     ▼ [Gate G4]
+  CLARIFY_DONE                   CLARIFY_DONE
+   │                               │
+   ▼ [Gate G5]                     ▼ [Gate G5]
+  PLAN_DONE                      PLAN_DONE
+   │                               │
+   ▼ [Gate G6]                     ▼ [Gate G6]
+  TASKS_DONE                     TASKS_DONE
+   │                               │
+   ▼ [Gate G7]                     ▼ [Gate G7]
+  ANALYZE_DONE                   ANALYZE_DONE
+   │                               │
+   ▼ [Gate G8]                     ▼ [Gate G8]
+  REVIEW_DONE                    REVIEW_DONE
+   │                               │
+   ▼                               ▼
+  COMPLETE                       COMPLETE
+```
+
+---
+
+### I.2 Phase Gates — Pflichtprüfungen
+
+Jedes Gate hat **Eingangsvoraussetzungen**. Wenn die Voraussetzungen nicht erfüllt sind, **blockiert** SpecForge den Übergang und gibt eine strukturierte Fehlermeldung:
+
+```
+⛔ PHASE GATE BLOCKED: [Gate-ID]
+Voraussetzung nicht erfüllt: [was fehlt]
+Aktuelle Phase: [aktueller State]
+Nächste Phase: [gewünschter State]
+Aktion: [was der Nutzer tun muss]
+Überspringen möglich: [Ja/Nein + Bedingung]
+```
+
+#### Gate G0: Modus-Erkennung
+
+**Prüft:** Was ist der Input?
+- Quellcode, IPA, APK, Binary, Artefakt → **Reverse-Engineering-Modus** aktivieren
+- Feature-Beschreibung, Problem, Idee → **Forward-Engineering-Modus**
+- Bestehende spec.md / Requirements → **Review-Modus**
+
+**Aktion bei Unklarheit:** SpecForge fragt:
+> "Ich erkenne [Input-Typ]. Soll ich (a) ein bestehendes System dokumentieren (Reverse-Engineering), (b) ein neues Feature spezifizieren (Forward-Engineering), oder (c) bestehende Requirements prüfen (Review)?"
+
+#### Gate G1: Cynefin + Impact Mapping (Forward)
+
+**Voraussetzung:** Modus = Forward-Engineering
+**Prüft:**
+- [ ] Cynefin-Einordnung durchgeführt (Klar/Kompliziert/Komplex/Chaotisch)
+- [ ] Impact Map erstellt (Ziel → Akteure → Auswirkungen → Liefergegenstände)
+- [ ] Formalismus-Grad bestimmt und dokumentiert
+
+**Überspringen:** Nur bei explizitem Nutzer-Override + Begründung wird als `[SKIP-G1: Begründung]` dokumentiert.
+
+#### Gate G1-RE: Input-Analyse (Reverse-Engineering)
+
+**Voraussetzung:** Modus = Reverse-Engineering
+**Prüft:**
+- [ ] Input vollständig extrahiert (Binary, Metadaten, Strings, Assets, Konfigurationen)
+- [ ] Extraktionsbericht erstellt (was wurde gefunden, was ist die Evidenz-Qualität)
+- [ ] Analysemethoden dokumentiert
+
+**Blockiert wenn:** Extraktion nicht abgeschlossen oder Input nicht lesbar.
+
+#### Gate G2: Constitution (Forward) / G2-RE: 5W-Extraktion (Reverse)
+
+**Forward — Prüft:**
+- [ ] constitution.md erstellt
+- [ ] Zweck + Leitbild + Nicht-Ziele vorhanden
+- [ ] Golden Principles GP-01–GP-10 projektspezifisch formuliert
+- [ ] Regulatorischer Rahmen (KRITIS/NIS2/DSGVO) bewertet
+- [ ] Sicherheits-Baseline definiert
+- [ ] Testanforderungen definiert
+- [ ] Definition of Done vorhanden
+
+**Reverse — 5W-Pflichtprüfung — Prüft:**
+- [ ] W₁ WER: Nutzergruppen identifiziert mit Evidenz
+- [ ] W₁ WER: Berechtigungsmodell dokumentiert (falls erkennbar)
+- [ ] W₂ WAS: Kernfunktionen aufgelistet mit Evidenz-Stärke (Stark/Mittel/Schwach)
+- [ ] W₂ WAS: Explizites "Out of Scope" mit negativer Evidenz ("nicht im Binary")
+- [ ] W₃ WARUM: Business-Ziele abgeleitet mit Evidenz
+- [ ] W₃ WARUM: MoSCoW-Priorisierung der Ziele
+- [ ] W₄ WIE: Tech-Stack vollständig mit Versionen
+- [ ] W₄ WIE: Architektur-Prinzipien abgeleitet
+- [ ] W₅ WANN/WO: Nutzungskontexte identifiziert
+- [ ] W₅ WANN/WO: Zeitmodell (Echtzeit/Periodisch/Historisch)
+- [ ] Ableitungsmatrix: Jedes W → Spec-Abschnitt zugeordnet
+- [ ] Offene Klärungsfragen dokumentiert (was konnte NICHT beantwortet werden)
+
+**Blockiert wenn:** Eine W-Frage hat weder Antwort noch dokumentierte Begründung für "nicht beantwortbar".
+
+#### Gate G3: Spec
+
+**Prüft (Spec-Readiness-Checklist — automatisch, nicht separat erstellen):**
+- [ ] Jede Story hat EARS-Formulierung mit explizit benanntem Pattern
+- [ ] Jede Story hat ≥2 Gherkin-Szenarien (Happy Path + Error/Edge Case)
+- [ ] Keine vagen Begriffe ohne Quantifizierung (Scan auf: "schnell", "viele", "einfach", "sicher", "performant", "skalierbar")
+- [ ] Annahmen mit `[Annahme: A-NNN]` markiert
+- [ ] KRITIS-NFR-Scan durchgeführt (Anhang D)
+- [ ] STRIDE für security-relevante Stories (Anhang E)
+- [ ] Stakeholder-Tabelle vorhanden
+- [ ] Datenmodell in DDD-Sprache (Bounded Contexts, Entities, Value Objects, Aggregates, Domain Events)
+- [ ] Systemgrenzen & Schnittstellen definiert
+- [ ] Übersichtstabelle (§11) bei ≥3 Stories
+- [ ] ID-Schema korrekt (SF-[Präfix]-[NNN])
+- [ ] Self-Assessment gegen Constitution durchgeführt
+
+**Blockiert wenn:** Readiness-Score < 80% (weniger als 80% der Checkpunkte erfüllt).
+
+**Output bei Blockade:** SpecForge gibt die fehlenden Punkte als priorisierte Liste aus und bietet an, sie zu beheben.
+
+#### Gate G4: Clarify
+
+**Prüft:**
+- [ ] Coverage-Analyse durchgeführt (Phase 2a)
+- [ ] Sokratische Fragen gestellt — min. 1 Runde (Phase 2b)
+- [ ] Fragen mit Schweregrad gelabelt ([BLOCKER] / [MAJOR] / [MINOR])
+- [ ] Jede Frage referenziert eine Story-ID oder Spec-Abschnitt
+- [ ] Fragen bieten konkrete Optionen (nicht offen)
+- [ ] Antworten in Clarifications-Tabelle dokumentiert (Phase 2c)
+- [ ] Betroffene Requirements aktualisiert (Phase 2d)
+- [ ] Keine offenen [BLOCKER]-Fragen
+
+**Überspringen:** Nur bei dokumentiertem Spike/PoC — SpecForge fragt explizit:
+> "Clarify ist Phase Gate. Möchtest du (a) Clarify jetzt durchführen, oder (b) explizit überspringen? Bei (b): Ist das ein Spike/PoC?"
+
+**Reverse-Engineering-Sonderregel:** Bei Reverse-Engineering ersetzt die 5W-Analyse einen Teil der Clarify-Phase. Gate G4 prüft zusätzlich:
+- [ ] Offene Klärungsfragen aus 5W (Q-001 bis Q-NNN) sind als [BLOCKER/MAJOR/MINOR] eingestuft
+- [ ] Für jede Frage ist dokumentiert, ob sie ohne Quellcode beantwortbar ist
+
+#### Gate G5: Plan + Research
+
+**Prüft:**
+- [ ] plan.md erstellt
+- [ ] Architekturentscheidungen mit ADR-Referenz (bei ≥1 Entscheidung mit ≥3 Alternativen: Morphological Box + Pugh Matrix)
+- [ ] Sicherheitsarchitektur dokumentiert (STRIDE-informed)
+- [ ] research.md erstellt (bei Tech-Stack mit schnellen Release-Zyklen: Pflicht)
+- [ ] Versions-Matrix ausgefüllt
+- [ ] Security Advisories geprüft (Web-Recherche — nicht nur aus Gedächtnis)
+- [ ] Compliance-Mapping (Anforderung → Komponente → Status)
+- [ ] quickstart.md erstellt (bei Forward-Engineering Pflicht; bei Reverse optional)
+
+**Blockiert wenn:** research.md fehlt bei Framework-Versionen, die älter als 6 Monate sind.
+
+#### Gate G6: Tasks
+
+**Prüft:**
+- [ ] tasks.md erstellt
+- [ ] Jeder Task hat Spec-First Chain Steps markiert ([1,2,3,...])
+- [ ] Jeder Task hat Typ-Annotation (Neues Feature / Security Fix / Dependency / etc.)
+- [ ] Jeder Task hat MoSCoW-Priorität
+- [ ] Parallelisierungsmatrix vorhanden (Blockiert durch / Parallelisierbar mit)
+- [ ] ExecPlan-Pflicht bei Tasks mit 5+ Dateien markiert (GP-04)
+- [ ] Jeder Task referenziert mindestens eine Story-ID
+
+**Blockiert wenn:** Ein Task ohne Story-Referenz existiert (verwaister Task, GP-02-Verstoß).
+
+#### Gate G7: Analyze (MECE)
+
+**Prüft:**
+- [ ] Analyze-Report erstellt
+- [ ] Alle 5 MECE-Dimensionen geprüft
+- [ ] Befunde mit Schweregrad (BLOCKER/MAJOR/MINOR)
+- [ ] GP-Score berechnet (X/10)
+- [ ] Keine offenen BLOCKER-Befunde
+
+**Re-Analyze-Loop:** Wenn BLOCKER-Befunde existieren:
+1. SpecForge listet die Befunde
+2. Bietet Fixes an oder fragt den Nutzer
+3. Nach Fix: Erneuter Analyze-Durchlauf
+4. Loop bis keine BLOCKER mehr
+
+**Blockiert wenn:** GP-Score < 8/10 oder offene BLOCKER.
+
+#### Gate G8: Review + Abschluss
+
+**Prüft:**
+- [ ] Stakeholder-Simulation durchgeführt (min. 3 Rollen)
+- [ ] Jede Rolle hat mindestens eine Annahme identifiziert
+- [ ] Review-Protokoll erstellt (3-Ebenen: Qualität, Governance, Security)
+- [ ] Traceability Matrix erstellt (Constitution → GP → Stories → ACs → Tasks)
+- [ ] tech-debt-tracker.md aktuell (alle identifizierten Schulden mit Owner)
+- [ ] Alle Checklists (Spec-Readiness + Plan-Readiness) erfüllt
+
+**Blockiert wenn:** Stakeholder-Simulation nicht durchgeführt.
+
+---
+
+### I.3 Enforcement-Verhalten
+
+#### Automatische Gate-Checks
+
+**VOR jeder Artefakt-Erzeugung** prüft SpecForge den aktuellen State und das erforderliche Gate:
+
+```
+Nutzer: "Erstelle den Plan."
+SpecForge (intern): Aktueller State = SPEC_DONE. Plan erfordert Gate G5. Aber Gate G4 (Clarify) wurde nicht passiert.
+SpecForge (Output):
+
+⛔ PHASE GATE BLOCKED: G4 (Clarify)
+Aktuell: SPEC_DONE
+Gewünscht: PLAN_DONE (erfordert G4 → G5)
+Fehlend: Clarify-Phase nicht durchlaufen.
+
+Ich kann den Plan erst erstellen, wenn wir die Spec durch eine Clarify-Runde geschärft haben.
+Soll ich (a) jetzt mit der Clarify-Phase starten, oder (b) Clarify explizit überspringen?
+Bei (b) dokumentiere ich [SKIP-G4] mit deiner Begründung.
+```
+
+#### Skip-Protokoll
+
+Wenn ein Gate übersprungen wird, dokumentiert SpecForge:
+
+```markdown
+## Skip-Log
+
+| Gate | Übersprungen am | Begründung | Risiko | Genehmigt durch |
+|------|----------------|-----------|--------|----------------|
+| G4 | 2026-03-15 | Reverse-Engineering, kein Stakeholder verfügbar | MAJOR: Offene Annahmen nicht validiert | Nutzer |
+```
+
+Das Skip-Log wird im Analyze-Report als Befund aufgeführt.
+
+#### Vage-Begriffe-Scanner
+
+Bei jeder Spec-Erzeugung scannt SpecForge automatisch auf vage Begriffe:
+
+**Watchlist:** schnell, langsam, viele, wenige, einfach, sicher, performant, skalierbar, robust, zuverlässig, benutzerfreundlich, intuitiv, modern, flexibel, effizient, optimiert, hochverfügbar, echtzeitfähig
+
+**Aktion:** Jeder Treffer wird mit Warnung markiert:
+
+```
+⚠️ Vager Begriff erkannt: "schnell" in SF-PER-001
+Aktuell: "Die API soll schnell antworten."
+Vorschlag: "Die API soll in ≤200ms p95 antworten, gemessen am API-Gateway."
+Quantifizierung erforderlich bevor Gate G3 passiert werden kann.
+```
+
+#### Anti-Pattern-Erkennung
+
+SpecForge prüft bei jeder Story auf bekannte Anti-Patterns:
+
+| Anti-Pattern | Erkennung | Aktion |
+|-------------|-----------|--------|
+| Implementation Bias | Story enthält Technologie-Details statt Nutzer-Bedürfnisse | Warnung + Umformulierungsvorschlag |
+| Gold Plating | Story hat kein Business-Ziel (kein "damit...") | Warnung + Nachfrage |
+| Implizite Annahme | Story setzt Wissen voraus, das nicht dokumentiert ist | `[Annahme: A-NNN]` einfügen |
+| Missing Negative | Nur Happy-Path-Szenarien, kein Fehlerfall | Warnung + Gherkin-Fehlerfall vorschlagen |
+| Scope Creep | Story lässt sich nicht auf Impact Map zurückführen | Warnung + Out-of-Scope prüfen |
+| Orphan Requirement | Requirement ohne zugeordneten Task | Analyze-Befund |
+| Orphan Task | Task ohne Story-Referenz | Gate G6 blockiert |
+
+---
+
+### I.4 Reverse-Engineering-Modus
+
+**Trigger:** Input ist ein kompiliertes Artefakt (IPA, APK, Binary, WAR, Docker Image, etc.)
+
+**Abweichungen vom Forward-Modus:**
+
+| Phase | Forward | Reverse |
+|-------|---------|---------|
+| Phase 0 | Cynefin + Impact Mapping | Input-Analyse + Extraktionsbericht |
+| Phase 1a | Constitution schreiben | Constitution aus Evidenz ableiten |
+| Phase 1b | Spec interaktiv erstellen | **5W-Analyse zuerst** → dann Spec |
+| Phase 2 | Sokratische Fragen an Nutzer | Offene Klärungsfragen dokumentieren + dem Nutzer vorlegen |
+| Phase 3b | Web-Recherche nach Versionen | **CVE-Recherche Pflicht** für alle erkannten Dependencies |
+| Phase 3c | quickstart.md | Optional (kein Repo zum Klonen) |
+| Modus 6 | Stakeholder-Sim live | Stakeholder-Sim gegen extrahierte Daten |
+
+**5W-Pflichtblock für Reverse-Engineering:**
+
+Bei jedem Reverse-Engineering-Durchlauf erzwingt SpecForge die 5W-Analyse als **erstes Artefakt**, bevor constitution.md oder spec.md erstellt werden. Jede Antwort muss mit konkreter Evidenz belegt sein:
+
+```markdown
+## 5W-Analyse: [Projektname]
+
+### W₁ WER nutzt das System?
+**Antwort:** [Identifizierte Nutzergruppen]
+**Evidenz:** [Konkrete Fundstelle im Binary/Metadaten]
+**Berechtigungsmodell:** [Falls erkennbar]
+**Konfidenz:** Hoch | Mittel | Niedrig
+
+### W₂ WAS tut das System?
+**Antwort:** [Kernfunktionen]
+**Evidenz:** [Strings, Routes, DTOs, Assets, ...]
+**Explizit NICHT vorhanden:** [Negativ-Evidenz: was im Binary fehlt]
+**Konfidenz:** Hoch | Mittel | Niedrig
+
+### W₃ WARUM existiert das System?
+**Antwort:** [Abgeleitete Business-Ziele]
+**Evidenz:** [Onboarding-Texte, Feature-Gewichtung, ...]
+**MoSCoW:** [Priorisierung der Ziele]
+**Konfidenz:** Hoch | Mittel | Niedrig
+
+### W₄ WIE ist das System gebaut?
+**Antwort:** [Tech-Stack mit Versionen]
+**Evidenz:** [Frameworks, Libraries, Configs, ...]
+**Architektur-Prinzipien:** [Abgeleitet aus Patterns im Code]
+**Konfidenz:** Hoch | Mittel | Niedrig
+
+### W₅ WANN und WO wird das System genutzt?
+**Antwort:** [Nutzungskontexte, Zeitmodell]
+**Evidenz:** [Permissions, Location-Handling, Scheduling, Distribution]
+**Konfidenz:** Hoch | Mittel | Niedrig
+
+### Ableitungsmatrix
+| W | Leitet ab → | Ziel-Artefakt |
+|---|-------------|---------------|
+
+### Offene Klärungsfragen
+| # | W | Frage | Schweregrad | Beantwortbar ohne Quellcode? |
+|---|---|-------|-------------|------------------------------|
+```
+
+**Gate G2-RE blockiert wenn:**
+- Eine W-Frage hat Konfidenz "Niedrig" ohne dokumentierte Begründung
+- Weniger als 3 der 5 W-Fragen haben Konfidenz "Hoch"
+- Keine Negativ-Evidenz dokumentiert (W₂ "NICHT vorhanden")
+- Ableitungsmatrix fehlt
+
+---
+
+### I.5 Artefakt-Vollständigkeits-Check
+
+**VOR Abschluss** (State = REVIEW_DONE → COMPLETE) prüft SpecForge die vollständige Artefaktkette:
+
+```markdown
+## Artefakt-Vollständigkeits-Check
+
+| Artefakt | Pflicht | Vorhanden | Gate | Status |
+|----------|---------|-----------|------|--------|
+| 5W-Analyse (nur RE) | Ja (RE) | ✅/❌ | G2-RE | |
+| constitution.md | Ja | ✅/❌ | G2 | |
+| ARCHITECTURE.md | Ja | ✅/❌ | G2 | |
+| spec.md | Ja | ✅/❌ | G3 | |
+| Clarifications | Ja | ✅/❌ | G4 | |
+| plan.md | Ja | ✅/❌ | G5 | |
+| research.md | Bedingt | ✅/❌/— | G5 | |
+| quickstart.md | Bedingt | ✅/❌/— | G5 | |
+| tasks.md | Ja | ✅/❌ | G6 | |
+| adr-*.md | Bedingt | ✅/❌/— | G5 | |
+| STRIDE-Analyse | Ja | ✅/❌ | G3 | |
+| tech-debt-tracker.md | Ja | ✅/❌ | G7 | |
+| Analyze-Report | Ja | ✅/❌ | G7 | |
+| Stakeholder-Simulation | Ja | ✅/❌ | G8 | |
+| Review-Protokoll | Ja | ✅/❌ | G8 | |
+| Traceability Matrix | Ja | ✅/❌ | G8 | |
+| Checklists | Ja | ✅/❌ | G8 | |
+| EP-*.md (ExecPlans) | Bedingt | ✅/❌/— | G6 | |
+| discovery-protocol.md (nur RE) | Ja (RE) | ✅/❌ | G1-RE | |
+| migration-delta.md (nur RE) | Bedingt | ✅/❌/— | G8 | |
+| Skip-Log | Bedingt | ✅/❌/— | — | |
+
+Pflicht-Artefakte vorhanden: X/Y
+Bedingte Artefakte: X anwendbar, Y vorhanden
+Übersprungene Gates: Z (im Skip-Log)
+```
+
+**Blockiert COMPLETE wenn:**
+- Ein Pflicht-Artefakt fehlt
+- Skip-Log hat ungenehmigten Skip
+
+---
+
+### I.6 Konsolidiertes Dokument — Enforcement
+
+Wenn der Nutzer "ein Dokument" oder "alles zusammen" anfordert, prüft SpecForge:
+
+**Pflicht-Kapitelreihenfolge im Dokument:**
+
+```
+0. Inhaltsverzeichnis
+1. 5W-Analyse (bei Reverse-Engineering) ODER Executive Summary (bei Forward)
+2. Constitution
+3. ARCHITECTURE.md
+4. spec.md (mit Clarifications, Stories, DDD, STRIDE-Zusammenfassung)
+5. plan.md (mit ADR-Zusammenfassungen)
+6. research.md
+7. tasks.md
+8. Analyze-Report
+9. Stakeholder-Simulation
+10. Review-Protokoll
+11. Traceability Matrix
+12. Tech-Debt-Tracker
+13. Skip-Log (falls vorhanden)
+14. Einschränkungen & Methodik
+```
+
+**Blockiert wenn:** Der Nutzer "ein Dokument" anfordert, aber die Artefaktkette nicht vollständig ist. SpecForge zeigt dann den Artefakt-Vollständigkeits-Check und fragt, welche fehlenden Teile erstellt werden sollen.
+
+---
+
+### I.7 Session-Status-Anzeige
+
+SpecForge zeigt den aktuellen Pipeline-Status auf Nachfrage oder bei Gate-Blockaden:
+
+```
+📋 SpecForge Pipeline-Status
+═══════════════════════════════
+Modus:          Reverse-Engineering
+Aktueller State: SPEC_DONE
+Nächstes Gate:   G4 (Clarify)
+
+Durchlaufen:
+  ✅ G0  Modus erkannt (RE)
+  ✅ G1-RE Input analysiert
+  ✅ G2-RE 5W extrahiert
+  ✅ G3  Spec erstellt
+
+Ausstehend:
+  ⬜ G4  Clarify
+  ⬜ G5  Plan + Research
+  ⬜ G6  Tasks
+  ⬜ G7  Analyze
+  ⬜ G8  Review + Abschluss
+
+Skips: 0
+Blocker: 0
+═══════════════════════════════
 ```
 

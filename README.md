@@ -31,6 +31,7 @@ SpecForge ist ein Claude-Skill (Cowork Plugin / Project Knowledge), der Requirem
 - **Cross-Artifact-Konsistenz** — Spec ↔ Plan ↔ Tasks Abgleich mit Re-Analyze-Loop
 - **EARS-Konformität** — jedes Requirement in einem der 5 EARS-Patterns
 - **Gherkin-Qualität** — min. 2 Szenarien pro Story
+- **Enforcement Engine** — Phase Gates G0–G8 mit State Machine, Skip-Protokoll und Artefakt-Vollständigkeits-Check
 
 ---
 
@@ -241,7 +242,7 @@ design/                ← Wireframes, Datenmodelle, Diagramme
 
 ## Skill-Architektur
 
-SpecForge ist als **Single-File-Skill** aufgebaut — die gesamte SKILL.md (100 KB, 2.400+ Zeilen) enthält sowohl die Skill-Logik als auch alle 8 Referenz-Anhänge inline:
+SpecForge ist als **Single-File-Skill** aufgebaut — die gesamte SKILL.md (~120 KB, 2.900+ Zeilen) enthält sowohl die Skill-Logik als auch alle 9 Referenz-Anhänge inline:
 
 ```
 SKILL.md
@@ -256,9 +257,9 @@ SKILL.md
 │   ├── Output-Format (User Story Template)
 │   ├── Artefakt-Übersicht
 │   ├── Sprachverhalten
-│   ├── Interaktionsregeln (19 Regeln)
-│   └── Qualitätsregeln (22 Regeln)
-└── Anhänge A–H (Referenzdokumente)
+│   ├── Interaktionsregeln (21 Regeln)
+│   └── Qualitätsregeln (26 Regeln)
+└── Anhänge A–I (Referenzdokumente)
     ├── A: Spec Template
     ├── B: Constitution Template
     ├── C: EARS-Syntax
@@ -266,7 +267,8 @@ SKILL.md
     ├── E: STRIDE-Checkliste
     ├── F: Golden Principles (Detail)
     ├── G: Folder Convention (Detail)
-    └── H: Spec-First Chain
+    ├── H: Spec-First Chain
+    └── I: Enforcement Engine (Phase Gates & State Machine)
 ```
 
 ### Warum Single-File?
@@ -421,7 +423,8 @@ Teste jeden Modus mit:
 | 1.0 | 2025-10 | Initial: Specify, Plan, Tasks, Review, Stakeholder-Sim, Management |
 | 2.0 | 2026-03 | +Clarify, +Analyze, +Checklist, +Research, +Quickstart. SpecKit v3 Alignment. RE Butler entfernt. Single-File-Architektur. |
 | 2.1 | 2026-03 | +Phase 0 (Cynefin + Impact Mapping), 15 methodische Frameworks mit Aktivieren-Eingrenzen-Prüfen-Muster, Sokratische Klärung, MECE-Analyse, Devil's Advocate + Steelmanning, Morphological Box + Pugh Matrix, DDD-Datenmodell, BLUF-Zusammenfassungen. |
-| 2.2 | 2026-03 | +Modus 9 Discover (Bestandsdokumentation & Reverse Spec). Zwei verpflichtende QS-Schleifen: Vollständigkeit + Konsistenz/Stringenz. Rückwärts-Validierung. discovery-protocol.md und migration-delta.md als neue Artefakte. 19 Interaktions- + 22 Qualitätsregeln. |
+| 2.2 | 2026-03 | +Modus 9 Discover (Bestandsdokumentation & Reverse Spec). Zwei verpflichtende QS-Schleifen: Vollständigkeit + Konsistenz/Stringenz. Rückwärts-Validierung. discovery-protocol.md und migration-delta.md als neue Artefakte. |
+| 2.3 | 2026-03 | +Anhang I Enforcement Engine: State Machine (INIT→COMPLETE), Phase Gates G0–G8, Skip-Protokoll, Vage-Begriffe-Scanner, Anti-Pattern-Erkennung. +5W-Pflichtblock für Reverse-Engineering (WER/WAS/WARUM/WIE/WANN mit Evidenz und Konfidenz). +Artefakt-Vollständigkeits-Check. +Session-Status-Anzeige. 21 Interaktions- + 26 Qualitätsregeln. |
 
 ---
 
