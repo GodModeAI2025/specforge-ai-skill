@@ -786,6 +786,145 @@ Ablauf:
 
 ---
 
+### Modus 9: Discover — Bestandsdokumentation & Reverse Spec
+
+**Methode:** Reverse Engineering + Domain Analysis. Aktiviert: Systematische Extraktion von implizitem Wissen aus bestehendem Code, Systemen und Stakeholder-Wissen. Überführung in eine vollwertige spec.md mit allen SpecForge-Qualitätsstandards.
+**Delta:** Arbeitsrichtung ist umgekehrt zu Modus 1 (Specify). Statt von einer Idee vorwärts wird von bestehendem System rückwärts gearbeitet. Der Anspruch an die erzeugte spec.md ist identisch — EARS, Gherkin, STRIDE, KRITIS, Golden Principles gelten vollständig.
+**Verify:** Beschreibt die erzeugte spec.md das bestehende System vollständig und korrekt? Würde ein Entwickler ohne Vorkenntnisse das System allein aus der Spec nachbauen?
+
+**Trigger:** Nutzer übergibt bestehenden Code, Systemdokumentation, Architekturdiagramme oder beschreibt ein existierendes System. Erkennbare Phrasen: "dokumentiere den Bestand", "reverse-engineer die Spec", "was macht dieses System", "erstelle eine Spec aus dem Code", "Bestandsaufnahme", "As-Is-Dokumentation".
+
+**Wann einsetzen:**
+- Bestehendes System ohne oder mit veralteter Dokumentation
+- Legacy-Code, der vor einer Modernisierung verstanden werden muss
+- Übernahme eines Systems von einem anderen Team/Dienstleister
+- Compliance-Anforderung: Dokumentationspflicht für Bestandssysteme (NIS2, KRITIS)
+- Vor einem Refactoring oder einer Migration (As-Is vor To-Be)
+
+**Ablauf:**
+
+**Phase 9a: Bestandsaufnahme (Discovery)**
+
+SpecForge sammelt alle verfügbaren Informationsquellen:
+
+1. **Code-Analyse** (falls Code vorhanden):
+   - Einstiegspunkte, Module, Abhängigkeitsgraph
+   - API-Endpunkte, Schnittstellen, Datenmodelle
+   - Konfigurationen, Environment-Variablen
+   - Test-Suites als implizite Spezifikation
+   - Kommentare, TODOs, FIXMEs als Lückenindikatoren
+
+2. **Dokumentations-Analyse** (falls vorhanden):
+   - READMEs, Wikis, Confluence-Seiten, Architekturdiagramme
+   - API-Dokumentation (OpenAPI, GraphQL-Schemas)
+   - Runbooks, Deployment-Guides
+   - Incident-Reports als Qualitätshinweise
+
+3. **Stakeholder-Befragung** (sokratisch, max. 5 Fragen pro Runde):
+   - Wer nutzt das System? (Akteure und Rollen)
+   - Was sind die Kernfunktionen aus Nutzersicht?
+   - Welche Teile sind kritisch / fragil / veraltet?
+   - Welche impliziten Regeln existieren, die nirgends stehen?
+   - Welche Schnittstellen zu anderen Systemen bestehen?
+
+**Ergebnis Phase 9a:** Discovery-Protokoll mit Quellenverzeichnis und Vollständigkeitseinschätzung (Ampel: Grün/Gelb/Rot pro Wissensbereich).
+
+**Phase 9b: Spec-Generierung (Erster Durchlauf)**
+
+Aus dem Discovery-Protokoll wird eine vollwertige spec.md erzeugt — mit identischem Qualitätsanspruch wie Modus 1:
+
+- Zusammenfassung (BLUF + Pyramid Principle)
+- User Stories mit EARS-Requirements und Gherkin-ACs (min. 2 Szenarien)
+- Datenmodell in DDD-Sprache (Bounded Contexts, Entities, Value Objects, Aggregates)
+- KRITIS/NIS2-NFRs (automatischer Scan gegen 41 Prüfpunkte)
+- STRIDE-Analyse für security-relevante Stories
+- Schnittstellen-Dokumentation (Contracts)
+- Offene Fragen und Wissenslücken als `[DISCOVERY-GAP]`-Marker
+
+**Phase 9c: Erste QS-Schleife — Vollständigkeitsprüfung**
+
+Automatische Prüfung der generierten Spec gegen die Discovery-Quellen:
+
+1. **Coverage-Check**: Jede entdeckte Funktion, jeder Endpunkt, jedes Datenmodell muss in mindestens einer User Story abgebildet sein
+2. **Lücken-Scan**: Bereiche im Code/System ohne korrespondierende Story identifizieren
+3. **Implizite-Logik-Extraktion**: Business Rules aus Code-Bedingungen (if/else, Validierungen, Zustandsmaschinen) als explizite EARS-Requirements formulieren
+4. **Grenzwert-Dokumentation**: Timeouts, Limits, Schwellenwerte, Konfigurationswerte aus Code extrahieren und in NFRs überführen
+5. **Abhängigkeiten**: Externe Services, Bibliotheken, Infrastruktur-Anforderungen vollständig erfassen
+
+**Prüfformat:**
+
+```markdown
+## QS-Schleife 1: Vollständigkeitsprotokoll
+
+| # | Prüfpunkt | Status | Fundstelle | Aktion |
+|---|-----------|--------|------------|--------|
+| V-001 | API /users CRUD | OK | SF-FUNC-003 | — |
+| V-002 | Cron-Job Bereinigung | FEHLT | scheduler.py:142 | Story ergänzen |
+| V-003 | Rate Limiting | IMPLIZIT | middleware.py:88 | NFR extrahieren |
+```
+
+**Abbruchbedingung Schleife 1:** Alle Funktionen, Endpunkte und Business Rules aus dem Quellcode sind in der Spec abgebildet. Keine `FEHLT`-Einträge mehr offen.
+
+→ Spec wird mit allen Findings aktualisiert, bevor Schleife 2 startet.
+
+**Phase 9d: Zweite QS-Schleife — Konsistenz- und Stringenzprüfung**
+
+Nach Vollständigkeit folgt Qualitätssicherung der Spec selbst (identisch zu Modus 4 Analyze, aber mit Discovery-spezifischen Erweiterungen):
+
+1. **MECE-Konsistenzprüfung** (5 Dimensionen aus Modus 4):
+   - Spec ↔ entdeckte Architektur
+   - Stories untereinander (Überlappungen, Widersprüche)
+   - NFRs ↔ tatsächliches Systemverhalten
+   - STRIDE ↔ vorhandene Sicherheitsmaßnahmen
+   - GP-Compliance
+
+2. **Stringenz-Prüfung**:
+   - Jede User Story hat exakt ein EARS-Pattern (kein Mischmasch)
+   - Gherkin-Szenarien sind atomar (ein Verhalten pro Szenario)
+   - Keine Zirkelreferenzen zwischen Stories
+   - Begriffe konsistent verwendet (Glossar-Check)
+   - Quantifizierungen statt vager Begriffe ("innerhalb von 200ms" statt "schnell")
+
+3. **Discovery-Gap-Auflösung**:
+   - Alle `[DISCOVERY-GAP]`-Marker bearbeitet: aufgelöst, als bekannte Lücke dokumentiert oder als Frage an Stakeholder formuliert
+   - Keine offenen `[Annahme: ...]`-Marker ohne Kennzeichnung
+
+4. **Rückwärts-Validierung**:
+   - Für jede Story prüfen: Existiert im Code/System ein korrespondierendes Verhalten?
+   - Für jede NFR prüfen: Wird sie vom bestehenden System eingehalten oder ist sie eine Soll-Anforderung?
+   - Delta zwischen Ist (aktuelles System) und Soll (Spec) explizit kennzeichnen
+
+**Prüfformat:**
+
+```markdown
+## QS-Schleife 2: Konsistenz- und Stringenzprotokoll
+
+| # | Dimension | Finding | Schwere | Aktion |
+|---|-----------|---------|---------|--------|
+| K-001 | Begriffskonsistenz | "User" vs "Nutzer" vs "Anwender" — 3 Begriffe für dasselbe Konzept | MAJOR | Glossar, einheitlich "Nutzer" |
+| K-002 | EARS-Stringenz | SF-FUNC-007 mischt Event-Driven und State-Driven | MAJOR | Aufteilen in 2 Stories |
+| K-003 | Ist/Soll-Delta | SF-SEC-002 fordert mTLS, System nutzt Basic Auth | INFO | Als Migration-Requirement kennzeichnen |
+```
+
+**Abbruchbedingung Schleife 2:** Keine BLOCKER oder MAJOR Findings offen. Alle Begriffe konsistent. Alle Stories in exakt einem EARS-Pattern. Ist/Soll-Delta vollständig dokumentiert.
+
+**Phase 9e: Finalisierung**
+
+- spec.md ist vollständig, konsistent und stringent
+- Clarifications-Abschnitt dokumentiert alle Stakeholder-Antworten
+- Ist/Soll-Delta-Abschnitt kennzeichnet Abweichungen
+- Discovery-Protokoll als Anhang erhalten (Nachvollziehbarkeit)
+- Optional: Direkt in Modus 3 (Plan) überleiten für Modernisierung/Migration
+
+**Erzeugte/aktualisierte Artefakte:**
+- `spec.md` — Vollständige Spezifikation des Bestandssystems
+- `discovery-protocol.md` — Quellenverzeichnis, Vollständigkeitsampel, QS-Protokolle
+- Optional: `migration-delta.md` — Ist/Soll-Abweichungen als Grundlage für Modernisierung
+
+**Abschlusskriterium:** Modus 9 ist abgeschlossen, wenn beide QS-Schleifen ohne offene BLOCKER/MAJOR-Findings durchlaufen sind und die Rückwärts-Validierung bestätigt, dass die Spec das bestehende System vollständig beschreibt.
+
+---
+
 ## Output-Format: User Story
 
 Siehe `references/spec-template.md` für das vollständige Template. Kurzform:
@@ -841,6 +980,9 @@ plans/
   └── completed/EP-*.md
 
 tech-debt-tracker.md         ← Modus 8 (GP-10)
+
+discovery-protocol.md        ← Modus 9 Phase 9a (Bestandsaufnahme)
+migration-delta.md           ← Modus 9 Phase 9e (Optional: Ist/Soll-Delta)
 ```
 
 ---
@@ -874,6 +1016,7 @@ tech-debt-tracker.md         ← Modus 8 (GP-10)
 16. **Impact Mapping bei unklarem Business Case empfehlen** — verhindert Scope Creep
 17. **Aktivieren-Eingrenzen-Prüfen-Muster durchgängig nutzen** — etablierte Methodiken aktivieren statt ad-hoc beschreiben
 18. **Morphological Box + Pugh Matrix bei Technologieentscheidungen mit 3+ Alternativen**
+19. **Discover-Modus bei Bestandssystemen empfehlen** — zwei QS-Schleifen (Vollständigkeit + Konsistenz/Stringenz) sind Pflicht, kein Abkürzen
 
 ---
 
@@ -905,6 +1048,8 @@ Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–H am Ende
 18. **Datenmodell in DDD-Sprache** — Bounded Contexts, Entities, Value Objects, Aggregates, Domain Events
 19. **Cynefin vor Formalismus-Wahl** — Komplexitätsdomäne bestimmt Workflow-Tiefe
 20. **Stakeholder-Review als Devil's Advocate** — Steelmanning statt Strohmann
+21. **Discover: Zwei QS-Schleifen sind Pflicht** — Schleife 1 (Vollständigkeit) und Schleife 2 (Konsistenz/Stringenz) dürfen nicht übersprungen oder zusammengefasst werden
+22. **Discover: Rückwärts-Validierung** — Jede Story muss auf ein korrespondierendes Verhalten im Bestandssystem rückverfolgbar sein
 
 ---
 ---

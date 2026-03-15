@@ -155,6 +155,16 @@ Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 "Prüfe auf stale Marker."
 ```
 
+### Modus 9: Discover — Bestandsdokumentation
+
+```
+"Dokumentiere den Bestand dieses Systems."
+"Erstelle eine Spec aus dem vorhandenen Code."
+"Reverse-engineer die Anforderungen."
+```
+
+Reverse Spec: Vom bestehenden System rückwärts zur vollwertigen spec.md. Zwei verpflichtende QS-Schleifen — erst Vollständigkeitsprüfung (jede Funktion/Endpunkt/Business Rule abgebildet?), dann Konsistenz- und Stringenzprüfung (MECE, EARS-Reinheit, Begriffskonsistenz, Ist/Soll-Delta). Erzeugt zusätzlich `discovery-protocol.md` und optional `migration-delta.md`.
+
 ---
 
 ## Workflow
@@ -231,7 +241,7 @@ design/                ← Wireframes, Datenmodelle, Diagramme
 
 ## Skill-Architektur
 
-SpecForge ist als **Single-File-Skill** aufgebaut — die gesamte SKILL.md (92 KB, 2.300+ Zeilen) enthält sowohl die Skill-Logik als auch alle 8 Referenz-Anhänge inline:
+SpecForge ist als **Single-File-Skill** aufgebaut — die gesamte SKILL.md (100 KB, 2.400+ Zeilen) enthält sowohl die Skill-Logik als auch alle 8 Referenz-Anhänge inline:
 
 ```
 SKILL.md
@@ -242,12 +252,12 @@ SKILL.md
 │   ├── Folder Convention
 │   ├── Golden Principles Übersicht
 │   ├── Workflow-Phasen (Gesamtübersicht)
-│   ├── Modi 1–8 (Specify → Management)
+│   ├── Modi 1–9 (Specify → Discover)
 │   ├── Output-Format (User Story Template)
 │   ├── Artefakt-Übersicht
 │   ├── Sprachverhalten
-│   ├── Interaktionsregeln (18 Regeln)
-│   └── Qualitätsregeln (20 Regeln)
+│   ├── Interaktionsregeln (19 Regeln)
+│   └── Qualitätsregeln (22 Regeln)
 └── Anhänge A–H (Referenzdokumente)
     ├── A: Spec Template
     ├── B: Constitution Template
@@ -410,7 +420,8 @@ Teste jeden Modus mit:
 |---------|-------|---------|
 | 1.0 | 2025-10 | Initial: Specify, Plan, Tasks, Review, Stakeholder-Sim, Management |
 | 2.0 | 2026-03 | +Clarify, +Analyze, +Checklist, +Research, +Quickstart. SpecKit v3 Alignment. RE Butler entfernt. Single-File-Architektur. |
-| 2.1 | 2026-03 | +Phase 0 (Cynefin + Impact Mapping), 15 methodische Frameworks mit Aktivieren-Eingrenzen-Prüfen-Muster, Sokratische Klärung, MECE-Analyse, Devil's Advocate + Steelmanning, Morphological Box + Pugh Matrix, DDD-Datenmodell, BLUF-Zusammenfassungen. 18 Interaktions- + 20 Qualitätsregeln. |
+| 2.1 | 2026-03 | +Phase 0 (Cynefin + Impact Mapping), 15 methodische Frameworks mit Aktivieren-Eingrenzen-Prüfen-Muster, Sokratische Klärung, MECE-Analyse, Devil's Advocate + Steelmanning, Morphological Box + Pugh Matrix, DDD-Datenmodell, BLUF-Zusammenfassungen. |
+| 2.2 | 2026-03 | +Modus 9 Discover (Bestandsdokumentation & Reverse Spec). Zwei verpflichtende QS-Schleifen: Vollständigkeit + Konsistenz/Stringenz. Rückwärts-Validierung. discovery-protocol.md und migration-delta.md als neue Artefakte. 19 Interaktions- + 22 Qualitätsregeln. |
 
 ---
 
