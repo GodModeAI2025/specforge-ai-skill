@@ -1,6 +1,24 @@
 ---
 name: SpecForge
-description: Spec-Driven Requirements Engineering mit Governance-Enforcement für KRITIS-Umgebungen. Kombiniert GitHub Spec Kit, Harness-Patterns (Golden Principles, Spec-First Chain, STRIDE, Folder Convention) mit EARS-Syntax, Gherkin ACs und automatischen NIS2/KRITIS-NFRs. Erzeugt spec.md, constitution.md, plan.md, research.md, quickstart.md, tasks.md — enforced, nicht optional. Simuliert Stakeholder und Reviewer-Agenten (System Architect, Contract Guardian, Security Reviewer, Data Engineer, Harness Auditor), reviewt bestehende Requirements, Verwende diesen Skill IMMER bei: Requirements schreiben, User Stories erstellen, Spezifikation erstellen, spec.md, constitution.md, Spec Kit, Spec-Driven Development, EARS Anforderung, Gherkin, Akzeptanzkriterien, Requirements Review, Stakeholder-Analyse, KRITIS-Anforderungen, NIS2, STRIDE, Golden Principles, Folder Convention, Spec-First Chain, Backlog Refinement, Definition of Ready, Traceability, Architecture Decision Record, ADR, ExecPlan, Clarify, Analyze, Checklist, Research, Quickstart. Auch bei "prüfe meine Anforderungen", "erstelle eine Spezifikation", "was fehlt in diesem Requirement", "simuliere einen Security Officer", "STRIDE-Analyse", "kläre offene Fragen", "prüfe Konsistenz", "erstelle Checkliste".
+description: >
+  Spec-Driven Requirements Engineering mit Governance-Enforcement fuer
+  KRITIS-Umgebungen. Kombiniert GitHub Spec Kit, Harness-Patterns (Golden
+  Principles, Spec-First Chain, STRIDE, Folder Convention) mit EARS-Syntax,
+  Gherkin ACs und automatischen NIS2/KRITIS-NFRs. Erzeugt spec.md,
+  constitution.md, plan.md, research.md, quickstart.md, tasks.md — enforced,
+  nicht optional. Simuliert Stakeholder und Reviewer-Agenten (System Architect,
+  Contract Guardian, Security Reviewer, Data Engineer, Harness Auditor), reviewt
+  bestehende Requirements. Verwende diesen Skill IMMER bei Requirements
+  schreiben, User Stories erstellen, Spezifikation erstellen, spec.md,
+  constitution.md, Spec Kit, Spec-Driven Development, EARS Anforderung, Gherkin,
+  Akzeptanzkriterien, Requirements Review, Stakeholder-Analyse,
+  KRITIS-Anforderungen, NIS2, STRIDE, Golden Principles, Folder Convention,
+  Spec-First Chain, Backlog Refinement, Definition of Ready, Traceability,
+  Architecture Decision Record, ADR, ExecPlan, Clarify, Analyze, Checklist,
+  Research, Quickstart. Auch bei "pruefe meine Anforderungen", "erstelle eine
+  Spezifikation", "was fehlt in diesem Requirement", "simuliere einen Security
+  Officer", "STRIDE-Analyse", "klaere offene Fragen", "pruefe Konsistenz",
+  "erstelle Checkliste".
 ---
 
 # SpecForge — Specs schmieden, nicht schreiben
