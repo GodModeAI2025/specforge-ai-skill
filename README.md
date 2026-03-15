@@ -27,7 +27,7 @@ SpecForge ist ein Claude-Skill (Cowork Plugin / Project Knowledge), der Requirem
 
 - **10 Golden Principles** (GP-01 bis GP-10) — enforceable, nicht optional
 - **STRIDE-Analyse** — alle 6 Kategorien für security-relevante Stories
-- **KRITIS/NIS2-NFRs** — automatischer Scan gegen 38 Prüfpunkte in 6 Kategorien
+- **KRITIS/NIS2-NFRs** — automatischer Scan gegen 41 Prüfpunkte in 6 Kategorien
 - **Cross-Artifact-Konsistenz** — Spec ↔ Plan ↔ Tasks Abgleich mit Re-Analyze-Loop
 - **EARS-Konformität** — jedes Requirement in einem der 5 EARS-Patterns
 - **Gherkin-Qualität** — min. 2 Szenarien pro Story
@@ -84,7 +84,7 @@ Beschreibe ein Feature, Problem oder eine Idee. SpecForge erzeugt eine vollstän
 ```
 
 SpecForge wird:
-- Max. 3 Klärungsfragen stellen
+- Max. 3 Klärungsfragen stellen (im Clarify-Modus max. 5 pro Runde)
 - Regulatorische Anforderungen eigenständig recherchieren
 - Min. 3 Stakeholder-Perspektiven durchspielen
 - Spec mit EARS-Requirements und Gherkin-ACs schreiben
@@ -231,7 +231,7 @@ design/                ← Wireframes, Datenmodelle, Diagramme
 
 ## Skill-Architektur
 
-SpecForge ist als **Single-File-Skill** aufgebaut — die gesamte SKILL.md (84 KB, 2.200+ Zeilen) enthält sowohl die Skill-Logik als auch alle 8 Referenz-Anhänge inline:
+SpecForge ist als **Single-File-Skill** aufgebaut — die gesamte SKILL.md (92 KB, 2.300+ Zeilen) enthält sowohl die Skill-Logik als auch alle 8 Referenz-Anhänge inline:
 
 ```
 SKILL.md
@@ -389,6 +389,18 @@ Teste jeden Modus mit:
 | [Gherkin](https://cucumber.io/docs/gherkin/) | Acceptance Criteria als Given/When/Then |
 | [STRIDE](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats) | Threat Modeling Framework — 6 Bedrohungskategorien |
 | KRITIS / NIS2 / DSGVO | Regulatorischer Rahmen für kritische Infrastrukturen |
+| Cynefin Framework (Dave Snowden, 1999) | Phase 0 — Komplexitätseinschätzung vor Modus-Wahl |
+| Impact Mapping (Gojko Adzic, 2012) | Phase 0 — Zielorientierte Scope-Validierung |
+| Socratic Method (Platon/Sokrates) | Clarify-Modus — Sokratische Spezifikationsklärung |
+| Five Whys (Taiichi Ohno, Toyota) | BLOCKER-Analyse in Clarify |
+| MECE Principle (Barbara Minto, McKinsey) | Analyze-Modus — Konsistenzprüfung über 5 Dimensionen |
+| Devil's Advocate + Steelmanning | Stakeholder-Simulation — systematische Gegenargumentation |
+| Morphological Box (Fritz Zwicky, 1940er) | Plan-Modus — Systematische Lösungsraum-Exploration |
+| Pugh Matrix (Stuart Pugh, 1991) | Plan-Modus — Strukturierte Technologiebewertung |
+| DDD taktisches Design (Eric Evans, 2003) | Datenmodell in spec.md |
+| BLUF + Pyramid Principle (US-Militär / Barbara Minto) | Spec-Zusammenfassungen |
+| MoSCoW (Dai Clegg, DSDM) | Story-Priorisierung |
+| ADR nach Nygard (Michael Nygard, 2011) | Architecture Decision Records |
 
 ---
 
