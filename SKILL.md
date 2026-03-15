@@ -9,6 +9,32 @@ Spec-Driven RE für KRITIS-regulierte Scrum-Umgebungen. Kern: GitHub Spec Kit + 
 
 **Leitprinzip: Governance ist ein Compiler, kein Komitee.** Specs sind Verträge, keine Vorschläge. Enforcement ist automatisch, nicht optional.
 
+### Methodische Grundlagen — Aktivierte Frameworks
+
+SpecForge integriert etablierte Methoden der Softwaretechnik, des Requirements Engineering und der Entscheidungstheorie. Jede Methode wird nach dem **Aktivieren-Eingrenzen-Prüfen-Muster** eingesetzt:
+
+1. **Aktivieren** — Etablierte Methode aufrufen (z.B. Socratic Method)
+2. **Eingrenzen** — Auf den SpecForge-Kontext einschränken (z.B. max 5 Fragen, Schweregrad-Labels)
+3. **Prüfen** — Verifizieren, ob das Ergebnis den Zweck erfüllt
+
+| Methode | Herkunft | Einsatz in SpecForge |
+|---------|----------|---------------------|
+| EARS Requirements | Alistair Mavin (Rolls-Royce) | Requirement-Syntax (Anhang C) |
+| STRIDE | Microsoft | Threat Modeling (Anhang E) |
+| BDD / Gherkin | Dan North | Acceptance Criteria |
+| MoSCoW Prioritization | Dai Clegg (DSDM) | Story-Priorisierung (Must/Should/Could/Won't) |
+| SSOT (Single Source of Truth) | — | spec.md als autoritative Quelle (GP-02) |
+| Socratic Method | Platon/Sokrates (~400 v. Chr.) | Clarify-Modus (Modus 2) |
+| MECE Principle | Barbara Minto (McKinsey) | Analyze-Modus (Modus 4) |
+| Devil's Advocate + Steelmanning | Advocatus Diaboli (1587) | Stakeholder-Simulation (Modus 6) |
+| Five Whys | Taiichi Ohno (Toyota) | BLOCKER-Analyse in Clarify |
+| Cynefin Framework | Dave Snowden (1999) | Komplexitätseinschätzung vor Modus-Wahl |
+| Impact Mapping | Gojko Adzic (2012) | Optionaler Pre-Specify-Schritt |
+| DDD (taktisches Design) | Eric Evans (2003) | Datenmodell in spec.md |
+| BLUF + Pyramid Principle | US-Militär / Barbara Minto (1987) | Spec-Zusammenfassungen |
+| Morphological Box + Pugh Matrix | Fritz Zwicky (1940er) / Stuart Pugh (1991) | Technologieentscheidungen in plan.md |
+| ADR nach Nygard | Michael Nygard (2011) | Architecture Decision Records |
+
 ---
 
 ## Wissensquellen — Strikte Session-Isolation
@@ -102,28 +128,59 @@ Siehe `references/golden-principles.md` für Details und Beispiele.
 
 SpecForge folgt dem erweiterten SpecKit-v3-Workflow. Jede Phase hat ein Phase Gate — Überspringen ist nur bei expliziter Begründung erlaubt.
 
+### Phase 0: Komplexitätseinschätzung (Cynefin) + Impact Mapping
+
+Vor jedem neuen Feature prüft SpecForge zwei Dinge:
+
+**Methode 1: Cynefin Framework (Dave Snowden, 1999)** — Sensemaking-Framework mit 5 Domänen.
+**Delta:** Feature einordnen, um Formalismus-Grad zu bestimmen:
+- **Klar** → Specify direkt, Clarify optional → schlanker Durchlauf
+- **Kompliziert** → Voller Workflow (Specify → Clarify → Plan → Analyze) → Expertenwissen nötig
+- **Komplex** → Spike/PoC zuerst, dann erst Specify → Emergente Anforderungen
+- **Chaotisch** → Sofort handeln, nachträglich spezifizieren → Krisenmodus
+**Verify:** Passt der gewählte Formalismus-Grad zur Domäne des Features?
+
+**Methode 2: Impact Mapping (Gojko Adzic, 2012)** — Zielorientierte Scope-Steuerung.
+**Delta:** 4 Ebenen als Eingangsprüfung vor Specify:
+1. **Ziel (Warum?)** — Welches Geschäftsziel wird verfolgt?
+2. **Akteure (Wer?)** — Wer kann die gewünschte Auswirkung erzeugen oder verhindern?
+3. **Auswirkungen (Wie?)** — Wie muss sich das Verhalten der Akteure ändern?
+4. **Liefergegenstände (Was?)** — Was müssen wir bauen?
+**Verify:** Lässt sich jedes geplante Feature auf ein Geschäftsziel zurückführen? Wenn nein → Scope Creep erkannt, bevor die Spec geschrieben wird.
+
+**Phase 0 ist optional**, aber empfohlen bei: neuen Produkten, Features ohne klaren Business Case, Stakeholder-Konflikten über Prioritäten.
+
 ```
 ┌───────────────────────────────────────────────────────────────────────┐
 │                        SpecForge Workflow                             │
 │                                                                       │
-│  ┌──────────┐   ┌─────────┐   ┌─────────┐   ┌──────────────────┐    │
-│  │ 1 CONST. │──▶│ 2 SPEC  │──▶│ 3 CLAR. │──▶│ 4 PLAN+RESEARCH  │    │
-│  └──────────┘   └─────────┘   └─────────┘   └──────────────────┘    │
+│  ┌──────────┐   ┌──────────┐   ┌─────────┐   ┌──────────────────┐   │
+│  │ 0 CYNEF. │──▶│ 1 CONST. │──▶│ 2 SPEC  │──▶│ 3 CLARIFY        │   │
+│  │ +IMPACT  │   │          │   │         │   │ (Socratic)       │   │
+│  └──────────┘   └──────────┘   └─────────┘   └──────────────────┘   │
 │       │              │             │                │                 │
 │       ▼              ▼             ▼                ▼                 │
-│  constitution   spec.md      Clarifications    plan.md               │
-│  .md                         in spec.md        research.md           │
-│                                                quickstart.md         │
+│  Cynefin-Einord. constitution  spec.md        Clarifications         │
+│  Impact Map      .md                          in spec.md             │
 │                                                                       │
-│  ┌──────────┐   ┌─────────────┐   ┌───────────┐   ┌──────────┐     │
-│  │ 5 TASKS  │──▶│ 6 ANALYZE   │──▶│ 7 IMPLMNT │──▶│ 8 REVIEW │     │
-│  └──────────┘   └─────────────┘   └───────────┘   └──────────┘     │
-│       │              │ ▲                                │             │
-│       ▼              ▼ │ Loop                           ▼             │
-│  tasks.md       Fix ──┘                           Review-Protokoll   │
+│  ┌──────────────────┐   ┌─────────┐   ┌──────────────────┐          │
+│  │ 4 PLAN+RESEARCH  │──▶│ 5 TASKS │──▶│ 6 ANALYZE (MECE) │          │
+│  └──────────────────┘   └─────────┘   └──────────────────┘          │
+│       │                      │              │ ▲                       │
+│       ▼                      ▼              ▼ │ Loop                  │
+│  plan.md, research.md   tasks.md       Fix ──┘                       │
+│  quickstart.md                                                        │
+│                                                                       │
+│  ┌───────────┐   ┌──────────┐                                       │
+│  │ 7 IMPLMNT │──▶│ 8 REVIEW │                                       │
+│  └───────────┘   └──────────┘                                       │
+│                       │                                              │
+│                       ▼                                              │
+│                  Review-Protokoll                                     │
 │                                                                       │
 │  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─   │
-│  Jederzeit verfügbar: CHECKLIST · STAKEHOLDER-SIM · TRACEABILITY     │
+│  Jederzeit: CHECKLIST · STAKEHOLDER-SIM (Devil's Advocate)           │
+│             TRACEABILITY · CYNEFIN-REASSESSMENT                      │
 └───────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -160,7 +217,11 @@ Siehe `references/constitution-template.md` für das vollständige Template.
 
 ---
 
-### Modus 2: Clarify — Strukturierte Spezifikationsklärung
+### Modus 2: Clarify — Sokratische Spezifikationsklärung
+
+**Methode:** Socratic Method (Platon/Sokrates, ~400 v. Chr.) — geführte Entdeckung durch Fragen statt direkter Instruktion. Aktiviert: Maieutik (Hebammenkunst der Ideen), Elenchos (Aufdecken von Widersprüchen), Aporie (produktive Verwirrung), Annahmen-sichtbar-machen.
+**Delta:** Fokus auf Stakeholder-Konflikte, implizite Annahmen und Systemgrenzen. Max. 5 Fragen pro Runde. Jede Frage referenziert eine Story-ID. Schweregrade steuern die Priorisierung.
+**Verify:** Haben die Fragen Annahmen sichtbar gemacht, die vorher implizit waren?
 
 **Trigger:** `spec.md` existiert, offene Fragen oder unterspezifizierte Bereiche vorhanden. Empfohlen: **immer** zwischen Specify und Plan ausführen.
 
@@ -177,7 +238,7 @@ Siehe `references/constitution-template.md` für das vollständige Template.
 
 **Phase 2a: Coverage-Analyse**
 
-SpecForge scannt die spec.md systematisch nach:
+SpecForge scannt die spec.md systematisch nach Lücken (MECE-vollständig):
 - Anforderungen ohne EARS-Pattern oder mit unvollständiger EARS-Formulierung
 - User Stories ohne oder mit unvollständigen Gherkin-ACs
 - Vage Begriffe ohne Quantifizierung (z.B. "schnell", "viele", "einfach")
@@ -188,19 +249,30 @@ SpecForge scannt die spec.md systematisch nach:
 - Fehlende Abhängigkeitsdeklarationen zwischen Stories
 - Implizite Annahmen über Systemgrenzen oder Schnittstellen
 
-**Phase 2b: Strukturierte Befragung**
+**Phase 2b: Sokratische Befragung**
 
-Für jede identifizierte Lücke generiert SpecForge gezielte Fragen:
+Für jede identifizierte Lücke generiert SpecForge gezielte Fragen nach der sokratischen Fragenhierarchie:
+1. **Klärende Fragen** — "Was genau meinst du mit ...?" (Vage Begriffe auflösen)
+2. **Annahmen hinterfragen** — "Welche Annahme steckt hinter ...?" (Implizites explizit machen)
+3. **Implikationen erforschen** — "Was passiert, wenn ...?" (Grenzfälle und Fehlerszenarien)
+
+Regeln:
 - Max. 5 Fragen pro Runde (priorisiert nach Schweregrad)
 - Jede Frage referenziert die betroffene Story-ID oder den Spec-Abschnitt
-- Fragen sind geschlossen oder mit konkreten Optionen formuliert — keine offenen "was meinen Sie"-Fragen
+- Fragen bieten konkrete Optionen — keine offenen "was meinen Sie"-Fragen
 - Schweregrad pro Frage: `[BLOCKER]` | `[MAJOR]` | `[MINOR]`
+
+**Bei BLOCKER-Fragen: Five Whys (Taiichi Ohno, Toyota)**
+**Delta:** Max. 5 Iterationen. Stopp bei handlungsfähiger Grundursache. Fokus auf Prozess-/Architekturlücken, nicht Schuldzuweisung.
+**Verify:** Ist die identifizierte Ursache etwas, das in der Spec adressiert werden kann?
 
 **Frageformat:**
 
 ```markdown
 **[BLOCKER] SF-SEC-001 — Authentifizierung**
+Sokratische Ebene: Annahme hinterfragen
 Die Spec definiert "sichere Authentifizierung" ohne konkretes Verfahren.
+Implizite Annahme: "Sicher" ist selbsterklärend.
 Optionen: (a) OAuth 2.0 + OIDC, (b) mTLS Client-Zertifikate, (c) SAML 2.0, (d) Kombination
 Auswirkung bei Nicht-Klärung: Plan-Phase kann Sicherheitsarchitektur nicht ableiten.
 ```
@@ -242,10 +314,22 @@ Nach Klärung werden betroffene Requirements automatisch aktualisiert:
 
 Erzeugt `plan.md`:
 - Technische Architekturentscheidungen → ADR in `specs/decisions/`
-- Datenmodell-Entwurf
+- Datenmodell-Entwurf (DDD-informed, siehe Spec-Template Abschnitt 7)
 - Sicherheitsarchitektur (STRIDE-informed)
 - Integrationen und Schnittstellen
 - Compliance-Mapping (NIS2-Artikel ↔ Komponente)
+
+**Technologieentscheidungen: Morphological Box + Pugh Matrix**
+
+**Methode 1: Morphological Box (Fritz Zwicky, 1940er)** — Systematische Lösungsraum-Exploration.
+**Delta:** Dimensionen = Architektur-Parameter aus der Spec (z.B. Runtime, Datenbank, Auth-Verfahren, Hosting). Für jeden Parameter werden 3–5 Varianten identifiziert. Constraint-Filterung eliminiert nicht-kompatible Kombinationen.
+**Verify:** Wurde der Lösungsraum vollständig aufgespannt? Sind die Parameter unabhängig (MECE)?
+
+**Methode 2: Pugh Matrix (Stuart Pugh, "Total Design", 1991)** — Strukturierte Bewertung gegen Referenz.
+**Delta:** Referenz = bestehende Lösung oder einfachste Option. Kriterien = NFRs aus spec.md + Golden Principles. Bewertung: Besser (+), Gleich (S), Schlechter (−). Nettowert entscheidet.
+**Verify:** Führt die gewählte Kombination zu einem Nettovorteil gegenüber der Referenz?
+
+Ergebnis fließt in ADR ein (Alternativen-Abschnitt dokumentiert die Pugh-Bewertung).
 
 **Phase 3b: Research — Technische Tiefenrecherche**
 
@@ -394,11 +478,15 @@ Zusätzlich:
 
 ---
 
-### Modus 4: Analyze — Cross-Artifact-Konsistenzprüfung
+### Modus 4: Analyze — MECE-Konsistenzprüfung
+
+**Methode:** MECE Principle (Barbara Minto, McKinsey, späte 1960er) — Mutually Exclusive, Collectively Exhaustive. Aktiviert: Keine Überlappung zwischen Prüfdimensionen, Vollständigkeitsgarantie, hierarchische Anwendbarkeit, klare Grenzen.
+**Delta:** 5 Dimensionen bilden eine MECE-Zerlegung der Artefakt-Konsistenz. Jede Dimension prüft eine spezifische Beziehung — keine Dimension überschneidet sich mit einer anderen, alle zusammen decken das gesamte Artefakt-System ab.
+**Verify:** Sind die 5 Dimensionen tatsächlich sich gegenseitig ausschließend und gemeinsam erschöpfend? Gibt es Konsistenz-Aspekte, die in keiner Dimension erfasst sind?
 
 **Trigger:** `tasks.md` existiert. Empfohlen: **immer** nach Tasks und vor Implementierung ausführen.
 
-**Zweck:** Systematische Prüfung der Konsistenz und Abdeckung über **alle** erzeugten Artefakte hinweg. Nicht zu verwechseln mit dem Review-Modus (Modus 6), der einzelne Requirements prüft. Analyze prüft das Artefakt-System als Ganzes.
+**Zweck:** Systematische MECE-Prüfung der Konsistenz und Abdeckung über **alle** erzeugten Artefakte hinweg. Nicht zu verwechseln mit dem Review-Modus (Modus 6), der einzelne Requirements prüft. Analyze prüft das Artefakt-System als Ganzes.
 
 **Wann Pflicht:**
 - Nach jeder Tasks-Erzeugung, vor Implementierung
@@ -408,29 +496,29 @@ Zusätzlich:
 **Wann optional:**
 - Triviale Änderungen an einzelnen Tasks ohne Cross-Artefakt-Auswirkung
 
-**Prüfkatalog (5 Dimensionen):**
+**Prüfkatalog (5 MECE-Dimensionen):**
 
-**Dimension 1 — Spec ↔ Plan Konsistenz:**
+**Dimension 1 — Spec ↔ Plan Konsistenz (Was ↔ Wie):**
 - Jedes Requirement aus spec.md hat eine Entsprechung im Plan
 - Architekturentscheidungen im Plan sind durch ADRs abgedeckt (GP-03)
 - Datenmodell im Plan deckt alle in der Spec definierten Entitäten ab
 - KRITIS-NFRs aus spec.md sind im Plan adressiert
 - Research-Ergebnisse sind in den Plan eingeflossen
 
-**Dimension 2 — Plan ↔ Tasks Konsistenz:**
+**Dimension 2 — Plan ↔ Tasks Konsistenz (Wie ↔ Wann):**
 - Jede Plan-Komponente hat mindestens einen zugeordneten Task
 - Task-Reihenfolge respektiert Plan-Abhängigkeiten
 - Spec-First Chain Schritte sind pro Task korrekt markiert
 - ExecPlan-Pflicht ist bei Tasks mit 5+ Dateien eingehalten (GP-04)
 - Parallelisierungsmarker `[P]` sind korrekt (keine Abhängigkeitskonflikte)
 
-**Dimension 3 — Spec ↔ Tasks Traceability:**
+**Dimension 3 — Spec ↔ Tasks Traceability (Was ↔ Wann — direkte Rückverfolgung):**
 - Jede User Story aus spec.md ist durch mindestens einen Task abgedeckt
 - Jedes Gherkin-Szenario ist durch einen Task testbar
 - Keine verwaisten Tasks (Tasks ohne Spec-Referenz)
 - Keine verwaisten Requirements (Requirements ohne Task)
 
-**Dimension 4 — Governance-Compliance (Golden Principles):**
+**Dimension 4 — Governance-Compliance (Prozessregeln — orthogonal zu Inhalt):**
 - GP-01: Schema-Fixtures für alle API-Contracts vorhanden
 - GP-02: Kein Task ohne Spec-Referenz
 - GP-03: ADRs für alle modulübergreifenden Entscheidungen
@@ -440,7 +528,7 @@ Zusätzlich:
 - GP-07: Alle Artefakte in Convention-Verzeichnissen
 - GP-10: Identifizierte Tech-Debt in Tracker erfasst
 
-**Dimension 5 — Security & Compliance Vollständigkeit:**
+**Dimension 5 — Security & Compliance Vollständigkeit (regulatorische Abdeckung):**
 - STRIDE: Alle 6 Kategorien für security-relevante Stories geprüft
 - KRITIS-NFRs: Alle relevanten Kategorien abgedeckt
 - NIS2-Meldepflichten: In Tasks reflektiert (wenn zutreffend)
@@ -593,9 +681,13 @@ Beispiele:
 
 ### Modus 6: Stakeholder- & Reviewer-Simulation
 
+**Methode:** Devil's Advocate (Advocatus Diaboli, formalisiert 1587) + Steelmanning. Aktiviert: Systematische Gegenargumentation, Annahmen hinterfragen, Pre-Mortem-Denken, dialektisches Denken (These → Antithese → Synthese), Risikoidentifikation.
+**Delta:** Jede Rolle nutzt Steelmanning — die stärkste Version der Gegenposition, nicht Strohmann-Argumente. Min. 3, max. 5 Rollen pro Review. Jede Rolle muss mindestens eine Annahme explizit in Frage stellen.
+**Verify:** Hat jede Rolle mindestens eine Annahme identifiziert, die der Spec-Autor für selbstverständlich hielt?
+
 **Trigger:** Blinde Flecken aufdecken oder explizit Perspektiven simulieren.
 
-SpecForge kombiniert klassische Stakeholder-Rollen mit spezialisierten Reviewer-Agenten:
+SpecForge kombiniert klassische Stakeholder-Rollen mit spezialisierten Reviewer-Agenten (jeder agiert als Advocatus Diaboli für seinen Verantwortungsbereich):
 
 | Rolle | Fokus | Methodik |
 |-------|-------|----------|
@@ -760,7 +852,7 @@ tech-debt-tracker.md         ← Modus 8 (GP-10)
 4. Im Review: Zuerst Protokoll, dann optional verbesserte Version
 5. Bei mehreren Stories: Übersichtstabelle am Ende
 6. Web-Recherche still durchführen
-7. **Spec-Kit-Phasen respektieren: Specify → Clarify → Plan+Research+Quickstart → Tasks → Analyze → Implement**
+7. **Spec-Kit-Phasen respektieren: [Cynefin+Impact] → Specify → Clarify (Socratic) → Plan+Research+Quickstart → Tasks → Analyze (MECE) → Implement**
 8. Golden Principles bei jedem Output prüfen — nicht optional
 9. STRIDE bei jeder security-relevanten Änderung — nicht optional
 10. Folder Convention bei jedem neuen Projekt vorschlagen
@@ -768,6 +860,10 @@ tech-debt-tracker.md         ← Modus 8 (GP-10)
 12. **Analyze nach Tasks empfehlen** — Re-Analyze-Loop bis keine Blocker
 13. **Research bei schnelllebigen Tech-Stacks erzwingen**
 14. **Quickstart bei jedem neuen Feature erzeugen**
+15. **Cynefin-Einordnung bei neuen Features empfehlen** — bestimmt Formalismus-Grad
+16. **Impact Mapping bei unklarem Business Case empfehlen** — verhindert Scope Creep
+17. **Aktivieren-Eingrenzen-Prüfen-Muster durchgängig nutzen** — etablierte Methodiken aktivieren statt ad-hoc beschreiben
+18. **Morphological Box + Pugh Matrix bei Technologieentscheidungen mit 3+ Alternativen**
 
 ---
 
@@ -779,7 +875,7 @@ Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–H am Ende
 
 ## Qualitätsregeln (immer aktiv)
 
-1. **Spec ist Source of Truth** — GP-02: Keine Implementierung ohne Spec
+1. **SSOT — spec.md ist Single Source of Truth** — GP-02: Keine Implementierung ohne Spec. Alle abgeleiteten Artefakte (plan.md, tasks.md, Code, Tests) sind Derivate und müssen bei Widerspruch gegen spec.md aktualisiert werden.
 2. **Keine vagen Begriffe** ohne Quantifizierung
 3. **Jede Story hat ≥2 Gherkin-Szenarien**
 4. **EARS-Pattern wird explizit benannt**
@@ -795,6 +891,10 @@ Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–H am Ende
 14. **Analyze nach Tasks** — Re-Analyze-Loop bis Blocker-frei
 15. **Research bei Tech-Stack-Entscheidungen** — research.md ist Pflicht-Artefakt
 16. **Quickstart bei jedem Feature** — quickstart.md senkt Onboarding-Barriere
+17. **Etablierte Methoden per Aktivieren-Eingrenzen-Prüfen aktivieren** statt lang beschreiben
+18. **Datenmodell in DDD-Sprache** — Bounded Contexts, Entities, Value Objects, Aggregates, Domain Events
+19. **Cynefin vor Formalismus-Wahl** — Komplexitätsdomäne bestimmt Workflow-Tiefe
+20. **Stakeholder-Review als Devil's Advocate** — Steelmanning statt Strohmann
 
 ---
 ---
@@ -829,9 +929,9 @@ Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–H am Ende
 
 ---
 
-## 1. Zusammenfassung
+## 1. Zusammenfassung (BLUF + Pyramid Principle)
 
-[2–4 Sätze: Was wird gebaut und warum. Kein Tech-Stack.]
+**Format:** BLUF (Bottom Line Up Front, US-Militär) — Ein Satz: Was wird gebaut, für wen, welches Problem wird gelöst. Danach: Pyramid Principle (Barbara Minto) — max. 3 Schlüsselargumente als Stützen. Kein Tech-Stack.
 
 ## 2. Kontext & Problemstellung
 
@@ -859,15 +959,15 @@ Alle Referenzen sind in diesem Skill integriert — siehe Anhänge A–H am Ende
 ### [SF-XXX-001] [Titel]
 
 **Typ**: User Story | Technical Story | Enabler
-**Priorität**: Must | Should | Could | Won't
+**Priorität**: MoSCoW (Dai Clegg, DSDM): Must | Should | Could | Won't
 **Spec-First Steps**: [1,2,3,4,6,7]
 
 #### Story
 Als [Rolle] möchte ich [Funktion], damit [Nutzen].
 
-#### EARS-Requirement
+#### EARS-Requirement (Alistair Mavin, Rolls-Royce)
 **Pattern:** [Ubiquitous | Event-Driven | State-Driven | Optional | Unwanted]
-[EARS-Formulierung gemäß ears-syntax.md]
+[EARS-Formulierung gemäß Anhang C]
 
 #### Acceptance Criteria (Gherkin, min. 2)
 
@@ -925,9 +1025,17 @@ Scenario: [Edge Case / Fehlerfall]
 ### Compliance
 [KRITIS/NIS2/DSGVO-Anforderungen mit Artikel-Referenzen]
 
-## 7. Datenmodell (konzeptionell)
+## 7. Datenmodell (DDD — taktisches Design nach Eric Evans)
 
-[Entitäten, Beziehungen, Datenklassifizierung — kein Tech-Stack]
+**Methode:** Domain-Driven Design (Eric Evans, "Tackling Complexity in the Heart of Software", 2003) — taktisches Design.
+**Delta:** Konzeptionelles Modell, kein Tech-Stack. Identifiziere:
+- **Bounded Contexts** und deren Grenzen (Wo endet ein Modell?)
+- **Entities** (identitätsbasiert — z.B. Benutzer, Auftrag)
+- **Value Objects** (attributbasiert, unveränderlich — z.B. Adresse, Geldbetrag)
+- **Aggregates** mit Invarianten (Konsistenzgrenzen)
+- **Domain Events** (bedeutsame Vorkommnisse — z.B. "AuftragAngenommen")
+- **Datenklassifizierung** (PII, sensibel, öffentlich — DSGVO-relevant)
+**Verify:** Spricht das Modell die Ubiquitous Language der Stakeholder? Können Domänenexperten das Modell lesen und verstehen?
 
 ## 8. Systemgrenzen & Schnittstellen
 
@@ -1623,6 +1731,9 @@ Gherkin Szenario 2 (Edge Case):
 
 **Regel:** Modulübergreifende Entscheidungen brauchen ein ADR in `specs/decisions/`.
 
+**Methodik:** ADR according to Michael Nygard ("Documenting Architecture Decisions", 2011).
+**Delta:** Erweitert um Alternativen-Abschnitt für Entscheidungstransparenz.
+
 **Enforcement:** Review-Routing — System Architect und Contract Guardian prüfen Cross-Modul-Änderungen.
 
 **Verstoß-Beispiel:** Wechsel von REST zu gRPC für Service-Kommunikation ohne ADR.
@@ -1632,7 +1743,7 @@ Gherkin Szenario 2 (Edge Case):
 - Gibt es ein ADR mit: Kontext, Entscheidung, Konsequenzen, Status?
 - Ist das ADR in `specs/decisions/adr-NNN.md` abgelegt?
 
-**ADR-Format:**
+**ADR-Format (Nygard-Struktur):**
 ```markdown
 # ADR-NNN: [Titel]
 
@@ -1650,7 +1761,7 @@ Gherkin Szenario 2 (Edge Case):
 [Positive und negative Auswirkungen]
 
 ## Alternativen
-[Verworfene Optionen mit Begründung]
+[Verworfene Optionen mit Begründung — bei komplexen Entscheidungen: Pugh Matrix als Bewertungshilfe]
 ```
 
 **Schweregrad bei Verstoß:** BLOCKER

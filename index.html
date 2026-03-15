@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpecForge — Specs schmieden, nicht schreiben</title>
+  <meta name="description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. Von der Idee zum implementierungsreifen Backlog.">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+      --green: #3fb950;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --red: #f85149;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .tagline {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    .hero .cta-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-primary:hover { background: var(--accent-hover); text-decoration: none; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); text-decoration: none; }
+
+    /* Sections */
+    section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+    section:last-child { border-bottom: none; }
+    section h2 {
+      font-size: 1.75rem;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    /* Feature Grid */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .feature .icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .feature h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .feature p { color: var(--text-muted); font-size: 0.95rem; }
+
+    /* Workflow */
+    .workflow-diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      white-space: pre;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Methods Table */
+    .methods-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .methods-table th {
+      background: var(--border);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .methods-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .methods-table tr:last-child td { border-bottom: none; }
+    .methods-table tr:hover td { background: rgba(88, 166, 255, 0.05); }
+
+    /* Principles */
+    .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .principle {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .principle code {
+      background: var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      color: var(--green);
+    }
+
+    /* Install */
+    .install-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .install-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .install-card h3 { font-size: 1rem; margin-bottom: 12px; color: var(--accent); }
+    .install-card ol {
+      padding-left: 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .install-card li { margin-bottom: 6px; }
+    .install-card code {
+      background: var(--border);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--text-muted); }
+    footer a:hover { color: var(--text); }
+
+    /* Badge row */
+    .badges { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid;
+    }
+    .badge-blue { color: var(--accent); border-color: var(--accent); }
+    .badge-green { color: var(--green); border-color: var(--green); }
+    .badge-purple { color: var(--purple); border-color: var(--purple); }
+    .badge-orange { color: var(--orange); border-color: var(--orange); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2rem; }
+      .hero .tagline { font-size: 1rem; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <h1>SpecForge</h1>
+      <p class="tagline">Specs schmieden, nicht schreiben — Spec-Driven Requirements Engineering als KI-Skill</p>
+      <div class="badges">
+        <span class="badge badge-blue">Claude Skill</span>
+        <span class="badge badge-green">v2.1</span>
+        <span class="badge badge-purple">15 Methoden</span>
+        <span class="badge badge-orange">8 Modi</span>
+      </div>
+      <div class="cta-group">
+        <a href="https://github.com/GodModeAI2025/specforge-ai-skill" class="btn btn-primary">
+          GitHub Repository
+        </a>
+        <a href="https://github.com/GodModeAI2025/specforge-ai-skill/blob/main/SKILL.md" class="btn btn-secondary">
+          SKILL.md ansehen
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Was ist SpecForge -->
+  <section>
+    <div class="container">
+      <h2>Was ist SpecForge?</h2>
+      <p style="text-align:center; color:var(--text-muted); max-width:720px; margin:0 auto 40px;">
+        Ein Claude-Skill, der Requirements Engineering von der Idee bis zum implementierungsreifen Backlog automatisiert — mit Governance-Enforcement statt optionalen Richtlinien. <strong style="color:var(--text)">Governance ist ein Compiler, kein Komitee.</strong>
+      </p>
+      <div class="features">
+        <div class="feature">
+          <span class="icon">1</span>
+          <h3>Specify</h3>
+          <p>Aus einer Feature-Idee wird eine vollständige spec.md mit EARS-Requirements, Gherkin-ACs und STRIDE-Analyse.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">2</span>
+          <h3>Clarify</h3>
+          <p>Sokratische Spezifikationsklärung: gezielte Fragen zu Stakeholder-Konflikten, Annahmen und Systemgrenzen.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">3</span>
+          <h3>Plan & Tasks</h3>
+          <p>Technischer Plan mit ADRs, Morphological Box + Pugh Matrix für Technologieentscheidungen, plus Task-Breakdown.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">4</span>
+          <h3>Analyze</h3>
+          <p>MECE-Konsistenzprüfung über 5 Dimensionen mit Re-Analyze-Loop bis keine Blocker offen sind.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">5</span>
+          <h3>Checklist</h3>
+          <p>Wiederverwendbare Quality Gates — Spec-Readiness, DSGVO-Compliance oder Custom-Checklisten.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">6</span>
+          <h3>Stakeholder-Simulation</h3>
+          <p>Devil's Advocate + Steelmanning: 8 Rollen simulieren Perspektiven und decken blinde Flecken auf.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">7</span>
+          <h3>Review</h3>
+          <p>3-Ebenen-Review: Requirement-Qualität, Governance-Compliance, Security &amp; Compliance.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">8</span>
+          <h3>Management</h3>
+          <p>Traceability Matrix, Spec-First Chain Audit, Stale-Marker-Erkennung und Tech-Debt-Tracking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workflow -->
+  <section>
+    <div class="container">
+      <h2>Workflow</h2>
+      <div class="workflow-diagram">Phase 0          Phase 1      Phase 2      Phase 3            Phase 4
+Cynefin+Impact ─── Specify ─── Clarify ─── Plan+Research ─── Tasks
+                                                                │
+Phase 8          Phase 7      Phase 6      Phase 5              │
+Management ─── Review ─── Implement ─── Analyze ◄──────────────┘
+                                            ▲    │
+                                            └────┘ Re-Analyze Loop</div>
+    </div>
+  </section>
+
+  <!-- Methodische Grundlagen -->
+  <section>
+    <div class="container">
+      <h2>15 Methodische Grundlagen</h2>
+      <p style="text-align:center; color:var(--text-muted); margin-bottom:24px;">
+        Jede Methode wird nach dem <strong style="color:var(--text)">Aktivieren-Eingrenzen-Prüfen-Muster</strong> eingesetzt.
+      </p>
+      <div style="overflow-x:auto;">
+        <table class="methods-table">
+          <thead>
+            <tr><th>Methode</th><th>Herkunft</th><th>Einsatz</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Cynefin Framework</td><td>Dave Snowden (1999)</td><td>Phase 0 — Komplexitätseinschätzung</td></tr>
+            <tr><td>Impact Mapping</td><td>Gojko Adzic (2012)</td><td>Phase 0 — Scope-Validierung</td></tr>
+            <tr><td>Socratic Method</td><td>Platon/Sokrates</td><td>Clarify-Modus</td></tr>
+            <tr><td>Five Whys</td><td>Taiichi Ohno (Toyota)</td><td>BLOCKER-Analyse</td></tr>
+            <tr><td>MECE Principle</td><td>Barbara Minto (McKinsey)</td><td>Analyze-Modus</td></tr>
+            <tr><td>Devil's Advocate + Steelmanning</td><td>Advocatus Diaboli (1587)</td><td>Stakeholder-Simulation</td></tr>
+            <tr><td>Morphological Box</td><td>Fritz Zwicky (1940er)</td><td>Technologieentscheidungen</td></tr>
+            <tr><td>Pugh Matrix</td><td>Stuart Pugh (1991)</td><td>Technologieentscheidungen</td></tr>
+            <tr><td>DDD (taktisches Design)</td><td>Eric Evans (2003)</td><td>Datenmodell in spec.md</td></tr>
+            <tr><td>BLUF + Pyramid Principle</td><td>US-Militär / B. Minto</td><td>Spec-Zusammenfassungen</td></tr>
+            <tr><td>MoSCoW</td><td>Dai Clegg (DSDM)</td><td>Story-Priorisierung</td></tr>
+            <tr><td>ADR nach Nygard</td><td>Michael Nygard (2011)</td><td>Architecture Decision Records</td></tr>
+            <tr><td>EARS Requirements</td><td>Alistair Mavin (Rolls-Royce)</td><td>Requirement-Syntax</td></tr>
+            <tr><td>STRIDE</td><td>Microsoft</td><td>Threat Modeling</td></tr>
+            <tr><td>BDD / Gherkin</td><td>Dan North</td><td>Acceptance Criteria</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Golden Principles -->
+  <section>
+    <div class="container">
+      <h2>10 Golden Principles</h2>
+      <div class="principles">
+        <div class="principle"><code>GP-01</code> Schema-Hygiene</div>
+        <div class="principle"><code>GP-02</code> Spec-before-Code</div>
+        <div class="principle"><code>GP-03</code> ADR-Disziplin</div>
+        <div class="principle"><code>GP-04</code> ExecPlan-Pflicht</div>
+        <div class="principle"><code>GP-05</code> Invariant-Traceability</div>
+        <div class="principle"><code>GP-06</code> Keine stale Marker</div>
+        <div class="principle"><code>GP-07</code> Dokument-Platzierung</div>
+        <div class="principle"><code>GP-08</code> Prinzip-Unverletzlichkeit</div>
+        <div class="principle"><code>GP-09</code> Abhängigkeitsrichtung</div>
+        <div class="principle"><code>GP-10</code> Schulden-Tracking</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation -->
+  <section>
+    <div class="container">
+      <h2>Installation</h2>
+      <div class="install-options">
+        <div class="install-card">
+          <h3>Claude.ai — Projekt-Knowledge</h3>
+          <ol>
+            <li>Claude-Projekt öffnen</li>
+            <li><strong>Project Knowledge</strong> aufrufen</li>
+            <li><code>SKILL.md</code> hochladen</li>
+            <li>Sofort aktiv</li>
+          </ol>
+        </div>
+        <div class="install-card">
+          <h3>Claude Cowork — Plugin/Skill</h3>
+          <ol>
+            <li><code>SKILL.md</code> in Skill-Verzeichnis kopieren</li>
+            <li>In <code>plugin.json</code> registrieren</li>
+            <li>Als Skill verfügbar</li>
+          </ol>
+        </div>
+        <div class="install-card">
+          <h3>Claude Code — Projekt-Kontext</h3>
+          <ol>
+            <li><code>SKILL.md</code> in <code>.claude/knowledge/</code> legen</li>
+            <li>Optional: In <code>CLAUDE.md</code> referenzieren</li>
+            <li>Automatisch geladen</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Artefakte -->
+  <section>
+    <div class="container">
+      <h2>Erzeugte Artefakte</h2>
+      <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="feature">
+          <h3><code>constitution.md</code></h3>
+          <p>Projektprinzipien, Golden Principles, regulatorischer Rahmen, Definition of Done</p>
+        </div>
+        <div class="feature">
+          <h3><code>spec.md</code></h3>
+          <p>Funktionale Spezifikation mit EARS-Requirements und Gherkin-ACs</p>
+        </div>
+        <div class="feature">
+          <h3><code>plan.md</code></h3>
+          <p>Technischer Implementierungsplan mit ADRs</p>
+        </div>
+        <div class="feature">
+          <h3><code>research.md</code></h3>
+          <p>Technische Tiefenrecherche (Versionen, CVEs, Kompatibilität)</p>
+        </div>
+        <div class="feature">
+          <h3><code>quickstart.md</code></h3>
+          <p>Entwickler-Schnelleinstieg für sofortiges Onboarding</p>
+        </div>
+        <div class="feature">
+          <h3><code>tasks.md</code></h3>
+          <p>Task-Breakdown mit Spec-First Chain und Parallelisierungsmarkern</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        <a href="https://github.com/GodModeAI2025/specforge-ai-skill">GitHub</a> &middot;
+        MIT License &middot;
+        Issues &amp; Pull Requests willkommen
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

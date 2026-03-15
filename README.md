@@ -159,22 +159,22 @@ Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 
 ## Workflow
 
-SpecForge folgt dem erweiterten SpecKit-v3-Workflow:
+SpecForge folgt dem erweiterten SpecKit-v3-Workflow mit vorgelagerter Komplexitätseinschätzung:
 
 ```
-Constitution → Specify → Clarify → Plan+Research+Quickstart → Tasks → Analyze → Implement → Review
+[Cynefin+Impact] → Constitution → Specify → Clarify → Plan+Research+Quickstart → Tasks → Analyze → Implement → Review
 ```
 
 Jede Phase hat ein Phase Gate. Überspringen nur mit expliziter Begründung.
 
 ```
-┌──────────┐   ┌─────────┐   ┌─────────┐   ┌──────────────────┐
-│ CONSTIT. │──▶│  SPEC   │──▶│ CLARIFY │──▶│ PLAN+RESEARCH    │
-└──────────┘   └─────────┘   └─────────┘   └──────────────────┘
-                                                   │
-┌──────────┐   ┌─────────────┐   ┌───────────┐    │
-│  REVIEW  │◀──│  IMPLEMENT  │◀──│  ANALYZE  │◀───┘
-└──────────┘   └─────────────┘   └─────────────┘
+┌────────────────┐   ┌──────────┐   ┌─────────┐   ┌─────────┐
+│ PHASE 0:       │──▶│ CONSTIT. │──▶│  SPEC   │──▶│ CLARIFY │
+│ Cynefin+Impact │   └──────────┘   └─────────┘   └─────────┘
+└────────────────┘                                      │
+┌──────────┐   ┌─────────────┐   ┌───────────┐   ┌─────▼────────────┐
+│  REVIEW  │◀──│  IMPLEMENT  │◀──│  ANALYZE  │◀──│ PLAN+RESEARCH    │
+└──────────┘   └─────────────┘   └───────────┘   └──────────────────┘
                                     ▲    │
                                     └────┘ Re-Analyze Loop
 ```
@@ -246,8 +246,8 @@ SKILL.md
 │   ├── Output-Format (User Story Template)
 │   ├── Artefakt-Übersicht
 │   ├── Sprachverhalten
-│   ├── Interaktionsregeln (14 Regeln)
-│   └── Qualitätsregeln (16 Regeln)
+│   ├── Interaktionsregeln (18 Regeln)
+│   └── Qualitätsregeln (20 Regeln)
 └── Anhänge A–H (Referenzdokumente)
     ├── A: Spec Template
     ├── B: Constitution Template
@@ -398,6 +398,7 @@ Teste jeden Modus mit:
 |---------|-------|---------|
 | 1.0 | 2025-10 | Initial: Specify, Plan, Tasks, Review, Stakeholder-Sim, Management |
 | 2.0 | 2026-03 | +Clarify, +Analyze, +Checklist, +Research, +Quickstart. SpecKit v3 Alignment. RE Butler entfernt. Single-File-Architektur. |
+| 2.1 | 2026-03 | +Phase 0 (Cynefin + Impact Mapping), 15 methodische Frameworks mit Aktivieren-Eingrenzen-Prüfen-Muster, Sokratische Klärung, MECE-Analyse, Devil's Advocate + Steelmanning, Morphological Box + Pugh Matrix, DDD-Datenmodell, BLUF-Zusammenfassungen. 18 Interaktions- + 20 Qualitätsregeln. |
 
 ---
 
