@@ -4,25 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SpecForge — Specs schmieden, nicht schreiben</title>
-  <meta name="description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 9 Modi, 15 Methoden, 26 Qualitätsregeln. Von der Idee zum implementierungsreifen Backlog — oder vom Bestandssystem zurück zur Spec. Open Source.">
-  <meta name="keywords" content="SpecForge, Requirements Engineering, Claude Skill, EARS, Gherkin, STRIDE, KRITIS, NIS2, Spec-Driven Development, AI Skill, Reverse Spec, Bestandsdokumentation, Golden Principles, MECE, Cynefin, MoSCoW, ADR, DDD">
+  <meta name="description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 9 Modi, 15 Methoden, 19 Dateien, 3.143 Zeilen. Multi-File-Architektur mit Orchestrator + Fachmodulen. Von der Idee zum implementierungsreifen Backlog — oder vom Bestandssystem zurück zur Spec. Open Source.">
+  <meta name="keywords" content="SpecForge, Requirements Engineering, Claude Skill, EARS, Gherkin, STRIDE, KRITIS, NIS2, Spec-Driven Development, AI Skill, Reverse Spec, Bestandsdokumentation, Golden Principles, MECE, Cynefin, MoSCoW, ADR, DDD, Multi-File Skill, Enforcement Engine">
   <meta name="author" content="GodModeAI2025">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://godmodeai2025.github.io/specforge-ai-skill/">
-
   <!-- Open Graph (Facebook, LinkedIn, Perplexity, Slack) -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="SpecForge — Spec-Driven Requirements Engineering als KI-Skill">
-  <meta property="og:description" content="9 Modi, 15 Methoden, 26 Qualitätsregeln. Von der Idee zum Backlog oder vom Bestandssystem zurück zur Spec. EARS, Gherkin, STRIDE, KRITIS/NIS2. Open Source Claude Skill.">
+  <meta property="og:description" content="9 Modi, 15 Methoden, 19 Dateien, 3.143 Zeilen. Multi-File-Architektur mit Orchestrator + 9 Fachmodulen. EARS, Gherkin, STRIDE, KRITIS/NIS2. Enforcement Engine mit Phase Gates. Open Source Claude Skill.">
   <meta property="og:url" content="https://godmodeai2025.github.io/specforge-ai-skill/">
   <meta property="og:site_name" content="SpecForge">
   <meta property="og:locale" content="de_DE">
-
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SpecForge — Specs schmieden, nicht schreiben">
-  <meta name="twitter:description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 9 Modi, 15 Methoden, Governance als Compiler. Open Source.">
-
+  <meta name="twitter:description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 9 Modi, 19 Dateien, Multi-File-Architektur. Governance als Compiler. Open Source.">
   <!-- JSON-LD Structured Data (Google, Perplexity, AI Crawlers) -->
   <script type="application/ld+json">
   {
@@ -31,25 +28,28 @@
     "name": "SpecForge",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
-    "description": "Spec-Driven Requirements Engineering als KI-Skill für Claude. Automatisiert Requirements Engineering von der Idee bis zum implementierungsreifen Backlog mit 9 Modi, 15 etablierten Methoden, 21 Interaktionsregeln und 26 Qualitätsregeln. Enforcement Engine mit State Machine und Phase Gates. Unterstützt auch Reverse Spec für Bestandsdokumentation.",
+    "description": "Spec-Driven Requirements Engineering als KI-Skill für Claude. Multi-File-Architektur: Orchestrator (SKILL.md) + 9 Fachmodule + 9 Support-Dateien = 19 Dateien, 3.143 Zeilen. 9 Modi, 15 etablierte Methoden, Enforcement Engine mit State Machine und Phase Gates. Jedes Modul mit Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung und GP-Mapping. Unterstützt auch Reverse Spec für Bestandsdokumentation.",
     "url": "https://godmodeai2025.github.io/specforge-ai-skill/",
     "downloadUrl": "https://github.com/GodModeAI2025/specforge-ai-skill",
-    "softwareVersion": "2.3",
+    "softwareVersion": "3.0",
     "license": "https://opensource.org/licenses/MIT",
     "programmingLanguage": "Markdown",
     "codeRepository": "https://github.com/GodModeAI2025/specforge-ai-skill",
     "featureList": [
       "Specify — Interaktive Spezifikation mit EARS und Gherkin",
       "Clarify — Sokratische Spezifikationsklärung",
-      "Plan & Tasks — Von Spec zu Backlog mit ADRs",
-      "Analyze — MECE-Konsistenzprüfung über 5 Dimensionen",
-      "Checklist — Custom Quality Gates",
-      "Stakeholder-Simulation — Devil's Advocate + Steelmanning",
-      "Review — 3-Ebenen-Review für bestehende Requirements",
-      "Management & Traceability",
-      "Discover — Bestandsdokumentation und Reverse Spec"
+      "Plan & Tasks — Von Spec zu Backlog mit ADRs und Explore-Phase",
+      "Analyze — MECE-Konsistenzprüfung über 5 Dimensionen mit Re-Analyze-Loop",
+      "Checklist — 4 Checklist-Typen (Spec-Readiness, Compliance, Security, Domain)",
+      "Stakeholder-Simulation — Deterministische Rollenauswahl, Gate-Integration",
+      "Review — 3-Ebenen-Review mit GP-Score-Formel",
+      "Management — 7 Funktionen inkl. Traceability, SFC-Audit, Freshness-Check",
+      "Discover — Bestandsdokumentation mit QS-Loops und 5W-Analyse",
+      "Multi-File-Architektur — Orchestrator + 9 Module + 9 Support-Dateien",
+      "Enforcement Engine — Phase Gates G0-G8, Skip-Protokoll, Anti-Pattern-Erkennung",
+      "Profil-Resolution Cascade — KRITIS / Standard / Startup"
     ],
-    "keywords": "Requirements Engineering, EARS, Gherkin, STRIDE, KRITIS, NIS2, Claude Skill, Spec-Driven Development, Reverse Spec, Cynefin, MECE, MoSCoW, ADR, DDD, Golden Principles",
+    "keywords": "Requirements Engineering, EARS, Gherkin, STRIDE, KRITIS, NIS2, Claude Skill, Spec-Driven Development, Reverse Spec, Cynefin, MECE, MoSCoW, ADR, DDD, Golden Principles, Multi-File Skill, Enforcement Engine",
     "isAccessibleForFree": true,
     "offers": {
       "@type": "Offer",
@@ -58,11 +58,10 @@
     }
   }
   </script>
-
   <!-- Additional AI/Search Crawler Hints -->
   <meta name="application-name" content="SpecForge">
-  <meta name="generator" content="SpecForge v2.3">
-  <meta property="og:updated_time" content="2026-03-15T00:00:00+01:00">
+  <meta name="generator" content="SpecForge v3.0">
+  <meta property="og:updated_time" content="2026-03-22T00:00:00+01:00">
   <style>
     :root {
       --bg: #0d1117;
@@ -77,21 +76,16 @@
       --purple: #bc8cff;
       --red: #f85149;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
-
     a { color: var(--accent); text-decoration: none; }
     a:hover { color: var(--accent-hover); text-decoration: underline; }
-
     .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
-
     /* Hero */
     .hero {
       text-align: center;
@@ -135,7 +129,6 @@
       border-color: var(--border);
     }
     .btn-secondary:hover { border-color: var(--text-muted); text-decoration: none; }
-
     /* Sections */
     section { padding: 64px 0; border-bottom: 1px solid var(--border); }
     section:last-child { border-bottom: none; }
@@ -144,7 +137,6 @@
       margin-bottom: 32px;
       text-align: center;
     }
-
     /* Feature Grid */
     .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
     .feature {
@@ -160,7 +152,6 @@
     }
     .feature h3 { font-size: 1.1rem; margin-bottom: 8px; }
     .feature p { color: var(--text-muted); font-size: 0.95rem; }
-
     /* Workflow */
     .workflow-diagram {
       background: var(--surface);
@@ -175,7 +166,6 @@
       color: var(--text-muted);
       text-align: center;
     }
-
     /* Methods Table */
     .methods-table {
       width: 100%;
@@ -200,7 +190,6 @@
     }
     .methods-table tr:last-child td { border-bottom: none; }
     .methods-table tr:hover td { background: rgba(88, 166, 255, 0.05); }
-
     /* Principles */
     .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
     .principle {
@@ -221,7 +210,6 @@
       white-space: nowrap;
       color: var(--green);
     }
-
     /* Install */
     .install-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
     .install-card {
@@ -243,7 +231,62 @@
       border-radius: 3px;
       font-size: 0.85rem;
     }
-
+    /* Architecture */
+    .arch-tree {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 32px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      white-space: pre;
+      color: var(--text-muted);
+      overflow-x: auto;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .arch-tree .highlight { color: var(--accent); }
+    .arch-tree .dim { color: var(--text-muted); }
+    /* Stats */
+    .stats { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+    .stat {
+      text-align: center;
+    }
+    .stat .number {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat .label { font-size: 0.85rem; color: var(--text-muted); }
+    /* Module sections */
+    .module-sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      max-width: 720px;
+      margin: 24px auto 0;
+    }
+    .module-section {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .module-section .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
     /* Footer */
     footer {
       padding: 40px 0;
@@ -253,7 +296,6 @@
     }
     footer a { color: var(--text-muted); }
     footer a:hover { color: var(--text); }
-
     /* Badge row */
     .badges { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
     .badge {
@@ -268,16 +310,16 @@
     .badge-green { color: var(--green); border-color: var(--green); }
     .badge-purple { color: var(--purple); border-color: var(--purple); }
     .badge-orange { color: var(--orange); border-color: var(--orange); }
-
     @media (max-width: 600px) {
       .hero h1 { font-size: 2rem; }
       .hero .tagline { font-size: 1rem; }
       section { padding: 40px 0; }
+      .stats { gap: 16px; }
+      .stat .number { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
-
   <!-- Hero -->
   <header class="hero">
     <div class="container">
@@ -285,8 +327,8 @@
       <p class="tagline">Specs schmieden, nicht schreiben — Spec-Driven Requirements Engineering als KI-Skill</p>
       <div class="badges">
         <span class="badge badge-blue">Claude Skill</span>
-        <span class="badge badge-green">v2.3</span>
-        <span class="badge badge-purple">15 Methoden</span>
+        <span class="badge badge-green">v3.0</span>
+        <span class="badge badge-purple">19 Dateien</span>
         <span class="badge badge-orange">9 Modi</span>
       </div>
       <div class="cta-group">
@@ -302,7 +344,7 @@
 
   <main>
   <!-- Was ist SpecForge -->
-  <article>
+  <section>
     <div class="container">
       <h2>Was ist SpecForge?</h2>
       <p style="text-align:center; color:var(--text-muted); max-width:720px; margin:0 auto 40px;">
@@ -322,38 +364,86 @@
         <div class="feature">
           <span class="icon">3</span>
           <h3>Plan & Tasks</h3>
-          <p>Technischer Plan mit ADRs, Morphological Box + Pugh Matrix für Technologieentscheidungen, plus Task-Breakdown.</p>
+          <p>Technischer Plan mit ADRs, Explore-Phase, Morphological Box + Pugh Matrix, Brownfield/Greenfield-Erkennung.</p>
         </div>
         <div class="feature">
           <span class="icon">4</span>
           <h3>Analyze</h3>
-          <p>MECE-Konsistenzprüfung über 5 Dimensionen mit Re-Analyze-Loop bis keine Blocker offen sind.</p>
+          <p>MECE-Konsistenzprüfung über 5 Dimensionen mit Re-Analyze-Loop (max. 5 Iterationen) bis keine Blocker offen sind.</p>
         </div>
         <div class="feature">
           <span class="icon">5</span>
           <h3>Checklist</h3>
-          <p>Wiederverwendbare Quality Gates — Spec-Readiness, DSGVO-Compliance oder Custom-Checklisten.</p>
+          <p>4 Checklist-Typen: Spec-Readiness, Compliance, Security, Domain-spezifisch. Wiederverwendbare Quality Gates.</p>
         </div>
         <div class="feature">
           <span class="icon">6</span>
           <h3>Stakeholder-Simulation</h3>
-          <p>Devil's Advocate + Steelmanning: 8 Rollen simulieren Perspektiven und decken blinde Flecken auf.</p>
+          <p>8 Rollen, deterministische Keyword-basierte Auswahl, Gate-Integration. Findings blockieren Gate G4.</p>
         </div>
         <div class="feature">
           <span class="icon">7</span>
           <h3>Review</h3>
-          <p>3-Ebenen-Review: Requirement-Qualität, Governance-Compliance, Security &amp; Compliance.</p>
+          <p>3-Ebenen-Review mit GP-Score-Formel: Requirement-Qualität, Governance-Compliance, Security &amp; Compliance.</p>
         </div>
         <div class="feature">
           <span class="icon">8</span>
           <h3>Management</h3>
-          <p>Traceability Matrix, Spec-First Chain Audit, Stale-Marker-Erkennung und Tech-Debt-Tracking.</p>
+          <p>7 Funktionen: Traceability Matrix, SFC-Audit, ExecPlan-Übersicht, Tech-Debt, Spec-Diff, Freshness, Analyze-Historie.</p>
         </div>
         <div class="feature">
           <span class="icon">9</span>
           <h3>Discover</h3>
-          <p>Bestandsdokumentation: Vom Code zur Spec. Zwei QS-Schleifen (Vollständigkeit + Konsistenz/Stringenz) mit Rückwärts-Validierung.</p>
+          <p>Reverse Spec mit 5W-Pflichtanalyse, zwei QS-Schleifen (max. 5 Iterationen) und eigenen RE Gates (G0-RE bis G4-RE).</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architektur Highlight -->
+  <section style="background: linear-gradient(135deg, rgba(63,185,80,0.06), rgba(88,166,255,0.06));">
+    <div class="container" style="max-width:780px;">
+      <h2 style="font-size:1.5rem;">Multi-File-Architektur</h2>
+      <p style="text-align:center; color:var(--text-muted); margin-bottom:24px; font-size:1.05rem;">
+        v3.0 wechselt von Single-File (~120 KB) zu einer modularen Architektur.
+        <strong style="color:var(--text);">Orchestrator + 9 Fachmodule + 9 Support-Dateien.</strong>
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <div class="number">19</div>
+          <div class="label">Dateien</div>
+        </div>
+        <div class="stat">
+          <div class="number">3.143</div>
+          <div class="label">Zeilen</div>
+        </div>
+        <div class="stat">
+          <div class="number">395</div>
+          <div class="label">Orchestrator</div>
+        </div>
+        <div class="stat">
+          <div class="number">9</div>
+          <div class="label">Module</div>
+        </div>
+      </div>
+      <div class="arch-tree"><span class="highlight">SKILL.md</span> <span class="dim">(395 — Orchestrator)</span>
+<span class="highlight">references/</span>
+  <span class="highlight">01-specify.md</span>      <span class="dim">(163)</span>    <span class="highlight">07-review.md</span>       <span class="dim">(173)</span>
+  <span class="highlight">02-clarify.md</span>       <span class="dim">(159)</span>    <span class="highlight">08-management.md</span>   <span class="dim">(199)</span>
+  <span class="highlight">03-plan.md</span>          <span class="dim">(242)</span>    <span class="highlight">09-discover.md</span>     <span class="dim">(215)</span>
+  <span class="highlight">04-analyze.md</span>       <span class="dim">(141)</span>    checklists/  templates/
+  <span class="highlight">05-checklist.md</span>     <span class="dim">(132)</span>    conventions/ enforcement/
+  <span class="highlight">06-stakeholder-sim.md</span> <span class="dim">(155)</span></div>
+      <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-top:24px;">
+        Jedes Modul folgt einer einheitlichen Struktur:
+      </p>
+      <div class="module-sections">
+        <div class="module-section"><span class="dot" style="background:var(--accent);"></span> Profil-Steuerung</div>
+        <div class="module-section"><span class="dot" style="background:var(--green);"></span> Stringenz-Regeln</div>
+        <div class="module-section"><span class="dot" style="background:var(--purple);"></span> Erweiterbarkeit</div>
+        <div class="module-section"><span class="dot" style="background:var(--orange);"></span> Fehlerbehandlung</div>
+        <div class="module-section"><span class="dot" style="background:var(--red);"></span> GP-Mapping</div>
+        <div class="module-section"><span class="dot" style="background:var(--text-muted);"></span> Erzeugte Artefakte</div>
       </div>
     </div>
   </section>
@@ -380,7 +470,7 @@
         <div class="feature" style="text-align:center;">
           <span class="icon" style="color:var(--accent);">3</span>
           <h3>Spec generieren</h3>
-          <p>Zwei QS-Schleifen (Vollständigkeit + Konsistenz) liefern eine Spezifikation, die vorwärts weiterverwendbar ist.</p>
+          <p>Zwei QS-Schleifen (max. 5 Iterationen) mit eigenen RE Gates liefern eine vorwärts-kompatible Spezifikation.</p>
         </div>
       </div>
       <p style="text-align:center; color:var(--text-muted); font-size:0.9rem;">
@@ -469,14 +559,14 @@ Bestand ─── Discovery ─── Spec-Gen ─── QS1:Vollständigkeit �
           <ol>
             <li>Claude-Projekt öffnen</li>
             <li><strong>Project Knowledge</strong> aufrufen</li>
-            <li><code>SKILL.md</code> hochladen</li>
+            <li><code>SKILL.md</code> + <code>references/</code> hochladen</li>
             <li>Sofort aktiv</li>
           </ol>
         </div>
         <div class="install-card">
           <h3>Claude Cowork — Plugin/Skill</h3>
           <ol>
-            <li><code>SKILL.md</code> in Skill-Verzeichnis kopieren</li>
+            <li>Skill-Ordner in Plugin-Verzeichnis kopieren</li>
             <li>In <code>plugin.json</code> registrieren</li>
             <li>Als Skill verfügbar</li>
           </ol>
@@ -484,7 +574,7 @@ Bestand ─── Discovery ─── Spec-Gen ─── QS1:Vollständigkeit �
         <div class="install-card">
           <h3>Claude Code — Projekt-Kontext</h3>
           <ol>
-            <li><code>SKILL.md</code> in <code>.claude/knowledge/</code> legen</li>
+            <li>Skill-Ordner in <code>.claude/knowledge/</code> legen</li>
             <li>Optional: In <code>CLAUDE.md</code> referenzieren</li>
             <li>Automatisch geladen</li>
           </ol>
@@ -533,14 +623,13 @@ Bestand ─── Discovery ─── Spec-Gen ─── QS1:Vollständigkeit �
       </div>
     </div>
   </section>
-
   </main>
 
   <!-- Plain-text summary for AI crawlers and noscript environments -->
   <noscript>
     <section>
       <h2>SpecForge — Zusammenfassung</h2>
-      <p>SpecForge ist ein Open-Source Claude-Skill (v2.3) für Spec-Driven Requirements Engineering mit Governance-Enforcement. 9 Modi: Specify, Clarify, Plan, Analyze, Checklist, Stakeholder-Simulation, Review, Management, Discover. 15 etablierte Methoden (Cynefin, Socratic Method, MECE, STRIDE, EARS, Gherkin, DDD, MoSCoW, ADR nach Nygard, Five Whys, Devil's Advocate, Morphological Box, Pugh Matrix, BLUF/Pyramid Principle, Impact Mapping). 10 Golden Principles. 21 Interaktionsregeln. 26 Qualitätsregeln. KRITIS/NIS2-Compliance. Enforcement Engine mit State Machine, Phase Gates G0–G8, Skip-Protokoll und Anti-Pattern-Erkennung. Modus 9 Discover mit 5W-Pflichtblock für Reverse Engineering. MIT-Lizenz. GitHub: github.com/GodModeAI2025/specforge-ai-skill</p>
+      <p>SpecForge ist ein Open-Source Claude-Skill (v3.0) für Spec-Driven Requirements Engineering mit Governance-Enforcement. Multi-File-Architektur: Orchestrator (SKILL.md, 395 Zeilen) + 9 Fachmodule + 9 Support-Dateien = 19 Dateien, 3.143 Zeilen. 9 Modi: Specify, Clarify, Plan, Analyze, Checklist, Stakeholder-Simulation, Review, Management, Discover. 15 etablierte Methoden (Cynefin, Socratic Method, MECE, STRIDE, EARS, Gherkin, DDD, MoSCoW, ADR nach Nygard, Five Whys, Devil's Advocate, Morphological Box, Pugh Matrix, BLUF/Pyramid Principle, Impact Mapping). 10 Golden Principles. Enforcement Engine mit State Machine, Phase Gates G0-G8, Skip-Protokoll und Anti-Pattern-Erkennung. Jedes Modul mit standardisierten Sektionen: Profil-Steuerung, Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping. 3 Profile: KRITIS, Standard, Startup. Autoresearch-optimiert mit 600 Assertions in 6 Dimensionen. MIT-Lizenz. GitHub: github.com/GodModeAI2025/specforge-ai-skill</p>
     </section>
   </noscript>
 
@@ -554,6 +643,5 @@ Bestand ─── Discovery ─── Spec-Gen ─── QS1:Vollständigkeit �
       </p>
     </div>
   </footer>
-
 </body>
 </html>

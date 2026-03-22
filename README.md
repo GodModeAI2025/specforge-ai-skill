@@ -1,8 +1,7 @@
 # SpecForge — Specs schmieden, nicht schreiben
-
 **Spec-Driven Requirements Engineering als KI-Skill für Claude.**
 
-SpecForge kombiniert [GitHub Spec Kit](https://github.com/github/spec-kit), Harness-Patterns (Golden Principles, Spec-First Chain, STRIDE, Folder Convention) mit EARS-Syntax, Gherkin Acceptance Criteria und automatischen KRITIS/NIS2-NFRs zu einem einzigen, selbsttragenden Skill.
+SpecForge kombiniert [GitHub Spec Kit](https://github.com/github/spec-kit), Harness-Patterns (Golden Principles, Spec-First Chain, STRIDE, Folder Convention) mit EARS-Syntax, Gherkin Acceptance Criteria und automatischen KRITIS/NIS2-NFRs zu einem modularen, selbsttragenden Skill-System.
 
 ---
 
@@ -41,33 +40,43 @@ SpecForge ist ein Claude-Skill (Cowork Plugin / Project Knowledge), der Requirem
 
 1. Öffne ein Claude-Projekt unter [claude.ai](https://claude.ai)
 2. Gehe zu **Project Knowledge**
-3. Lade `SKILL.md` als Knowledge-Datei hoch
+3. Lade den gesamten `specforge/`-Ordner hoch (SKILL.md + references/)
 4. SpecForge ist sofort aktiv — der Skill erkennt den Modus aus dem Kontext
 
 ### Variante 2: Claude Cowork — Als Plugin/Skill
 
-1. Kopiere `SKILL.md` in dein Cowork-Plugin-Verzeichnis:
+1. Kopiere den gesamten Skill-Ordner in dein Cowork-Plugin-Verzeichnis:
    ```
    mein-plugin/
    └── skills/
        └── specforge/
-           └── SKILL.md
+           ├── SKILL.md
+           └── references/
+               ├── 01-specify.md
+               ├── 02-clarify.md
+               ├── ...
+               ├── checklists/
+               ├── templates/
+               ├── conventions/
+               └── enforcement/
    ```
 2. Registriere den Skill in deiner `plugin.json`
 3. SpecForge ist als Skill verfügbar
 
 ### Variante 3: Claude Code — Als Projekt-Kontext
 
-1. Lege `SKILL.md` in dein Repo:
+1. Lege den Skill-Ordner in dein Repo:
    ```
    .claude/
    └── knowledge/
-       └── specforge.md    ← Inhalt von SKILL.md
+       └── specforge/
+           ├── SKILL.md
+           └── references/
    ```
 2. Alternativ: Referenziere die Datei in deiner `CLAUDE.md`:
    ```markdown
    ## Knowledge
-   Read .claude/knowledge/specforge.md for Requirements Engineering guidance.
+   Read .claude/knowledge/specforge/SKILL.md for Requirements Engineering guidance.
    ```
 
 ---
@@ -113,13 +122,15 @@ SpecForge erzeugt:
 - `quickstart.md` als Entwickler-Schnelleinstieg
 - `tasks.md` mit Spec-First Chain Annotationen
 
+Neu in v3: Brownfield-vs-Greenfield-Erkennung, Explore-Phase mit parallelen Architektur-Varianten, Morphological Box + Pugh Matrix.
+
 ### Modus 4: Analyze — Konsistenzprüfung
 
 ```
 "Prüfe die Konsistenz meiner Artefakte."
 ```
 
-5-Dimensionen-Check: Spec↔Plan, Plan↔Tasks, Spec↔Tasks, GP-Compliance, Security/Compliance. Re-Analyze-Loop bis keine Blocker mehr offen sind.
+5-Dimensionen-Check: Spec↔Plan, Plan↔Tasks, Spec↔Tasks, GP-Compliance, Security/Compliance. Re-Analyze-Loop (max. 5 Iterationen) bis keine Blocker mehr offen sind.
 
 ### Modus 5: Checklist — Quality Gates
 
@@ -128,7 +139,7 @@ SpecForge erzeugt:
 "Erstelle eine DSGVO-Compliance-Checklist."
 ```
 
-Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
+4 Checklist-Typen: Spec-Readiness (Typ A), Compliance (Typ B), Security (Typ C), Domain-spezifisch (Typ D). Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 
 ### Modus 6: Stakeholder-Simulation
 
@@ -137,7 +148,7 @@ Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
  für meine Spec."
 ```
 
-8 Rollen verfügbar: Product Owner, System Architect, Contract Guardian, Security Reviewer, Data Engineer, Harness Auditor, Endnutzer, Datenschutzbeauftragter.
+8 Rollen verfügbar: Product Owner, System Architect, Contract Guardian, Security Reviewer, Data Engineer, Harness Auditor, Endnutzer, Datenschutzbeauftragter. Neu in v3: Deterministische Rollenauswahl per Keyword-Matching, Gate-Integration (Findings blockieren Gate G4), Simulations-Limit.
 
 ### Modus 7: Review — Bestehende Requirements prüfen
 
@@ -146,7 +157,7 @@ Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 [Stories einfügen oder hochladen]
 ```
 
-3-Ebenen-Review: Requirement-Qualität, Governance-Compliance, Security & Compliance. Output als strukturiertes Review-Protokoll.
+3-Ebenen-Review: Requirement-Qualität, Governance-Compliance, Security & Compliance. Neu in v3: GP-Score-Formel für reproduzierbare Bewertungen, vollständig spezifizierter 3-Ebenen-Katalog.
 
 ### Modus 8: Management & Traceability
 
@@ -156,6 +167,8 @@ Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 "Prüfe auf stale Marker."
 ```
 
+Neu in v3: 7 Management-Funktionen (Traceability Matrix, SFC-Audit, ExecPlan-Übersicht, Tech-Debt-Report, Spec-Diff, Freshness-Check, Analyze-Historie). KRITIS-Skip-Protokoll für übersprungene Phase Gates.
+
 ### Modus 9: Discover — Bestandsdokumentation
 
 ```
@@ -164,7 +177,7 @@ Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 "Reverse-engineer die Anforderungen."
 ```
 
-Reverse Spec: Vom bestehenden System rückwärts zur vollwertigen spec.md. Zwei verpflichtende QS-Schleifen — erst Vollständigkeitsprüfung (jede Funktion/Endpunkt/Business Rule abgebildet?), dann Konsistenz- und Stringenzprüfung (MECE, EARS-Reinheit, Begriffskonsistenz, Ist/Soll-Delta). Erzeugt zusätzlich `discovery-protocol.md` und optional `migration-delta.md`.
+Reverse Spec: Vom bestehenden System rückwärts zur vollwertigen spec.md. Zwei verpflichtende QS-Schleifen — erst Vollständigkeitsprüfung, dann Konsistenz- und Stringenzprüfung. Neu in v3: 5W-Analyse als Pflichtblock, QS-Loops mit max. 5 Iterationen und Terminierung, eigene RE Gates (G0-RE bis G4-RE).
 
 ---
 
@@ -176,7 +189,7 @@ SpecForge folgt dem erweiterten SpecKit-v3-Workflow mit vorgelagerter Komplexit�
 [Cynefin+Impact] → Constitution → Specify → Clarify → Plan+Research+Quickstart → Tasks → Analyze → Implement → Review
 ```
 
-Jede Phase hat ein Phase Gate. Überspringen nur mit expliziter Begründung.
+Jede Phase hat ein Phase Gate. Überspringen nur mit expliziter Begründung und Skip-Protokoll.
 
 ```
 ┌────────────────┐   ┌──────────┐   ┌─────────┐   ┌─────────┐
@@ -200,7 +213,6 @@ SpecForge schlägt bei jedem neuen Projekt diese Verzeichnisstruktur vor:
 ARCHITECTURE.md
 constitution.md
 tech-debt-tracker.md
-
 specs/
   principles/          ← Design Principles (P*.md)
   decisions/           ← Architecture Decision Records (adr-*.md)
@@ -213,11 +225,9 @@ specs/
       quickstart.md
       tasks.md
       contracts/
-
 plans/
   active/              ← Laufende ExecPlans (EP-*.md)
   completed/           ← Abgeschlossene ExecPlans
-
 design/                ← Wireframes, Datenmodelle, Diagramme
 ```
 
@@ -242,41 +252,73 @@ design/                ← Wireframes, Datenmodelle, Diagramme
 
 ## Skill-Architektur
 
-SpecForge ist als **Single-File-Skill** aufgebaut — die gesamte SKILL.md (~120 KB, 2.900+ Zeilen) enthält sowohl die Skill-Logik als auch alle 9 Referenz-Anhänge inline:
+SpecForge v3 ist als **Multi-File-Skill** aufgebaut — ein Orchestrator (SKILL.md) dispatcht zu 9 Fachmodulen und 9 Support-Dateien in einer `references/`-Verzeichnisstruktur:
 
 ```
-SKILL.md
-├── Frontmatter (Name, Description, Trigger-Keywords)
-├── Hauptteil
-│   ├── Wissensquellen & Session-Isolation
-│   ├── Architekturmodell (3-Schichten)
-│   ├── Folder Convention
-│   ├── Golden Principles Übersicht
-│   ├── Workflow-Phasen (Gesamtübersicht)
-│   ├── Modi 1–9 (Specify → Discover)
-│   ├── Output-Format (User Story Template)
-│   ├── Artefakt-Übersicht
-│   ├── Sprachverhalten
-│   ├── Interaktionsregeln (21 Regeln)
-│   └── Qualitätsregeln (26 Regeln)
-└── Anhänge A–I (Referenzdokumente)
-    ├── A: Spec Template
-    ├── B: Constitution Template
-    ├── C: EARS-Syntax
-    ├── D: KRITIS-NFR-Checkliste
-    ├── E: STRIDE-Checkliste
-    ├── F: Golden Principles (Detail)
-    ├── G: Folder Convention (Detail)
-    ├── H: Spec-First Chain
-    └── I: Enforcement Engine (Phase Gates & State Machine)
+specforge/
+├── SKILL.md                              (395 Zeilen — Orchestrator)
+└── references/
+    ├── 01-specify.md                     (163 Zeilen)
+    ├── 02-clarify.md                     (159 Zeilen)
+    ├── 03-plan.md                        (242 Zeilen)
+    ├── 04-analyze.md                     (141 Zeilen)
+    ├── 05-checklist.md                   (132 Zeilen)
+    ├── 06-stakeholder-sim.md             (155 Zeilen)
+    ├── 07-review.md                      (173 Zeilen)
+    ├── 08-management.md                  (199 Zeilen)
+    ├── 09-discover.md                    (215 Zeilen)
+    ├── checklists/
+    │   ├── ears-syntax.md                (79 Zeilen)
+    │   ├── golden-principles.md          (100 Zeilen)
+    │   ├── kritis-nfr.md                (95 Zeilen)
+    │   └── stride-guide.md              (127 Zeilen)
+    ├── templates/
+    │   ├── spec-template.md              (181 Zeilen)
+    │   └── constitution-template.md      (154 Zeilen)
+    ├── conventions/
+    │   ├── folder-convention.md          (105 Zeilen)
+    │   └── spec-first-chain.md           (102 Zeilen)
+    └── enforcement/
+        └── enforcement-engine.md         (226 Zeilen)
 ```
 
-### Warum Single-File?
+**19 Dateien, 3.143 Zeilen total.**
 
-- **Keine externen Abhängigkeiten** — funktioniert in Claude.ai, Cowork und Claude Code
-- **Copy-Paste-Deployment** — eine Datei hochladen, fertig
-- **Versionierung** — eine Datei = ein Commit = ein Zustand
-- **Context-Window-freundlich** — Claude lädt den gesamten Skill auf einmal
+### Warum Multi-File?
+
+- **Separation of Concerns** — Orchestrator bleibt kompakt (395 Zeilen), Module werden nur bei Bedarf geladen
+- **Wartbarkeit** — einzelne Module unabhängig aktualisierbar
+- **Erweiterbarkeit** — neue Modi, Checklisten oder Profile über `references/custom/` hinzufügbar
+- **Audit-freundlich** — jede Datei unabhängig bewertbar und testbar
+- **Context-Window-effizient** — statt 3.143 Zeilen auf einmal lädt Claude nur Orchestrator + benötigtes Modul
+
+### Was jedes Modul enthält (Standard-Sektionen)
+
+Jedes der 9 Fachmodule (M01–M09) folgt einer einheitlichen Struktur:
+
+| Sektion | Beschreibung |
+|---------|-------------|
+| Profil-Steuerung | KRITIS/Standard/Startup-spezifisches Verhalten |
+| Ablauf (deterministisch) | Nummerierte Phasen mit konkreten Schritten |
+| Output-Template | Markdown-Template für erzeugte Artefakte |
+| Stringenz-Regeln (Enforcement) | Tabellarische Regeln mit Schweregraden |
+| Erweiterbarkeit | Custom-Extension-Punkte mit Pfaden |
+| Fehlerbehandlung | Tabellarische Edge-Case-Behandlung (≥5 Fälle) |
+| GP-Mapping | Zuordnung relevanter Golden Principles |
+| Erzeugte Artefakte | Artefakt-Tabelle mit Pfaden |
+
+### Orchestrator-Features (SKILL.md)
+
+| Feature | Beschreibung |
+|---------|-------------|
+| Pre-Flight Checks | specforge.json laden, Profil-Resolution, Referenz-Verfügbarkeit |
+| Dispatch-Tabelle | Modus → Modul-Mapping mit Trigger-Keywords |
+| Profil-Resolution Cascade | CLI-Flag → specforge.json → Nutzer-Frage → Standard |
+| Calendar Versioning | `v<YYMM>` mit Suffix (`-green`, `-yellow`) für Audit-Status |
+| Session-Retrospektive | Automatische Zusammenfassung am Session-Ende |
+| Erweiterbarkeit | 8 Built-in Extension Points (EARS, Profile, APs, GPs, Modi, ...) |
+| Fehlerbehandlung | KRITISCH vs. OPTIONAL Referenzen mit spezifischem Verhalten |
+| Audit Trail | Jede Enforcement-Entscheidung wird protokolliert |
 
 ---
 
@@ -285,7 +327,6 @@ SKILL.md
 SpecForge kann als Blaupause für eigene Skills dienen. Hier die Methodik:
 
 ### 1. Frontmatter definieren
-
 ```yaml
 ---
 name: MeinSkill
@@ -322,13 +363,10 @@ Jeder Modus hat:
 
 ```markdown
 ### Modus N: [Name]
-
 **Trigger:** [Beschreibung]
-
 **Phase Na: [Schritt]**
 1. ...
 2. ...
-
 **Erzeugte Artefakte:**
 - ...
 ```
@@ -339,12 +377,10 @@ Gib Claude exakte Templates mit Platzhaltern:
 
 ```markdown
 ## Output-Format: [Artefakt-Typ]
-
 \```markdown
 ### [ID] [Titel]
 **Typ**: ...
 **Priorität**: ...
-
 #### Abschnitt
 [Inhalt]
 \```
@@ -369,19 +405,22 @@ Nicht "versuche X" sondern "X ist Pflicht":
 3. Smarte Annahmen mit `[Annahme: ...]` kennzeichnen
 ```
 
-### 7. Referenzen inline als Anhänge
+### 7. Referenzen als separate Dateien
 
-Statt externe Dateien → Anhänge am Ende:
+Statt alles inline: Module in `references/` auslagern und per Dispatch-Tabelle referenzieren:
 
 ```markdown
-## Anhang A: [Referenzname]
-
-**Wann konsultieren:** [Konkreter Auslöser]
-
-[Referenzinhalt]
+## Dispatch-Tabelle
+| Modus | Modul | Laden |
+|-------|-------|-------|
+| 1: Specify | references/01-specify.md | Bei Modus-Aktivierung |
 ```
 
-### 8. Skill testen
+### 8. Standardisierte Modul-Sektionen
+
+Jedes Modul sollte enthalten: Profil-Steuerung, Ablauf, Output-Template, Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping, Erzeugte Artefakte.
+
+### 9. Skill testen
 
 Teste jeden Modus mit:
 - Minimalem Input (erkennt der Skill den Modus?)
@@ -424,7 +463,8 @@ Teste jeden Modus mit:
 | 2.0 | 2026-03 | +Clarify, +Analyze, +Checklist, +Research, +Quickstart. SpecKit v3 Alignment. RE Butler entfernt. Single-File-Architektur. |
 | 2.1 | 2026-03 | +Phase 0 (Cynefin + Impact Mapping), 15 methodische Frameworks mit Aktivieren-Eingrenzen-Prüfen-Muster, Sokratische Klärung, MECE-Analyse, Devil's Advocate + Steelmanning, Morphological Box + Pugh Matrix, DDD-Datenmodell, BLUF-Zusammenfassungen. |
 | 2.2 | 2026-03 | +Modus 9 Discover (Bestandsdokumentation & Reverse Spec). Zwei verpflichtende QS-Schleifen: Vollständigkeit + Konsistenz/Stringenz. Rückwärts-Validierung. discovery-protocol.md und migration-delta.md als neue Artefakte. |
-| 2.3 | 2026-03 | +Anhang I Enforcement Engine: State Machine (INIT→COMPLETE), Phase Gates G0–G8, Skip-Protokoll, Vage-Begriffe-Scanner, Anti-Pattern-Erkennung. +5W-Pflichtblock für Reverse-Engineering (WER/WAS/WARUM/WIE/WANN mit Evidenz und Konfidenz). +Artefakt-Vollständigkeits-Check. +Session-Status-Anzeige. 21 Interaktions- + 26 Qualitätsregeln. |
+| 2.3 | 2026-03 | +Anhang I Enforcement Engine: State Machine (INIT→COMPLETE), Phase Gates G0–G8, Skip-Protokoll, Vage-Begriffe-Scanner, Anti-Pattern-Erkennung. +5W-Pflichtblock für Reverse-Engineering. +Artefakt-Vollständigkeits-Check. +Session-Status-Anzeige. 21 Interaktions- + 26 Qualitätsregeln. |
+| 3.0 (v202-green) | 2026-03 | **Architektur-Wechsel: Single-File → Multi-File.** Orchestrator (SKILL.md, 395 Zeilen) + 9 Fachmodule + 9 Support-Dateien = 19 Dateien, 3.143 Zeilen. Jedes Modul erhält standardisierte Sektionen: Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping. Orchestrator mit Pre-Flight Checks, Profil-Resolution Cascade, Calendar Versioning, Audit Trail, Session-Retrospektive, 8 Built-in Extension Points. Deterministische Rollenauswahl (M06), GP-Score-Formel (M07), 7 Management-Funktionen (M08), QS-Loops mit Terminierung (M09). Autoresearch-optimiert: 600 Assertions, 6 Dimensionen, 68%→80% Score über 5 Iterationen. |
 
 ---
 
@@ -439,5 +479,6 @@ MIT — siehe [LICENSE](LICENSE).
 Issues und Pull Requests willkommen. Insbesondere:
 - Neue Reviewer-Agenten-Definitionen für spezifische Domänen
 - Branchenspezifische NFR-Checklisten (Finanz, Pharma, Automotive)
-- Übersetzungen (Englische Version der SKILL.md)
+- Übersetzungen (Englische Version)
 - Integration mit weiteren KI-Agenten (Cursor, Copilot, Gemini)
+- Custom Extensions für `references/custom/`
