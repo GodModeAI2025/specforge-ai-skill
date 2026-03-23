@@ -1,0 +1,3 @@
+SpecForge ist ein unabhängiges Open-Source-Projekt und steht in keiner Verbindung zu Anthropic, Microsoft, Cognitive Edge oder anderen genannten Unternehmen und Organisationen. Es wird von keinem dieser Unternehmen gesponsert, unterstützt oder offiziell anerkannt.
+„Claude" ist eine Marke von Anthropic, PBC. „Cynefin" ist eine eingetragene Marke von Cognitive Edge (The Cynefin Co). „STRIDE" ist eine Methodik von Microsoft. Alle weiteren genannten Produkt- und Firmennamen sind Marken ihrer jeweiligen Inhaber und werden hier ausschließlich zu Identifikations- und Referenzzwecken verwendet.
+Die Verwendung dieser Namen stellt keine Beanspruchung von Markenrechten dar und impliziert keine Billigung oder Zugehörigkeit.
