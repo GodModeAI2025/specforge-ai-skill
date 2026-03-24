@@ -1,6 +1,6 @@
 # Enforcement Engine
 
-Phase Gates, Anti-Pattern-Erkennung, State Machine und Artefakt-Vollständigkeitsprüfung. Wird bei jedem Phasenübergang automatisch aktiviert. Verhalten skaliert mit dem gewählten Profil aus `specforge.json`.
+Phase Gates, Anti-Pattern-Erkennung, State Machine und Artefakt-Vollständigkeitsprüfung. Wird bei jedem Phasenübergang automatisch aktiviert. Verhalten skaliert mit dem gewählten Profil und der Perspektive aus `specforge.json`.
 
 ---
 
@@ -9,119 +9,248 @@ Phase Gates, Anti-Pattern-Erkennung, State Machine und Artefakt-Vollständigkeit
 ```
    G0              G1              G2              G3                G4              G5
 [START+PROFIL] → [SPECIFY] → [CLARIFY] → [PLAN+TASKS] → [ANALYZE] → [IMPLEMENT] → [COMPLETE]
-                                  ↑                          ↑           │
-                                  │                          └── Fix ────┘
-                             (Loop bei BLOCKER)
+                                 ↑                          ↑           │
+                                 │                          └── Fix ────┘
+                            (Loop bei F4/F3)
 ```
 
-## I.2 Ausführbare Phase Gates
+### Gate-Ausgänge
 
-Jedes Gate hat eine **konkrete Checkliste** mit Pass/Fail-Ergebnis. SpecForge prüft automatisch und gibt das Ergebnis aus, bevor der Übergang vorgeschlagen wird.
+Jedes Gate hat drei mögliche Ausgänge:
 
-**Profil-Schwellen für GP-Score:** KRITIS ≥ 9/10 · Standard ≥ 8/10 · Startup ≥ 6/10
+| Ausgang | Bedingung | Verhalten |
+|---------|-----------|-----------|
+| **PASS** | Nur F0/F1/F2/F5-Befunde | Weiter zur nächsten Phase. F2-Befunde erzeugen Pflicht-Tasks. |
+| **CONDITIONAL** | Mindestens 1× F3, kein F4 | Gate blockiert bis Nutzer-Bestätigung. **Voraussetzung:** Die dokumentierte Risiko-Akzeptanz (gemäß CONDITIONAL-Akzeptanz-Protokoll, Abschnitt I.5) muss **vor** der Gate-Bestätigung vorliegen — die Bestätigung selbst ist keine Dokumentation, sondern setzt deren Existenz voraus. Bei Bestätigung → PASS mit Audit-Eintrag `[CONDITIONAL ACCEPTED]`. Bei Ablehnung → Gate bleibt offen. |
+| **FAIL** | Mindestens 1× F4 | Gate blockiert. Prüfpunkt muss erfüllt werden, bevor das Gate erneut geprüft wird. |
 
-**Skip-Regeln nach Profil:**
-- **KRITIS:** Skip nur mit vollständigem Skip-Protokoll (Begründung, Risiko, Kompensation, Entscheider)
-- **Standard:** Skip mit Einzeiler-Begründung erlaubt
-- **Startup:** Soft Gates — Empfehlungen statt Blocker
+---
+
+## I.2 Schweregrad-System (F-Stufen)
+
+Das F-Stufen-System ersetzt das bisherige binäre `required: true/false`. Die Klassifikation folgt dem aufsichtlichen Standard der Deutschen Bundesbank (Anlage 6 zu § 27 PrüfbV).
+
+| F-Stufe | Bezeichnung | Gate-Ergebnis | Verhalten |
+|---------|-------------|---------------|-----------|
+| **F4** | Schwergewichtiger Mangel | ❌ FAIL | Gate blockiert — Prüfpunkt muss erfüllt werden |
+| **F3** | Gewichtiger Mangel | ⚠️ CONDITIONAL | Gate passierbar nur mit dokumentierter Risiko-Akzeptanz durch Leitungsorgan |
+| **F2** | Mittelschwerer Mangel | ⚠️ WARNING | Gate passierbar — Pflicht-Task vor Go-Live erzeugen |
+| **F1** | Geringfügiger Mangel | ℹ️ INFO | Gate passierbar — als Empfehlung dokumentieren |
+| **F0** | Kein Mangel | ✅ PASS | Kein Handlungsbedarf |
+| **F5** | Nicht anwendbar | ⏭️ SKIP | Prüfpunkt entfällt — Begründung im Audit Trail |
+
+### Abwärtskompatibilität (Legacy-Mapping)
+
+Projekte ohne `severity_model` in specforge.json nutzen weiterhin Boolean-Logik. Die interne Zuordnung:
+
+| Legacy-Wert | F-Stufen-Äquivalent |
+|-------------|---------------------|
+| `required: true` | F4 |
+| `required: false, skip_reason_required: true` | F3 |
+| `required: false` | F1 |
+| BLOCKER (Anti-Pattern/Schweregrad) | F4 |
+| MAJOR | F3 |
+| MINOR | F1 |
+
+### Perspektivenabhängige F-Stufen
+
+Die F-Stufe eines Prüfpunkts kann je nach Perspektive variieren. In `checks_config` wird `severity` als String (einheitlich) oder als Objekt (perspektivenabhängig) angegeben:
+
+```json
+"stride_complete": {
+  "severity": {
+    "_default": "F3",
+    "regulated_entity": "F4",
+    "ict_provider": "F3",
+    "advisory": "F1"
+  }
+}
+```
+
+**Resolution:** Perspektive aus `specforge.json → perspective` lesen → Lookup im `severity`-Objekt → bei Treffer: diesen Wert verwenden → bei Fehltreffer: `_default` verwenden → kein `_default`: F3 als Fallback.
+
+### GP-Score-Berechnung mit F-Stufen
+
+| F-Stufe des Befunds | Auswirkung auf GP-Score |
+|----------------------|-------------------------|
+| F4 | GP gilt als nicht erfüllt |
+| F3 (nicht akzeptiert) | GP gilt als nicht erfüllt |
+| F3 (akzeptiert) | GP gilt als erfüllt (mit Conditional-Marker) |
+| F2 | GP gilt als erfüllt (mit Warning-Marker) |
+| F1 | GP gilt als erfüllt |
+| F0 | GP gilt als erfüllt |
+| F5 | GP wird aus Berechnung entfernt |
+
+**GP-Score-Schwellen nach Profil:** KRITIS ≥ 9/10 · Standard ≥ 8/10 · Startup ≥ 6/10
+
+---
+
+## I.3 Ausführbare Phase Gates
 
 ### Gate G0: Start → Specify
 ```
 ── Gate G0 ─────────────────────────────────
-[ ] specforge.json erzeugt mit Profil
-[ ] Cynefin-Einordnung (empfohlen)
-[ ] Folder Convention bestätigt
-[ ] constitution.md erzeugt mit GPs laut Profil
-── Ergebnis: PASS | FAIL ───────────────────
+[ ] specforge.json erzeugt mit Profil           [F4]
+[ ] Perspektive abgefragt (wenn Regulierung     [F3]
+    mit Pflicht-Abfrage geladen)
+[ ] Cynefin-Einordnung (empfohlen)              [F1]
+[ ] Folder Convention bestätigt                  [F2]
+[ ] constitution.md erzeugt mit GPs laut Profil [F4]
+── Ergebnis: PASS | CONDITIONAL | FAIL ─────────
 ```
 
 ### Gate G1: Specify → Clarify
 ```
 ── Gate G1 ─────────────────────────────────
-[ ] spec.md erzeugt
-[ ] EARS-Formulierung: X/Y Stories vollständig
-[ ] Gherkin-Szenarien: ≥2 pro Story
-[ ] Constitution referenziert
-[ ] STRIDE: laut Profil geprüft
-[ ] Keine offenen BLOCKER-Fragen
-── Ergebnis: PASS | FAIL ───────────────────
+[ ] spec.md erzeugt                              [F4]
+[ ] EARS-Formulierung: X/Y Stories vollständig   [F4]
+[ ] Gherkin-Szenarien: ≥2 pro Story              [F4]
+[ ] Constitution referenziert                    [F4]
+[ ] STRIDE: laut Profil geprüft                  [profilabhängig]
+[ ] NFR-Scan: Core + Extensions                  [profilabhängig]
+[ ] Keine offenen F4-Befunde                     [F4]
+── Ergebnis: PASS | CONDITIONAL | FAIL ─────────
 ```
 
 ### Gate G2: Clarify → Plan
 ```
 ── Gate G2 ─────────────────────────────────
-[ ] Keine offenen BLOCKER-Fragen
-[ ] Clarifications dokumentiert in spec.md
-[ ] Vage Begriffe aufgelöst
-[ ] [Annahme: ...]-Marker bestätigt oder verworfen
-── Ergebnis: PASS | FAIL ───────────────────
+[ ] Keine offenen F4-Befunde                     [F4]
+[ ] Clarifications dokumentiert in spec.md       [F4]
+[ ] Vage Begriffe aufgelöst                      [F4]
+[ ] [Annahme: ...]-Marker bestätigt/verworfen    [F3]
+[ ] Artefakt-Erwartung erfüllt                   [F2]
+── Ergebnis: PASS | CONDITIONAL | FAIL ─────────
 ```
 
 ### Gate G3: Plan+Tasks → Analyze
 ```
 ── Gate G3 ─────────────────────────────────
-[ ] plan.md erzeugt
-[ ] tasks.md erzeugt mit Spec-First Steps
-[ ] ADRs für Cross-Modul-Entscheidungen (GP-03)
-[ ] research.md vorhanden (Pflicht bei KRITIS/Standard)
-[ ] quickstart.md vorhanden
-[ ] ExecPlans für Tasks mit 5+ Dateien (GP-04)
-── Ergebnis: PASS | FAIL ───────────────────
+[ ] plan.md erzeugt                              [F4]
+[ ] tasks.md erzeugt mit Spec-First Steps        [F4]
+[ ] ADRs für Cross-Modul-Entscheidungen (GP-03)  [profilabhängig]
+[ ] research.md vorhanden                        [profilabhängig]
+[ ] quickstart.md vorhanden                      [F2]
+[ ] ExecPlans für Tasks mit 5+ Dateien (GP-04)   [F2]
+── Ergebnis: PASS | CONDITIONAL | FAIL ─────────
 ```
 
 ### Gate G4: Analyze → Implement
 ```
 ── Gate G4 ─────────────────────────────────
-[ ] Keine BLOCKER-Befunde offen
-[ ] GP-Score ≥ Profil-Schwelle
-[ ] STRIDE vollständig (laut Profil)
-[ ] Custom-Checks bestanden (falls vorhanden)
-── Ergebnis: PASS | FAIL ───────────────────
+[ ] Keine F4-Befunde offen                       [F4]
+[ ] GP-Score ≥ Profil-Schwelle                   [F4]
+[ ] STRIDE vollständig (laut Profil)             [profilabhängig]
+[ ] NFR-Scan bestanden (Core + Extensions)       [profilabhängig]
+[ ] Custom-Checks bestanden (falls vorhanden)    [konfigurierbar]
+── Ergebnis: PASS | CONDITIONAL | FAIL ─────────
 ```
 
 ### Gate G5: Implement → Complete
 ```
 ── Gate G5 ─────────────────────────────────
-[ ] Artefakt-Vollständigkeits-Check (siehe I.5)
-[ ] Alle Tasks aus tasks.md abgeschlossen
-[ ] Spec-First Chain Compliance geprüft
-[ ] ARCHITECTURE.md aktuell
-[ ] Kein staler Marker ohne Owner (GP-06)
-── Ergebnis: PASS | FAIL ───────────────────
+[ ] Artefakt-Vollständigkeits-Check (siehe I.6)  [F4]
+[ ] Alle Tasks aus tasks.md abgeschlossen        [F4]
+[ ] Spec-First Chain Compliance geprüft          [F4]
+[ ] ARCHITECTURE.md aktuell                      [F3]
+[ ] Kein staler Marker ohne Owner (GP-06)        [F2]
+[ ] Alle F2-WARNING-Tasks abgearbeitet           [F4]
+── Ergebnis: PASS | CONDITIONAL | FAIL ─────────
 ```
 
-### Skip-Protokoll (KRITIS: vollständig, Standard: Einzeiler, Startup: nicht nötig)
+### Gate-Ergebnis-Format
+
+```
+── Gate G4: Analyze → Implement ──────────────
+✅ [F0] EARS-Formulierung: 5/5 Stories
+✅ [F0] Gherkin-Szenarien: 12 (min. 10)
+✅ [F0] Constitution: vorhanden
+⚠️ [F3] STRIDE: 2/5 Stories noch offen — CONDITIONAL
+   └─ Risiko-Akzeptanz erforderlich
+⚠️ [F2] NFR DAT-03: Transport-Verschlüsselung — WARNING
+   └─ Pflicht-Task vor Go-Live: DAT-03-FIX
+ℹ️ [F1] NFR GOV-03: Informationsaustausch — INFO
+── Ergebnis: CONDITIONAL — Risiko-Akzeptanz? ──
+```
+
+### NFR-Lücken-Format
+
+```
+[NFR-Lücke F4: IRM-01 — IKT-Risikomanagement-Framework fehlt — Gate: FAIL]
+[NFR-Lücke F3: TST-06 — TLPT-Zyklus nicht geplant — Gate: CONDITIONAL]
+[NFR-Lücke F2: DAT-03 — Transport-Verschlüsselung nicht spezifiziert — Gate: WARNING]
+[NFR-Lücke F1: GOV-03 — Informationsaustausch nicht vorgesehen — Gate: INFO]
+```
+
+### Skip-Protokoll (F5-Dokumentation)
+
+Jeder F5-Befund (nicht anwendbar) erfordert eine dokumentierte Begründung. Bei KRITIS-Profil ist das vollständige Skip-Protokoll Pflicht, bei Standard reicht ein Einzeiler, bei Startup entfällt die Dokumentationspflicht.
 
 ```markdown
-## Skip-Protokoll: [Gate-ID]
+## Skip-Protokoll: [Gate-ID] — [Prüfpunkt-ID]
 
-**Gate:** [z.B. G2 — Clarify → Plan]
-**Begründung:** [z.B. Spike/PoC, Nutzer hat explizit bestätigt]
+**Gate:** [z.B. G4 — Analyze → Implement]
+**Prüfpunkt:** [z.B. TST-06 — TLPT-Zyklus]
+**F-Stufe:** F5 (nicht anwendbar)
+**Begründung:** [z.B. Entität ist nicht für TLPT designiert (Art. 26(1) DORA)]
 **Risiko:** [Was wird durch Überspringen nicht geprüft?]
 **Kompensation:** [Welche Maßnahmen reduzieren das Risiko?]
 **Entscheider:** [Wer hat zugestimmt?]
 **Datum:** [YYYY-MM-DD]
 ```
 
+### CONDITIONAL-Akzeptanz-Protokoll (F3-Dokumentation)
+
+```markdown
+## Risiko-Akzeptanz: [Prüfpunkt-ID]
+
+**Gate:** [z.B. G4 — Analyze → Implement]
+**Prüfpunkt:** [z.B. TST-06 — TLPT-Zyklus nicht geplant]
+**F-Stufe:** F3 (gewichtiger Mangel)
+**Risiko:** [Beschreibung des Risikos bei Akzeptanz]
+**Akzeptiert durch:** [Name/Rolle des Leitungsorgans]
+**Kompensation:** [Geplante Maßnahmen zur Risikoreduktion]
+**Frist:** [Bis wann muss der Mangel behoben sein?]
+**Datum:** [YYYY-MM-DD]
+```
+
 ---
 
-## I.3 Anti-Pattern-Erkennung (7 Patterns)
+## I.4 Anti-Pattern-Erkennung (8 Patterns)
 
 Bei jeder Story-Erzeugung und jedem Review automatisch prüfen:
 
-| # | Anti-Pattern | Beschreibung | Erkennung | Schweregrad |
-|---|-------------|-------------|-----------|-------------|
-| AP-01 | Implementation Bias | Requirement beschreibt HOW statt WHAT | Technologie-Begriffe in Story-Text | MAJOR |
-| AP-02 | Gold Plating | Überflüssige Features ohne Business Value | Story ohne Impact-Mapping-Referenz | MINOR |
-| AP-03 | Implizite Annahmen | Unausgesprochene Voraussetzungen | Fehlende `[Annahme: ...]`-Marker | MAJOR |
-| AP-04 | Vage Quantifizierung | Nicht messbare Anforderungen | "schnell", "viele", "einfach" etc. | BLOCKER |
-| AP-05 | Scope Creep | Schleichende Erweiterung ohne Spec-Update | Tasks ohne Spec-Referenz (GP-02) | BLOCKER |
-| AP-06 | Missing Negative | Nur Happy Path, keine Fehlerfälle | <2 Gherkin-Szenarien, kein Unwanted-Pattern | MAJOR |
-| AP-07 | Orphan Artifact | Artefakt ohne Bezug zum Workflow | Task ohne Story, Story ohne Spec | MAJOR |
+| # | Anti-Pattern | Beschreibung | Erkennung | F-Stufe |
+|---|-------------|-------------|-----------|---------|
+| AP-01 | Implementation Bias | Requirement beschreibt HOW statt WHAT | Technologie-Begriffe in Story-Text | F3 |
+| AP-02 | Gold Plating | Überflüssige Features ohne Business Value | Story ohne Impact-Mapping-Referenz | F1 |
+| AP-03 | Implizite Annahmen | Unausgesprochene Voraussetzungen | Fehlende `[Annahme: ...]`-Marker | F3 |
+| AP-04 | Vage Quantifizierung | Nicht messbare Anforderungen | "schnell", "viele", "einfach" etc. | F4 |
+| AP-05 | Scope Creep | Schleichende Erweiterung ohne Spec-Update | Tasks ohne Spec-Referenz (GP-02) | F4 |
+| AP-06 | Missing Negative | Nur Happy Path, keine Fehlerfälle | <2 Gherkin-Szenarien, kein Unwanted-Pattern | F3 |
+| AP-07 | Orphan Artifact | Artefakt ohne Bezug zum Workflow | Task ohne Story, Story ohne Spec | F3 |
+| AP-08 | SOPHIST-Verletzung | Sprachliche Mehrdeutigkeit oder Unvollständigkeit | Passiv ohne Akteur, Negation statt Positivaussage, optionale Formulierung ohne Bedingung, generische Begriffe ("das System", "der Nutzer") | F3 |
+
+### SOPHIST-Blocklist (Erweiterung zu AP-04 Vage-Begriffe-Blocklist)
+
+AP-08 erkennt sprachliche Anti-Patterns, die über vage Quantifizierung (AP-04) hinausgehen. Prüfung erfolgt bei jeder Story-Erzeugung und jedem Review.
+
+| Kategorie | Trigger-Muster | Korrektur |
+|-----------|---------------|-----------|
+| **Passiv ohne Akteur** | "Es wird angezeigt", "wird verarbeitet", "ist sichtbar" | Akteur benennen: "Die Mobile App zeigt an" |
+| **Negation statt Positivaussage** | "nicht langsamer als", "nicht weniger als" | Positiv formulieren: "mindestens so schnell wie", "mindestens" |
+| **Optionale Formulierung ohne Bedingung** | "ggf.", "evtl.", "normalerweise", "in der Regel", "falls möglich" | Konkrete Bedingung: "Wenn [Bedingung], dann [Verhalten]" |
+| **Generische Begriffe** | "das System", "der Nutzer", "der Service" (ohne vorherige Definition) | Konkret benennen: "die Mobile App", "der E-Mobility Fahrer", "der Auth-Service" |
+| **Unvollständige Aufzählung** | "etc.", "usw.", "und so weiter", "u.a.", "z.B." (als einzige Spezifikation) | Vollständige Aufzählung oder explizit abgrenzen: "ausschließlich: X, Y, Z" |
+| **Implizite Zeitangabe** | "zeitnah", "umgehend", "bald", "regelmäßig" | Konkret: "innerhalb von 24h", "alle 5 Minuten" |
+
+**Abgrenzung AP-04 vs. AP-08:** AP-04 erkennt nicht messbare Quantifizierungen ("schnell", "viele"). AP-08 erkennt sprachliche Strukturprobleme (Passiv, Negation, Generik). Beide können gleichzeitig zutreffen — ein und dasselbe Requirement kann sowohl AP-04 als auch AP-08 verletzen.
+
+**Legacy-Mapping:** BLOCKER → F4, MAJOR → F3, MINOR → F1
 
 ---
 
-## I.4 5W-Pflichtblock (Reverse Engineering)
+## I.5 5W-Pflichtblock (Reverse Engineering)
 
 Bei Modus 9 (Discover) ist die 5W-Analyse das erste Pflicht-Artefakt — vor constitution.md und spec.md.
 
@@ -179,33 +308,36 @@ Bei Modus 9 (Discover) ist die 5W-Analyse das erste Pflicht-Artefakt — vor con
 
 ---
 
-## I.5 Artefakt-Vollständigkeits-Check (vor G5 COMPLETE)
+## I.6 Artefakt-Vollständigkeits-Check (vor G5 COMPLETE)
 
 Vor Abschluss eines Features prüft die Enforcement Engine die gesamte Artefaktkette:
 
-| Artefakt | Pflicht | Prüfung |
-|----------|---------|---------|
-| specforge.json | Ja (einmal) | Existiert? Profil gesetzt? |
-| constitution.md | Ja (einmal) | Existiert? GPs laut Profil enthalten? DoD definiert? |
-| ARCHITECTURE.md | Ja (einmal) | Existiert? Codemap aktuell? Invarianten mit IDs? |
-| spec.md | Ja | EARS vollständig? Gherkin ≥2? STRIDE laut Profil? NFRs? Clarifications? |
-| plan.md | Ja | Architektur dokumentiert? ADRs vorhanden (GP-03)? |
-| research.md | KRITIS/Standard | Research-Fragen beantwortet? Versions-Matrix? |
-| quickstart.md | Ja | Setup-Anleitung? Konventionen? Erster Task? |
-| tasks.md | Ja | Spec-First Steps markiert? ExecPlans bei 5+ Dateien (GP-04)? |
-| tech-debt-tracker.md | Wenn Debt | Alle bekannten Schulden erfasst (GP-10)? |
+| Artefakt | Pflicht | Prüfung | Default-F-Stufe |
+|----------|---------|---------|-----------------|
+| specforge.json | Ja (einmal) | Existiert? Profil gesetzt? Perspektive gesetzt (wenn Regulierung)? | F4 |
+| constitution.md | Ja (einmal) | Existiert? GPs laut Profil enthalten? DoD definiert? | F4 |
+| ARCHITECTURE.md | Ja (einmal) | Existiert? Codemap aktuell? Invarianten mit IDs? | F4 |
+| spec.md | Ja | EARS vollständig? Gherkin ≥2? STRIDE laut Profil? NFRs? Clarifications? | F4 |
+| plan.md | Ja | Architektur dokumentiert? ADRs vorhanden (GP-03)? | F4 |
+| research.md | KRITIS/Standard | Research-Fragen beantwortet? Versions-Matrix? | F3 (KRITIS: F4) |
+| quickstart.md | Ja | Setup-Anleitung? Konventionen? Erster Task? | F2 |
+| tasks.md | Ja | Spec-First Steps markiert? ExecPlans bei 5+ Dateien (GP-04)? | F4 |
+| tech-debt-tracker.md | Wenn Debt | Alle bekannten Schulden erfasst (GP-10)? | F2 |
+| specforge-audit.md | KRITIS: Pflicht | Gate-Checks dokumentiert? F-Stufen + Perspektive enthalten? | F4 (KRITIS), F1 (sonst) |
 
 **Ergebnis:**
 ```
 COMPLETE-Readiness: [Ja / Nein]
-Fehlende Artefakte: [Liste]
-Unvollständige Artefakte: [Liste mit Befund]
+Fehlende Artefakte: [Liste mit F-Stufe]
+Unvollständige Artefakte: [Liste mit Befund und F-Stufe]
 GP-Score: [X/10]
+Offene Warnings (F2): [Anzahl — müssen vor Go-Live abgearbeitet sein]
+Offene Conditionals (F3): [Anzahl — mit Akzeptanz-Verweis]
 ```
 
 ---
 
-## I.6 Reverse-Engineering Path (State Machine)
+## I.7 Reverse-Engineering Path (State Machine)
 
 ```
    G0-RE          G1-RE          G2-RE          G3-RE          G4-RE

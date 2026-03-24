@@ -119,7 +119,7 @@ Clarify ist abgeschlossen wenn:
 | Vage Begriffe aus Blocklist | Jede Clarification gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
 | Fragen-Budget | Max. 5 Fragen pro Runde (Clarify-spezifisch, sonst 3) | n.a. |
 | BLOCKER-Fragen vor Plan lösen | Offene BLOCKER-Fragen blockieren Gate G2 | BLOCKER |
-| Anti-Pattern-Prüfung | AP-01–AP-07 bei jeder Reformulierung | Schweregrad laut AP-Tabelle |
+| Anti-Pattern-Prüfung | AP-01–AP-08 bei jeder Reformulierung | Schweregrad laut AP-Tabelle |
 | Artefakt-Aktualisierung als Datei | Clarifications in spec.md als Datei, nicht inline | MAJOR |
 | Schweregrad-Zuweisung | Deterministisch: Fragen mit Architektur-Impact = BLOCKER, Fragen zu Details = MAJOR, Verständnisfragen = MINOR | n.a. |
 

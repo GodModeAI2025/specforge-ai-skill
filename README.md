@@ -26,11 +26,15 @@ SpecForge ist ein Claude-Skill (Cowork Plugin / Project Knowledge), der Requirem
 
 - **10 Golden Principles** (GP-01 bis GP-10) — enforceable, nicht optional
 - **STRIDE-Analyse** — alle 6 Kategorien für security-relevante Stories
-- **KRITIS/NIS2-NFRs** — automatischer Scan gegen 41 Prüfpunkte in 6 Kategorien
+- **NFR-Scan mit F-Stufen** — automatischer Scan gegen 41 KRITIS/NIS2-Prüfpunkte + erweiterbar über Extensions (z.B. DORA mit 58 Prüfpunkten). 6-stufiges Schweregrad-System (F0–F5) mit CONDITIONAL-Gate
 - **Cross-Artifact-Konsistenz** — Spec ↔ Plan ↔ Tasks Abgleich mit Re-Analyze-Loop
 - **EARS-Konformität** — jedes Requirement in einem der 5 EARS-Patterns
 - **Gherkin-Qualität** — min. 2 Szenarien pro Story
-- **Enforcement Engine** — Phase Gates G0–G8 mit State Machine, Skip-Protokoll und Artefakt-Vollständigkeits-Check
+- **8 Anti-Patterns** (AP-01 bis AP-08) — inkl. SOPHIST-Verletzung (Passiv, Negation, Generik)
+- **Story-Quality-Score (SQS)** — numerische Qualitätsbewertung (0–5) pro Story in Review und Analyze
+- **Testfall-Ableitung** (Modus 10 Derive) — Gherkin → strukturierte Testfälle mit Testabdeckungsmatrix
+- **Enforcement Engine** — Phase Gates G0–G5 mit State Machine, F-Stufen-basiertem Gate-System (PASS/CONDITIONAL/FAIL), Skip-Protokoll und Artefakt-Vollständigkeits-Check
+- **Regulierungs-Extensions** — erweiterbar über `references/custom/@{regulierung}/` mit Manifest-Auto-Detection. Mitgeliefert: DORA (EU 2022/2554), BAIT (Stub)
 
 ---
 
@@ -465,6 +469,8 @@ Teste jeden Modus mit:
 | 2.2 | 2026-03 | +Modus 9 Discover (Bestandsdokumentation & Reverse Spec). Zwei verpflichtende QS-Schleifen: Vollständigkeit + Konsistenz/Stringenz. Rückwärts-Validierung. discovery-protocol.md und migration-delta.md als neue Artefakte. |
 | 2.3 | 2026-03 | +Anhang I Enforcement Engine: State Machine (INIT→COMPLETE), Phase Gates G0–G8, Skip-Protokoll, Vage-Begriffe-Scanner, Anti-Pattern-Erkennung. +5W-Pflichtblock für Reverse-Engineering. +Artefakt-Vollständigkeits-Check. +Session-Status-Anzeige. 21 Interaktions- + 26 Qualitätsregeln. |
 | 3.0 (v202-green) | 2026-03 | **Architektur-Wechsel: Single-File → Multi-File.** Orchestrator (SKILL.md, 395 Zeilen) + 9 Fachmodule + 9 Support-Dateien = 19 Dateien, 3.143 Zeilen. Jedes Modul erhält standardisierte Sektionen: Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping. Orchestrator mit Pre-Flight Checks, Profil-Resolution Cascade, Calendar Versioning, Audit Trail, Session-Retrospektive, 8 Built-in Extension Points. Deterministische Rollenauswahl (M06), GP-Score-Formel (M07), 7 Management-Funktionen (M08), QS-Loops mit Terminierung (M09). Autoresearch-optimiert: 600 Assertions, 6 Dimensionen, 68%→80% Score über 5 Iterationen. |
+| 3.1 | 2026-03 | **DORA-Integration & F-Stufen-System.** +F-Stufen (F0–F5) nach PrüfbV §27 ersetzen binäres Pass/Fail. +CONDITIONAL als dritter Gate-Ausgang (Risiko-Akzeptanz). +Perspektive als orthogonale Dimension zu Profil (Lieferkettenrolle). +Manifest-Auto-Detection für Extensions. +DORA-Extension (58 Prüfpunkte, 6 Kategorien, 3 Perspektiven). +BAIT-Stub (8 Prüfpunkte). +CONTRIBUTING-CHECKLISTS.md mit Schema, Validierung und Kandidatenliste. +Erweiterter Audit Trail mit F-Stufen und Perspektive. |
+| 3.2 | 2026-03 | **Qualitätserweiterungen aus RE-Skill-Analyse.** +AP-08 SOPHIST-Verletzung (Passiv, Negation, Generik, unvollständige Aufzählung, implizite Zeitangabe) mit SOPHIST-Blocklist. +`[Offen: ...]`-Marker für unvollständige Stories (F3 nach Clarify). +Story-Quality-Score (SQS) als numerische Qualitätsbewertung (0–5) in Review und Analyze. +Modus 10 Derive: Testfall-Ableitung aus Gherkin-Szenarien mit Testabdeckungsmatrix, 6 Testfall-Typen, Traceability. +MCP-Kontext-Pre-Flight in Specify für externe Quellen (Figma, GitHub, Confluence, Jira). |
 
 ---
 
@@ -478,7 +484,17 @@ MIT — siehe [LICENSE](LICENSE).
 
 Issues und Pull Requests willkommen. Insbesondere:
 - Neue Reviewer-Agenten-Definitionen für spezifische Domänen
-- Branchenspezifische NFR-Checklisten (Finanz, Pharma, Automotive)
+- **Branchenspezifische NFR-Checklisten** — siehe [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md) für Schema, Validierung und Beispiele. Die DORA-Extension (`references/custom/@dora/`) dient als Referenzimplementierung.
 - Übersetzungen (Englische Version)
 - Integration mit weiteren KI-Agenten (Cursor, Copilot, Gemini)
 - Custom Extensions für `references/custom/`
+
+### Regulierungs-Extensions
+
+| Regulierung | Branche | Status | Pfad |
+|-------------|---------|--------|------|
+| DORA (EU 2022/2554) | Finanzsektor | ✅ Fertig (58 Prüfpunkte) | `references/custom/@dora/` |
+| BAIT | Banken (DE) | 🔧 Stub (8 Prüfpunkte) | `references/custom/@bait/` |
+| MaRisk | Finanzsektor (DE) | Offen | — |
+| PCI-DSS 4.0 | Zahlungsverkehr | Offen | — |
+| EnWG / IT-Sicherheitskatalog | Energiesektor | Offen | — |

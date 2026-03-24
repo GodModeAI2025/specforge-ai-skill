@@ -34,9 +34,42 @@ Jede Ebene wird vollständig durchlaufen. Keine Ebene darf übersprungen werden,
 | RQ-03 | EARS-Konformität | Explizit benanntes EARS-Pattern; korrekte Syntax | MAJOR |
 | RQ-04 | Gherkin-Qualität | ≥2 Szenarien pro Story (Happy Path + Fehlerfall) | MAJOR (AP-06) |
 | RQ-05 | Atomarität | Ein Requirement = eine testbare Aussage | MINOR |
-| RQ-06 | Anti-Pattern-Freiheit | AP-01 bis AP-07 geprüft | Schweregrad laut AP-Tabelle |
+| RQ-06 | Anti-Pattern-Freiheit | AP-01 bis AP-08 geprüft | Schweregrad laut AP-Tabelle |
 | RQ-07 | Annahmen-Markierung | Alle Annahmen als `[Annahme: ...]` gekennzeichnet | MAJOR (AP-03) |
 | RQ-08 | ID-Schema | SF-[Präfix]-[NNN] Format eingehalten | MINOR |
+
+#### Story-Quality-Score (SQS) — numerische Qualitätsbewertung
+
+Zusätzlich zur binären Prüfung (bestanden/nicht bestanden) erzeugt der Review einen numerischen **Story-Quality-Score (SQS)** pro Story. Der SQS misst *Formulierungsqualität*, nicht Governance-Compliance (das ist der GP-Score).
+
+| Dimension | Gewichtung | 0 Punkte | 2.5 Punkte | 5 Punkte |
+|-----------|-----------|----------|-----------|----------|
+| **Titel-Qualität** | 15% | <5 Wörter, kein Feature erkennbar | Feature erkennbar, <30 Zeichen | 8–12 Wörter, Feature + Kontext + Nutzen, 50–80 Zeichen |
+| **Description-Vollständigkeit** | 25% | "As a/I want/so that" fehlt oder generisch ("der Nutzer") | Alle 3 Teile vorhanden, aber Nutzen vage | Konkrete Rolle, klares Feature, messbarer Geschäftswert |
+| **Gherkin-Tiefe** | 25% | Kein Gherkin oder nur Happy Path | 2 Szenarien (Happy + 1 Fehlerfall) | ≥3 Szenarien (Happy + Fehlerfall + Edge Case), messbare Then-Schritte |
+| **SOPHIST-Konformität** | 20% | ≥3 SOPHIST-Verletzungen (AP-08) | 1–2 Verletzungen | Keine Verletzungen: aktive Sprache, eindeutige Begriffe, konkrete Werte |
+| **EARS-Präzision** | 15% | Kein EARS-Pattern erkennbar | Pattern benannt, aber Syntax fehlerhaft | Pattern korrekt, alle Bedingungen explizit |
+
+**SQS-Berechnung:** Gewichteter Durchschnitt aller Dimensionen → Ergebnis 0.0–5.0
+
+**SQS-Schwellen:**
+
+| SQS | Bewertung | Gate-Auswirkung |
+|-----|-----------|-----------------|
+| ≥ 4.0 | Produktionsreif | Keine |
+| 3.0–3.9 | Sprint-ready, Optimierungen möglich | F1 (INFO) — Empfehlung zur Verbesserung |
+| 2.0–2.9 | Überarbeitungsbedarf | F2 (WARNING) — Pflicht-Task vor Go-Live |
+| < 2.0 | Grundlegend überarbeiten | F3 (CONDITIONAL) — Risiko-Akzeptanz oder Überarbeitung |
+
+**SQS im Review-Protokoll (Ergänzung):**
+```markdown
+### Story-Quality-Score
+| Story-ID | Titel | Description | Gherkin | SOPHIST | EARS | **SQS** |
+|----------|-------|-------------|---------|---------|------|---------|
+| SF-FUNC-001 | 4.5 | 4.0 | 3.5 | 5.0 | 4.0 | **4.15** |
+
+**Durchschnitt-SQS:** [X.X] / 5.0
+```
 
 #### Ebene 2 — Governance-Compliance (Scope laut Profil)
 
@@ -130,7 +163,7 @@ Schwellwerte:
 |-------|-----------|------------|
 | Vage Begriffe aus Blocklist | Automatisch in Ebene 1 (RQ-01): "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer; Review-interne Prüfung unbegrenzt | n.a. |
-| Anti-Pattern-Prüfung | AP-01–AP-07 + custom APs aus `references/custom/anti-patterns-custom.md` | Schweregrad laut AP-Tabelle |
+| Anti-Pattern-Prüfung | AP-01–AP-08 + custom APs aus `references/custom/anti-patterns-custom.md` | Schweregrad laut AP-Tabelle |
 | Artefakt-Erzeugung als Datei | review-protocol.md als separate Datei, nicht inline | MAJOR |
 | Gherkin-Minimum | ≥2 Szenarien pro Story (RQ-04) — Unterschreitung = MAJOR (AP-06) | MAJOR |
 | EARS-Pflicht | Jede Story hat explizit benanntes Pattern (RQ-03) | MAJOR |

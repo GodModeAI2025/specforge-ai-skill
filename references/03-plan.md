@@ -189,7 +189,7 @@ Empfehlung: IMMER Analyze nach Tasks ausführen.
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer | n.a. |
 | ExecPlan-Pflicht (GP-04) | Automatisch bei Tasks mit 5+ Dateien | MAJOR |
 | ADR-Pflicht (GP-03) | Automatisch bei modulübergreifenden Entscheidungen | MAJOR (KRITIS: BLOCKER) |
-| Anti-Pattern-Prüfung | AP-01–AP-07 bei jedem Task | Schweregrad laut AP-Tabelle |
+| Anti-Pattern-Prüfung | AP-01–AP-08 bei jedem Task | Schweregrad laut AP-Tabelle |
 | Artefakte als Dateien | plan.md, tasks.md, research.md als Dateien, nicht inline | MAJOR |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md | n.a. |
 

@@ -29,7 +29,7 @@
 3. **Steelmanning-Pflicht:** Jede Rolle muss mindestens eine Annahme explizit in Frage stellen und die stärkste Version der Gegenposition formulieren (kein Strohmann)
 4. **Findings-Pflicht:** Jede Rolle muss mindestens ein Finding mit Schweregrad liefern
 5. **Schweregrad-Zuweisung:** Jedes Finding wird klassifiziert: BLOCKER / MAJOR / MINOR — Zuordnung ist deterministisch nach denselben Regeln wie enforcement-engine.md
-6. **Anti-Pattern-Prüfung:** AP-01–AP-07 werden von jeder Rolle mitgeprüft; Findings bei Erkennung sind Pflicht
+6. **Anti-Pattern-Prüfung:** AP-01–AP-08 werden von jeder Rolle mitgeprüft; Findings bei Erkennung sind Pflicht
 7. **GP-Referenz:** Jedes Finding referenziert den betroffenen GP (z.B. "Verstoß gegen GP-03: ADR fehlt")
 
 ## Ablauf (deterministisch)
@@ -107,7 +107,7 @@ Folgende Regeln werden **automatisch** bei jeder Simulation durchgesetzt:
 | Jede Rolle hinterfragt ≥1 Annahme | Automatischer Check nach Simulation | MAJOR |
 | Vage Begriffe aus Blocklist erkannt | Jedes Finding gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer; Stakeholder-Fragen intern unbegrenzt | n.a. (Budget-Überschreitung = Skip) |
-| Anti-Pattern-Prüfung | AP-01–AP-07 + custom APs aus `references/custom/anti-patterns-custom.md` | Schweregrad laut AP-Tabelle |
+| Anti-Pattern-Prüfung | AP-01–AP-08 + custom APs aus `references/custom/anti-patterns-custom.md` | Schweregrad laut AP-Tabelle |
 | Spec-Artefakt als Datei | Output als stakeholder-sim-protocol.md, nicht inline | MAJOR (AP-09) |
 
 ## Erweiterbarkeit

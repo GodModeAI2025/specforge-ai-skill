@@ -78,18 +78,29 @@ Automatische Prüfliste für nicht-funktionale Anforderungen in KRITIS-reguliert
 ## Anwendung
 
 1. SpecForge iteriert bei jeder Story-Erzeugung über alle 6 Kategorien
-2. Fehlende NFRs werden als `[NFR-Lücke: ...]` markiert
+2. Fehlende NFRs werden als `[NFR-Lücke F{n}: ...]` mit F-Stufe markiert
 3. Bei KRITIS-Projekten sind AVA, SEC, AUD Pflicht — keine Ausnahme
 4. Bei Nicht-KRITIS empfiehlt SpecForge relevante Kategorien basierend auf Domäne
 5. NFRs ohne quantifizierten Zielwert werden als "nicht testbar" markiert
+6. F-Stufen variieren nach Profil (siehe Tabelle unten) und ggf. nach Perspektive (wenn Extensions geladen)
 
-## Schweregrad bei fehlenden NFRs
+## F-Stufen bei fehlenden NFRs (nach Profil)
 
-| Kategorie | KRITIS-Projekt | Nicht-KRITIS |
-|-----------|---------------|-------------|
-| AVA | BLOCKER | MAJOR |
-| SEC | BLOCKER | MAJOR |
-| AUD | BLOCKER | MINOR |
-| PER | MAJOR | MINOR |
-| DAT | BLOCKER (bei PII) | MAJOR (bei PII) |
-| OPS | MAJOR | MINOR |
+| Kategorie | KRITIS | Standard | Startup |
+|-----------|--------|----------|---------|
+| **AVA** (Verfügbarkeit) | F4 | F3 | F1 |
+| **SEC** (Sicherheit) | F4 | F3 | F1 |
+| **AUD** (Audit & Logging) | F4 | F2 | F1 |
+| **PER** (Performance) | F3 | F2 | F1 |
+| **DAT** (Datenschutz) | F4 (bei PII), F3 (sonst) | F3 (bei PII), F2 (sonst) | F2 (bei PII), F1 (sonst) |
+| **OPS** (Betrieb) | F3 | F2 | F1 |
+
+### Legacy-Kompatibilität
+
+Für Projekte die noch mit dem bisherigen Schweregrad-System arbeiten, gilt folgendes Mapping:
+
+| Legacy-Schweregrad | F-Stufen-Äquivalent | Gate-Ergebnis |
+|--------------------|---------------------|---------------|
+| BLOCKER | F4 | FAIL |
+| MAJOR | F3 | CONDITIONAL |
+| MINOR | F1 | INFO |

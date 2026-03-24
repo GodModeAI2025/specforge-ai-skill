@@ -42,6 +42,23 @@ Wenn noch kein Projekt-Setup existiert:
 
 Schritt-für-Schritt, jeder Schritt ist Pflicht:
 
+0. **MCP-Kontext-Pre-Flight** (optional, empfohlen) — Vor der Kontexterfassung verfügbare Werkzeug-Quellen prüfen:
+
+   | Quelle | Prüfung | Nutzen für Spec |
+   |--------|---------|----------------|
+   | **Design System** (Figma, Sketch) | MCP-Tool verfügbar? | UI-Komponenten, Patterns referenzieren; Konsistenz zu Design sicherstellen |
+   | **Dokumentation** (Wiki, Confluence) | MCP-Tool verfügbar? | Fachliche Konzepte, Glossar, bestehende Anforderungen einbeziehen |
+   | **Source Code** (GitHub, GitLab) | MCP-Tool verfügbar? | APIs, Datenmodelle, technische Constraints als Input |
+   | **Projektmanagement** (Jira, Azure DevOps) | MCP-Tool verfügbar? | Bestehende Epics, Stories, Backlogs berücksichtigen |
+
+   Ergebnis im Spec-Header dokumentieren:
+   ```
+   context_sources: [figma, github, confluence]   ← verfügbare Quellen
+   context_sources: []                             ← keine MCP-Quellen verfügbar
+   ```
+
+   **Verhalten:** Wenn keine MCP-Tools verfügbar → kein Fehler, nur Skip mit Hinweis: "Keine externen Kontext-Quellen verfügbar — Spec basiert auf Session-Input und Web-Recherche." Wenn MCP-Tools verfügbar → aktiv nutzen, um Spec mit konkreten API-Signaturen, UI-Komponenten oder bestehenden Stories anzureichern.
+
 1. **Kontexterfassung** — Max. 3 Fragen zu Domäne, Nutzergruppe, Systemgrenzen
 2. **Web-Recherche** — Eigenständig regulatorische/domänenspezifische Anforderungen recherchieren
 3. **Stakeholder-Simulation** — Mind. 3 Perspektiven durchspielen
@@ -85,8 +102,13 @@ Als [Rolle] möchte ich [Funktion], damit [Nutzen].
 #### STRIDE-Bewertung (falls security-relevant)
 #### Abhängigkeiten
 #### Offene Fragen
+#### Offene Punkte
+[Offen: Sollen auch Sprachbefehle unterstützt werden?]
+[Offen: Welche Filterkriterien sind per Freitext erkennbar?]
 #### GP-Compliance
 ```
+
+**`[Offen: ...]`-Marker:** Wenn bei der Story-Erstellung nicht alle Informationen vorliegen, wird die Story trotzdem erzeugt — mit `[Offen: ...]`-Markern für fehlende Details. Dies verhindert, dass der Specify-Modus durch fehlende Einzelheiten blockiert wird. Marker werden bei Clarify (Modus 2) systematisch aufgelöst. Verbleibende `[Offen: ...]`-Marker nach Clarify erzeugen einen F3-Befund im Gate G2.
 
 ---
 
@@ -118,7 +140,8 @@ SpecForge prüft diese Checkliste und gibt ein Pass/Fail-Ergebnis aus:
 | Vage Begriffe aus Blocklist | Jede Story gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
 | EARS-Pflicht | Jede Story hat explizit benanntes EARS-Pattern | MAJOR |
 | Gherkin-Minimum | ≥2 Szenarien pro Story (Happy Path + Fehlerfall) → AP-06 | MAJOR |
-| Anti-Pattern-Prüfung | AP-01–AP-07 bei jeder Story-Erzeugung prüfen | Schweregrad laut AP-Tabelle |
+| Anti-Pattern-Prüfung | AP-01–AP-08 bei jeder Story-Erzeugung prüfen | Schweregrad laut AP-Tabelle |
+| Offene-Punkte-Marker | Fehlende Details als `[Offen: ...]` markieren statt Story zu blockieren | F3 (nach Clarify) |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer | n.a. |
 | Artefakt-Erzeugung als Datei | spec.md, constitution.md, specforge.json als Dateien, nicht inline | MAJOR |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md | n.a. |

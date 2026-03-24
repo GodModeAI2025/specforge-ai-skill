@@ -70,7 +70,7 @@ Vollwertige spec.md mit **identischem Qualitätsanspruch** wie Modus 1 (Specify)
 7. STRIDE-Analyse (Scope laut Profil)
 8. Wissenslücken als `[DISCOVERY-GAP]`-Marker kennzeichnen
 
-**Anti-Pattern-Prüfung:** AP-01–AP-07 bei jeder Story-Erzeugung prüfen (identisch zu Modus 1).
+**Anti-Pattern-Prüfung:** AP-01–AP-08 bei jeder Story-Erzeugung prüfen (identisch zu Modus 1).
 
 ### Phase 9d: QS-Schleife 1 — Vollständigkeit
 
@@ -155,7 +155,7 @@ Nach G4-RE: Übergang in Forward-Path ab G2 (Clarify) oder G3 (Plan).
 |-------|-----------|------------|
 | Vage Begriffe aus Blocklist | Jede erzeugte Story gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
 | Fragen-Budget | Stakeholder-Befragung: max. 5 Fragen/Runde; sonstige Interaktion: max. 3 Fragen/Runde | n.a. |
-| Anti-Pattern-Prüfung | AP-01–AP-07 + custom APs bei jeder Story-Erzeugung in Phase 9c | Schweregrad laut AP-Tabelle |
+| Anti-Pattern-Prüfung | AP-01–AP-08 + custom APs bei jeder Story-Erzeugung in Phase 9c | Schweregrad laut AP-Tabelle |
 | EARS-Pflicht | Jede Story hat explizit benanntes Pattern (wie Forward-Path) | MAJOR |
 | Gherkin-Minimum | ≥2 Szenarien pro Story (Happy Path + Fehlerfall) | MAJOR (AP-06) |
 | QS-Schleifen nicht überspringbar | KRITIS: beide Pflicht; Standard: beide Pflicht; Startup: QS-1 Pflicht | BLOCKER bei Skip |

@@ -18,6 +18,7 @@ Die Analyze-Phase nutzt spezialisierte Checker-Perspektiven, die unabhängig und
 | **Consistency Checker** | Spec ↔ Plan ↔ Tasks Traceability | 1, 2, 3 | spec.md, plan.md, tasks.md |
 | **GP Auditor** | Golden Principles Compliance | 4 | `references/checklists/golden-principles.md` |
 | **Security Checker** | STRIDE + NFRs + NIS2/DSGVO | 5 | `references/checklists/stride-guide.md`, `references/checklists/kritis-nfr.md` |
+| **SQS Checker** | Story-Quality-Score (Formulierungsqualität) | 7 (optional) | Bewertungsdimensionen aus 07-review.md |
 | **Custom Checker** | Projektspezifische Checklisten | 6 (optional) | `references/custom/*.md` + `references/custom/@*/**/*.md` |
 
 ## Prüfkatalog (5+1 MECE-Dimensionen)
@@ -30,6 +31,7 @@ Die Analyze-Phase nutzt spezialisierte Checker-Perspektiven, die unabhängig und
 | 4 | Governance | GP-Compliance laut Profil; ExecPlans (GP-04); Folder Convention (GP-07); stale Marker (GP-06) | Schweregrad laut GP |
 | 5 | Security & Compliance | STRIDE; NFRs; NIS2; DSGVO — Scope laut Profil | MAJOR (KRITIS: BLOCKER) |
 | 6 | Custom | Projektspezifische Prüfregeln (nur wenn `custom_checklists` in specforge.json) | Konfigurierbar |
+| 7 | Story-Quality | Numerischer SQS pro Story (Titel, Description, Gherkin, SOPHIST, EARS) — Details in 07-review.md | F3 (SQS < 2.0), F2 (SQS 2.0–2.9), F1 (SQS 3.0–3.9) |
 
 ## Ablauf (deterministisch)
 

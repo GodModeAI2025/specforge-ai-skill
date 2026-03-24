@@ -38,12 +38,25 @@ Maschinenlesbare Projektkonfiguration. Wird bei Projekt-Setup (Modus 1) erzeugt.
 {
   "project": "Projektname",
   "profile": "KRITIS | Standard | Startup",
+  "perspective": null,
   "stack": { "framework": "...", "language": "...", "database": "..." },
   "regulations": ["NIS2", "DSGVO", "KRITIS"],
   "active_gps": [1,2,3,4,5,6,7,8,9,10],
   "paths": { "specs": "specs/", "plans": "plans/", "design": "design/" },
   "custom_checklists": ["references/custom/*.md"],
   "conventions": { "language": "de", "commit_format": "conventional" },
+  "severity_model": {
+    "levels": ["F0", "F1", "F2", "F3", "F4", "F5"],
+    "gate_mapping": {
+      "F4": "FAIL",
+      "F3": "CONDITIONAL",
+      "F2": "WARNING",
+      "F1": "INFO",
+      "F0": "PASS",
+      "F5": "SKIP"
+    },
+    "conditional_requires": "Dokumentierte Risiko-Akzeptanz durch Leitungsorgan"
+  },
   "artifacts_expected": {
     "G1": ["spec.md", "constitution.md", "ARCHITECTURE.md"],
     "G2": ["spec.md"],
@@ -53,10 +66,18 @@ Maschinenlesbare Projektkonfiguration. Wird bei Projekt-Setup (Modus 1) erzeugt.
   },
   "checks_config": {
     "G1": {
-      "ears_coverage": { "required": true },
-      "gherkin_minimum": { "required": true },
-      "constitution_exists": { "required": true },
-      "stride_complete": { "required": false, "skip_reason_required": true }
+      "ears_coverage": { "severity": "F4" },
+      "gherkin_minimum": { "severity": "F4" },
+      "constitution_exists": { "severity": "F4" },
+      "stride_complete": {
+        "severity": {
+          "_default": "F3",
+          "regulated_entity": "F4",
+          "ict_provider": "F3",
+          "advisory": "F1"
+        },
+        "skip_reason_required": true
+      }
     }
   },
   "extensions": ["@custom/*"],
@@ -64,7 +85,7 @@ Maschinenlesbare Projektkonfiguration. Wird bei Projekt-Setup (Modus 1) erzeugt.
 }
 ```
 
-**Feld-Erläuterungen:** `active_gps` = GP-01 bis GP-10, profilabhängig aktiv. `conventions` = steuert Sprachverhalten und Commit-Konvention. `checks_config` = Beispiel für G1 — weitere Gates analog konfigurierbar. `artifacts_expected` = pro Gate erwartete Artefakte; `["*"]` bei G5 bedeutet: alle Artefakte aller vorherigen Gates müssen vorhanden sein (Vollständigkeitscheck). `audit` = Audit Trail aktivieren (bei KRITIS immer true).
+**Feld-Erläuterungen:** `active_gps` = GP-01 bis GP-10, profilabhängig aktiv. `perspective` = Rolle in der Wertschöpfungskette (freier String, von Extensions definiert; `null` = keine Perspektive). `conventions` = steuert Sprachverhalten und Commit-Konvention. `severity_model` = 6-stufiges Schweregrad-System (F0–F5) mit Gate-Mapping; fehlt dieses Feld, gilt Legacy-Verhalten (`required: true` → F4, `required: false` → F1). `checks_config` = Beispiel für G1 — `severity` kann ein String (gilt für alle Perspektiven) oder ein Objekt mit `_default` + perspektivenspezifischen Werten sein. `artifacts_expected` = pro Gate erwartete Artefakte; `["*"]` bei G5 bedeutet: alle Artefakte aller vorherigen Gates müssen vorhanden sein (Vollständigkeitscheck). `audit` = Audit Trail aktivieren (bei KRITIS immer true).
 
 ### Drei Profile — Governance skaliert mit Risiko
 
@@ -80,15 +101,26 @@ Maschinenlesbare Projektkonfiguration. Wird bei Projekt-Setup (Modus 1) erzeugt.
 
 **Kein Profil angegeben?** → Resolution-Cascade anwenden (siehe unten). Falls keine Quelle greift → Standard. Explizit nachfragen, wenn regulatorischer Kontext erkennbar ist.
 
-### Profil-Resolution (Cascading Priority)
+### Profil- und Perspektive-Resolution (zweidimensionale Matrix)
 
-Wenn mehrere Quellen ein Profil bestimmen, gilt diese Rangfolge:
+Profil (Risikostufe) und Perspektive (Lieferkettenrolle) sind orthogonale Dimensionen. Ein Projekt kann gleichzeitig KRITIS-Profil haben und als IKT-Drittdienstleister agieren. Das Profil bestimmt *ob* geprüft wird, die Perspektive bestimmt *was genau* und *wie streng*.
+
+**Profil-Resolution** (Cascading Priority):
 
 1. **Expliziter User-Input** in der aktuellen Runde (höchste Priorität)
 2. **Feature-Level Override** — einzelne Features können ein abweichendes Profil haben (z.B. ein Auth-Modul in einem Standard-Projekt das KRITIS braucht)
 3. **specforge.json → profile**
-4. **Kontexterkennung** — regulatorische Begriffe im Input (NIS2, KRITIS, §8a BSIG)
+4. **Kontexterkennung** — regulatorische Begriffe im Input (NIS2, KRITIS, §8a BSIG, DORA, EU 2022/2554, Finanzunternehmen, BaFin, PrüfbV, TLPT)
 5. **Default: Standard** (niedrigste Priorität)
+
+**Perspektive-Resolution** (Cascading Priority):
+
+1. **Expliziter User-Input** in der aktuellen Runde (höchste Priorität)
+2. **specforge.json → perspective** (freier String, von Extensions definiert)
+3. **Extension-Manifest-Abfrage** — wenn eine geladene Extension unter `Pflicht-Abfrage bei Aktivierung` eine Perspektive verlangt und `perspective` nicht gesetzt ist → Nutzer interaktiv fragen
+4. **Default: null** (keine Perspektive → alle F-Stufen nutzen `_default`)
+
+**Interaktion Profil × Perspektive:** Wenn `regulations` den Wert einer Extension enthält (z.B. `DORA`) und `perspective` nicht gesetzt ist, wird die Perspektive vor der ersten Prüfung abgefragt. Unbekannte Perspektiven-Werte (nicht in der Extension-manifest.md definiert) fallen auf `_default` zurück — kein Fehler, nur Warning.
 
 Feature-Level Override wird in spec.md als `profile_override: kritis` im Feature-Header dokumentiert.
 
@@ -114,6 +146,7 @@ SpecForge erkennt natürlichsprachliche Signale und reagiert:
 | "prüf das mal", "stimmt das alles?" | → **Analyze** oder **Review** vorschlagen |
 | "was würde ein Security-Reviewer sagen?" | → **Stakeholder-Sim** aktivieren |
 | "dokumentiere den Bestand", "was macht das System?" | → **Discover** aktivieren |
+| "leite Testfälle ab", "Testabdeckung", "Tests aus der Spec" | → **Derive** aktivieren |
 
 ### Dispatch-Tabelle
 
@@ -130,6 +163,7 @@ SpecForge erkennt natürlichsprachliche Signale und reagiert:
 | 7 | **Review** | `references/07-review.md` |
 | 8 | **Management** | `references/08-management.md` |
 | 9 | **Discover** | `references/09-discover.md` |
+| 10 | **Derive** | `references/10-derive.md` |
 
 ### Zusätzliche Referenzen (situativ laden)
 
@@ -155,6 +189,8 @@ Beispiele: branchenspezifische Checklisten (EnWG, BAIT, MaRisk), eigene Review-R
 
 **Zwei Wege, ein Ziel:** `custom_checklists` referenziert einzelne Dateien direkt — ideal für 1–3 projektspezifische Checklisten. `extensions` referenziert strukturierte Pakete mit eigener manifest.md — ideal für wiederverwendbare, teamübergreifende Regelwerke. Beide werden bei NFR-Scan und Review zusätzlich zu den Core-Checklisten geladen.
 
+**Manifest-Auto-Detection:** Wenn der Nutzer-Input Begriffe enthält, die in einer `manifest.md` unter `Trigger-Begriffe` gelistet sind, wird die zugehörige Extension automatisch geladen — auch ohne expliziten Eintrag in `specforge.json → extensions`. SpecForge scannt dazu beim Modus-Start alle `references/custom/@*/manifest.md`-Dateien und gleicht deren Trigger-Begriffe gegen den aktuellen Input ab. Matches werden als `[Extension geladen: @{name}]` dokumentiert. Enthält eine manifest.md eine `Pflicht-Abfrage bei Aktivierung`, wird diese vor der ersten Prüfung durchgeführt.
+
 **Extension-Struktur:**
 ```
 references/custom/
@@ -174,7 +210,7 @@ SpecForge ist an folgenden Stellen erweiterbar — ohne Änderung an Core-Dateie
 |-----|--------------|----------------|
 | **EARS-Patterns** | Neue Patterns in `references/checklists/ears-patterns-custom.md` definieren; Dispatcher prüft Core + Custom | ears-syntax.md (Core), Custom-Datei (Ergänzung) |
 | **Profile** | Neues Profil in specforge.json als `profile_custom`-Objekt mit `base` (KRITIS/Standard/Startup) + `overrides` | specforge.json |
-| **Anti-Patterns** | AP-08+ in `references/custom/anti-patterns-custom.md`; Format identisch zu AP-01–AP-07 | enforcement-engine.md (Core), Custom-Datei (Ergänzung) |
+| **Anti-Patterns** | AP-08+ in `references/custom/anti-patterns-custom.md`; Format identisch zu AP-01–AP-08 | enforcement-engine.md (Core), Custom-Datei (Ergänzung) |
 | **Golden Principles** | GP-11+ in `references/custom/golden-principles-custom.md`; `active_gps` in specforge.json erweitern | golden-principles.md (Core), Custom-Datei (Ergänzung) |
 | **Modi** | Neue Modi als `references/custom/mode-NN-name.md`; Dispatch-Tabelle in specforge.json um Einträge erweiterbar | SKILL.md Dispatch-Tabelle (Core 1–9), Custom (10+) |
 | **Review-Rollen** | Neue Rollen in `references/custom/@team-review-rollen/` | 06-stakeholder-sim.md |
@@ -216,55 +252,115 @@ Referenzdateien sind in zwei Kategorien eingeteilt:
                              ↑     │
                              └ Fix ┘
 
-Jederzeit: [5 Checklist] · [6 Stakeholder-Sim] · [7 Review] · [8 Management]
+Jederzeit: [5 Checklist] · [6 Stakeholder-Sim] · [7 Review] · [8 Management] · [10 Derive]
 Reverse:   [9 Discover] → [G1-RE] → [2 Clarify] → [3 Plan] → ...
 ```
 
 ### Ausführbare Phase Gates mit Pre-Flight Checks
 
-Jedes Gate hat eine **konkrete Checkliste** mit Pass/Fail-Ergebnis. SpecForge prüft die Checkliste automatisch und gibt ein Ergebnis aus, bevor der Übergang vorgeschlagen wird.
+Jedes Gate hat eine **konkrete Checkliste**. SpecForge prüft die Checkliste automatisch und gibt ein Ergebnis aus, bevor der Übergang vorgeschlagen wird.
 
-Jeder Check innerhalb eines Gates ist klassifiziert als:
-- **required** — Gate kann nicht passieren, solange dieser Check fehlschlägt
-- **skippable** — Kann übersprungen werden, erfordert aber eine dokumentierte Begründung (`skip_reason`)
+#### Schweregrad-System (F-Stufen)
 
-Die Klassifizierung ist profilabhängig: was bei KRITIS `required` ist, kann bei Startup `skippable` sein. Die Konfiguration liegt in `specforge.json → checks_config` (überschreibt Defaults) oder, falls nicht vorhanden, in den Defaults der Gate-Tabelle unten (die Angaben `req`/`skip`/`profilabhängig` gelten als Default).
+Jeder Check innerhalb eines Gates hat eine **F-Stufe** (Schweregrad bei Nichterfüllung):
 
-| Gate | Übergang | Checks (required / skippable) | Ergebnis |
-|------|---------|-------------------------------|----------|
-| G0 | Start → Specify | specforge.json existiert? (req) · Profil gewählt? (req) · Cynefin-Einordnung? (skip) | ✅ PASS / ⚠️ SKIP (Begründung) |
-| G1 | Specify → Clarify | EARS-Coverage? (req) · ≥2 Gherkin/Story? (req) · Constitution existiert? (req) · STRIDE komplett? (profilabhängig) | ✅ PASS / ❌ FAIL (Befunde) |
-| G2 | Clarify → Plan | Keine offenen BLOCKER? (req) · Clarifications dokumentiert? (req) · Artefakt-Erwartung erfüllt? (skip) | ✅ PASS / ❌ FAIL |
-| G3 | Plan+Tasks → Analyze | plan.md + tasks.md erzeugt? (req) · ADRs vorhanden? (profilabhängig) · research.md aktuell? (skip) | ✅ PASS / ❌ FAIL |
-| G4 | Analyze → Implement | Keine BLOCKER-Befunde? (req) · GP-Score ≥ Profil-Schwelle? (req) | ✅ PASS / ❌ FAIL |
-| G5 | Implement → Complete | Artefakt-Vollständigkeits-Check vs. `artifacts_expected` (req) | ✅ PASS / ❌ FAIL |
+| F-Stufe | Bedeutung | Gate-Ergebnis | Verhalten |
+|---------|-----------|---------------|-----------|
+| **F4** | Schwergewichtiger Mangel | ❌ FAIL | Gate blockiert — Prüfpunkt muss erfüllt werden |
+| **F3** | Gewichtiger Mangel | ⚠️ CONDITIONAL | Gate passierbar nur mit dokumentierter Risiko-Akzeptanz durch Leitungsorgan |
+| **F2** | Mittelschwerer Mangel | ⚠️ WARNING | Gate passierbar — Pflicht-Task vor Go-Live erzeugen |
+| **F1** | Geringfügiger Mangel | ℹ️ INFO | Gate passierbar — als Empfehlung dokumentieren |
+| **F0** | Kein Mangel | ✅ PASS | Kein Handlungsbedarf |
+| **F5** | Nicht anwendbar | ⏭️ SKIP | Prüfpunkt entfällt — Begründung im Audit Trail |
+
+**Abwärtskompatibilität:** Projekte ohne `severity_model` in specforge.json nutzen Legacy-Verhalten: `required: true` → F4, `required: false` → F1, `skip_reason_required: true` → F3.
+
+**Perspektivenabhängige F-Stufen:** `severity` in `checks_config` kann ein String (gilt für alle Perspektiven) oder ein Objekt mit `_default` + perspektivenspezifischen Werten sein:
+```json
+"stride_complete": {
+  "severity": { "_default": "F3", "regulated_entity": "F4", "advisory": "F1" }
+}
+```
+
+#### CONDITIONAL-Verhalten (F3)
+
+CONDITIONAL blockiert den automatischen Fluss. Der Nutzer muss explizit bestätigen:
+
+```
+Gate-Prüfung
+  ├── Nur F0/F1/F2/F5 → PASS (ggf. mit Warnings)
+  ├── Mindestens 1× F3, kein F4 → CONDITIONAL
+  │     └── Nutzer muss bestätigen: "Risiko-Akzeptanz dokumentiert? (ja/nein)"
+  │           ├── ja → PASS mit Audit-Eintrag [CONDITIONAL ACCEPTED]
+  │           └── nein → Gate bleibt offen
+  └── Mindestens 1× F4 → FAIL
+```
+
+#### Gate-Übersicht
+
+Die F-Stufe ist profilabhängig: was bei KRITIS F4 ist, kann bei Startup F1 sein. Die Konfiguration liegt in `specforge.json → checks_config` (überschreibt Defaults).
+
+| Gate | Übergang | Checks (Default-F-Stufe) | Mögliche Ergebnisse |
+|------|---------|--------------------------|---------------------|
+| G0 | Start → Specify | specforge.json existiert? (F4) · Profil gewählt? (F4) · Cynefin-Einordnung? (F1) | PASS / FAIL |
+| G1 | Specify → Clarify | EARS-Coverage? (F4) · ≥2 Gherkin/Story? (F4) · Constitution existiert? (F4) · STRIDE komplett? (profilabhängig: KRITIS=F4, Standard=F3, Startup=F1) | PASS / CONDITIONAL / FAIL |
+| G2 | Clarify → Plan | Keine offenen F4-Befunde? (F4) · Clarifications dokumentiert? (F4) · Artefakt-Erwartung erfüllt? (F2) | PASS / CONDITIONAL / FAIL |
+| G3 | Plan+Tasks → Analyze | plan.md + tasks.md erzeugt? (F4) · ADRs vorhanden? (profilabhängig: KRITIS=F4, Standard=F3, Startup=F1) · research.md aktuell? (F2) | PASS / CONDITIONAL / FAIL |
+| G4 | Analyze → Implement | Keine F4-Befunde? (F4) · GP-Score ≥ Profil-Schwelle? (F4) · NFR-Scan bestanden? (profilabhängig) | PASS / CONDITIONAL / FAIL |
+| G5 | Implement → Complete | Artefakt-Vollständigkeits-Check vs. `artifacts_expected` (F4) | PASS / FAIL |
 
 **GP-Score-Schwellen nach Profil:** KRITIS ≥ 9/10 · Standard ≥ 8/10 · Startup ≥ 6/10
 
+**GP-Score-Berechnung mit F-Stufen:** F4/F3 (nicht akzeptiert) = GP nicht erfüllt. F3 (akzeptiert) / F2 / F1 / F0 = GP erfüllt. F5 = GP aus Berechnung entfernt.
+
 **Gate-Ergebnis-Format:**
 ```
-── Gate G1: Specify → Clarify ──────────────
-✅ [req] EARS-Formulierung: 5/5 Stories
-✅ [req] Gherkin-Szenarien: 12 (min. 10)
-✅ [req] Constitution: vorhanden
-⚠️ [skip] STRIDE: 2/5 Stories noch offen
-   └─ skip_reason: Standard-Profil, keine SEC-Stories betroffen
-── Ergebnis: PASS — Clarify empfohlen ──────
+── Gate G4: Analyze → Implement ──────────────
+✅ [F0] EARS-Formulierung: 5/5 Stories
+✅ [F0] Gherkin-Szenarien: 12 (min. 10)
+✅ [F0] Constitution: vorhanden
+⚠️ [F3] STRIDE: 2/5 Stories noch offen — CONDITIONAL
+   └─ Risiko-Akzeptanz erforderlich
+⚠️ [F2] NFR DAT-03: Transport-Verschlüsselung — WARNING
+   └─ Pflicht-Task vor Go-Live: DAT-03-FIX
+ℹ️ [F1] NFR GOV-03: Informationsaustausch — INFO
+── Ergebnis: CONDITIONAL — Risiko-Akzeptanz? ──
+```
+
+**NFR-Lücken-Format (bei NFR-Scan):**
+```
+[NFR-Lücke F4: IRM-01 — IKT-Risikomanagement-Framework fehlt — Gate: FAIL]
+[NFR-Lücke F3: TST-06 — TLPT-Zyklus nicht geplant — Gate: CONDITIONAL]
+[NFR-Lücke F2: DAT-03 — Transport-Verschlüsselung nicht spezifiziert — Gate: WARNING]
+[NFR-Lücke F1: GOV-03 — Informationsaustausch nicht vorgesehen — Gate: INFO]
 ```
 
 Details zu allen Gates: `references/enforcement/enforcement-engine.md`
 
 ### Audit Trail
 
-Bei jedem Gate-Check wird ein Eintrag ins Audit Trail geschrieben. Format:
+Bei jedem Gate-Check wird ein Eintrag ins Audit Trail geschrieben. Das Audit Trail enthält pro Prüfpunkt die F-Stufe, das Gate-Ergebnis und ggf. die Risiko-Akzeptanz. Die verwendete Perspektive wird im Header dokumentiert.
 
 ```
 ## specforge-audit.md
 
-| Zeitpunkt | Gate | Ergebnis | Checks (req passed/total) | Skips | Bemerkung |
-|-----------|------|----------|--------------------------|-------|-----------|
-| 2026-03-22 14:30 | G0 | PASS | 2/2 | 1 (Cynefin) | Profil: Standard |
-| 2026-03-22 14:45 | G1 | PASS | 3/3 | 1 (STRIDE) | 5 Stories, 12 Gherkin |
+**Profil:** Standard | **Perspektive:** ict_provider | **Regulierungen:** NIS2, DORA
+
+### Gate-Übersicht
+
+| Zeitpunkt | Gate | Ergebnis | F4 | F3 | F2 | F1 | F5 | Bemerkung |
+|-----------|------|----------|----|----|----|----|----|-----------|
+| 2026-03-24 14:30 | G0 | PASS | 0 | 0 | 0 | 1 | 0 | Profil: Standard, Perspektive: ict_provider |
+| 2026-03-24 14:45 | G1 | CONDITIONAL | 0 | 1 | 1 | 0 | 0 | STRIDE: F3 (akzeptiert), DAT-03: F2 |
+| 2026-03-24 15:00 | G4 | FAIL | 1 | 0 | 2 | 1 | 0 | IRM-01: F4 |
+
+### Prüfpunkt-Detail (bei F3/F4-Befunden)
+
+| Zeitpunkt | Gate | Prüfpunkt | F-Stufe | Gate-Ergebnis | Akzeptanz |
+|-----------|------|-----------|---------|---------------|-----------|
+| 2026-03-24 14:45 | G1 | STRIDE | F3 | CONDITIONAL | Akzeptiert: CRO-Freigabe 2026-03-24 |
+| 2026-03-24 15:00 | G4 | IRM-01 | F4 | FAIL | — |
+| 2026-03-24 15:00 | G4 | DAT-03 | F2 | WARNING | Task: DAT-03-FIX vor Go-Live |
 ```
 
 Das Audit Trail wird als `specforge-audit.md` im Projekt-Root geschrieben. Bei KRITIS-Profil ist das Audit Trail Pflicht. Bei Standard/Startup wird es erzeugt, wenn `specforge.json → audit: true` oder wenn der Nutzer es anfordert.
@@ -298,13 +394,15 @@ Die Reports werden zu einem konsolidierten Analyze-Report zusammengeführt. Bei 
 8. **Annahmen** — `[Annahme: ...]` kennzeichnen bis Clarify-Bestätigung
 9. **Fragen-Budget** — Max. 3/Runde (Clarify: max. 5)
 10. **Anti-Patterns** — Bei jeder Story-Erzeugung und jedem Review prüfen:
-    - **AP-01 Implementation Bias** (MAJOR): HOW statt WHAT → Technologie-Begriffe in Story-Text
-    - **AP-02 Gold Plating** (MINOR): Features ohne Business Value → Story ohne Impact-Mapping-Referenz
-    - **AP-03 Implizite Annahmen** (MAJOR): Fehlende `[Annahme: ...]`-Marker
-    - **AP-04 Vage Quantifizierung** (BLOCKER): Nicht messbare Anforderungen → siehe Blocklist oben
-    - **AP-05 Scope Creep** (BLOCKER): Tasks ohne Spec-Referenz (GP-02)
-    - **AP-06 Missing Negative** (MAJOR): Nur Happy Path, <2 Gherkin, kein Unwanted-Pattern
-    - **AP-07 Orphan Artifact** (MAJOR): Task ohne Story, Story ohne Spec
+    - **AP-01 Implementation Bias** (F3): HOW statt WHAT → Technologie-Begriffe in Story-Text
+    - **AP-02 Gold Plating** (F1): Features ohne Business Value → Story ohne Impact-Mapping-Referenz
+    - **AP-03 Implizite Annahmen** (F3): Fehlende `[Annahme: ...]`-Marker
+    - **AP-04 Vage Quantifizierung** (F4): Nicht messbare Anforderungen → siehe Blocklist oben
+    - **AP-05 Scope Creep** (F4): Tasks ohne Spec-Referenz (GP-02)
+    - **AP-06 Missing Negative** (F3): Nur Happy Path, <2 Gherkin, kein Unwanted-Pattern
+    - **AP-07 Orphan Artifact** (F3): Task ohne Story, Story ohne Spec
+    - **AP-08 SOPHIST-Verletzung** (F3): Passiv ohne Akteur, Negation statt Positivaussage, optionale Formulierung ohne Bedingung ("ggf.", "evtl."), generische Begriffe ("das System", "der Nutzer"), unvollständige Aufzählung ("etc.", "usw."), implizite Zeitangabe ("zeitnah", "umgehend")
+11. **Offene Punkte** — Wenn bei Story-Erzeugung nicht alle Informationen vorliegen: Story trotzdem erstellen und offene Punkte als `[Offen: ...]`-Marker anhängen. Marker werden bei Clarify aufgelöst. Verbleibende `[Offen: ...]` nach Clarify → F3 im Gate.
 
 ---
 
@@ -361,6 +459,7 @@ specs/decisions/adr-*.md                    ← Modus 3
 plans/active/EP-*.md · completed/           ← Modus 3, 8
 tech-debt-tracker.md                        ← Modus 8
 discovery-protocol.md · migration-delta.md  ← Modus 9
+  test-cases.md · test-matrix.md             ← Modus 10
 session-retro.md                            ← Session-Retrospektive (optional)
 references/custom/                          ← Projektspezifische Extensions
   @<scope>/manifest.md                      ← Extension-Beschreibung

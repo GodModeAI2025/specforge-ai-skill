@@ -145,7 +145,7 @@ Folgende Regeln werden bei jeder Management-Funktion **automatisch** durchgesetz
 | Spec-First Chain Compliance | Automatisch bei SFC-01 bis SFC-06 | BLOCKER (SFC-01) / MAJOR |
 | Vage Begriffe in Spec-Diffs | Jede Änderung gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" | BLOCKER (AP-04) |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer | n.a. (Budget-Überschreitung = Skip) |
-| Anti-Pattern-Prüfung bei Spec-Diff | AP-01–AP-07 + custom APs aus `references/custom/anti-patterns-custom.md` bei jeder Spec-Änderung | Schweregrad laut AP-Tabelle |
+| Anti-Pattern-Prüfung bei Spec-Diff | AP-01–AP-08 + custom APs aus `references/custom/anti-patterns-custom.md` bei jeder Spec-Änderung | Schweregrad laut AP-Tabelle |
 | Artefakt-Erzeugung als Datei | Alle Reports als separate .md-Dateien, nicht inline | MAJOR |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md Tabelle | n.a. (systemweit) |
 | Freshness-Intervall | KRITIS: 14 Tage; Standard: bei Review; Startup: bei Bedarf | MAJOR (bei Überschreitung KRITIS) |
