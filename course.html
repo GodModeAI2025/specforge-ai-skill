@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpecForge verstehen — Interaktiver Kurs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ========== CORPORATE DESIGN SYSTEM ========== */
+:root {
+  --color-bg:#FFFFFF;--color-bg-warm:#F3EFEB;--color-bg-code:#000066;
+  --color-text:#1A1A2E;--color-text-secondary:#4A4A5A;--color-text-muted:#8A8A9A;
+  --color-border:#E4DAD4;--color-border-light:#F2EDEA;
+  --color-surface:#FFFFFF;--color-surface-warm:#F8F5F2;
+  --color-accent:#FE8F11;--color-accent-hover:#E57E0E;
+  --color-accent-light:#FFF3E0;--color-accent-muted:rgba(254,143,17,0.6);
+  --color-deep-blue:#000099;--color-deep-blue-90:rgba(0,0,153,0.9);
+  --color-deep-blue-15:rgba(0,0,153,0.15);--color-deep-blue-08:rgba(0,0,153,0.08);
+  --color-success:#84C041;--color-success-light:#EDF6E2;
+  --color-error:#CC0000;--color-error-light:#FDEAEA;
+  --color-info:#1195EB;--color-info-light:#E3F2FD;
+  --color-yellow:#FDC83A;--color-yellow-light:#FFF8E1;
+  --color-turquoise:#5BE3D6;
+  --color-actor-1:#FE8F11;--color-actor-2:#1195EB;--color-actor-3:#000099;
+  --color-actor-4:#FDC83A;--color-actor-5:#84C041;
+  --font-display:'Bricolage Grotesque',Georgia,serif;
+  --font-body:'DM Sans',-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono','Fira Code','Consolas',monospace;
+  --text-xs:.75rem;--text-sm:.875rem;--text-base:1rem;--text-lg:1.125rem;
+  --text-xl:1.25rem;--text-2xl:1.5rem;--text-3xl:1.875rem;--text-4xl:2.25rem;
+  --text-5xl:3rem;--text-6xl:3.75rem;
+  --leading-tight:1.15;--leading-snug:1.3;--leading-normal:1.6;
+  --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;
+  --space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;
+  --space-12:3rem;--space-16:4rem;--space-20:5rem;--space-24:6rem;
+  --content-width:820px;--content-width-wide:1000px;--nav-height:50px;
+  --radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-full:9999px;
+  --shadow-sm:0 1px 2px rgba(0,0,153,.04);--shadow-md:0 4px 12px rgba(0,0,153,.06);
+  --shadow-lg:0 8px 24px rgba(0,0,153,.08);--shadow-xl:0 16px 48px rgba(0,0,153,.1);
+  --ease-out:cubic-bezier(.16,1,.3,1);--ease-in-out:cubic-bezier(.65,0,.35,1);
+  --duration-fast:150ms;--duration-normal:300ms;--duration-slow:500ms;--stagger-delay:120ms;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--color-text);background:var(--color-bg);
+  background-image:radial-gradient(ellipse at 15% 50%,rgba(0,0,153,.03) 0%,transparent 50%),radial-gradient(ellipse at 85% 80%,rgba(254,143,17,.02) 0%,transparent 40%);
+  line-height:var(--leading-normal);font-size:var(--text-base)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:var(--radius-full)}
+pre,code{white-space:pre-wrap;word-break:break-word;overflow-x:hidden}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,153,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,153,.3)}
+.progress-bar{position:absolute;top:0;left:0;height:3px;background:var(--color-accent);width:0%;transition:width .1s}
+.nav-inner{max-width:var(--content-width-wide);margin:0 auto;padding:var(--space-3) var(--space-6);display:flex;align-items:center;justify-content:space-between}
+.nav-title{font-family:var(--font-display);font-weight:700;font-size:var(--text-sm);color:white}
+.nav-dots{display:flex;gap:var(--space-2)}
+.nav-dot{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:transparent;cursor:pointer;transition:all var(--duration-fast);padding:0}
+.nav-dot.active{border-color:var(--color-accent);background:var(--color-accent);box-shadow:0 0 8px rgba(254,143,17,.4)}
+.nav-dot.visited{border-color:var(--color-accent);background:var(--color-accent)}
+
+/* MODULES */
+.module{min-height:100dvh;scroll-snap-align:start;padding:var(--space-16) var(--space-6);padding-top:calc(var(--nav-height) + var(--space-12))}
+.module-content{max-width:var(--content-width);margin:0 auto}
+.module-header{margin-bottom:var(--space-12)}
+.module-number{font-family:var(--font-display);font-size:var(--text-6xl);font-weight:800;color:var(--color-deep-blue);opacity:.12;display:block;line-height:var(--leading-tight)}
+.module-title{font-family:var(--font-display);font-size:var(--text-4xl);font-weight:700;line-height:var(--leading-tight);margin-top:var(--space-2);color:var(--color-deep-blue)}
+.module-subtitle{color:var(--color-text-secondary);font-size:var(--text-lg);margin-top:var(--space-3)}
+.screen{margin-bottom:var(--space-16)}
+.screen-heading{font-family:var(--font-display);font-size:var(--text-2xl);font-weight:600;margin-bottom:var(--space-6);line-height:var(--leading-snug);color:var(--color-deep-blue)}
+.screen p{max-width:65ch;margin-bottom:var(--space-4);line-height:var(--leading-normal)}
+
+/* ANIMATIONS */
+.animate-in{opacity:0;transform:translateY(20px);transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}
+.animate-in.visible{opacity:1;transform:translateY(0)}
+.stagger-children>.animate-in{transition-delay:calc(var(--stagger-index,0)*var(--stagger-delay))}
+
+/* TRANSLATION BLOCKS */
+.translation-block{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);margin:var(--space-8) 0}
+.translation-code{background:#0A0A40;color:#D4D4F0;padding:var(--space-6);font-family:var(--font-mono);font-size:var(--text-sm);line-height:1.7;position:relative;overflow-x:hidden}
+.translation-code pre,.translation-code code{white-space:pre-wrap;word-break:break-word;overflow-x:hidden;margin:0;background:none}
+.translation-english{background:var(--color-surface-warm);padding:var(--space-6);font-size:var(--text-sm);line-height:1.7;border-left:3px solid var(--color-accent)}
+.translation-label{position:absolute;top:var(--space-2);right:var(--space-3);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.1em;opacity:.5;font-family:var(--font-mono)}
+.translation-english .translation-label{position:relative;top:auto;right:auto;color:var(--color-text-muted);display:block;margin-bottom:var(--space-3)}
+.tl{margin-bottom:var(--space-3);padding-left:var(--space-3);border-left:2px solid var(--color-border-light)}
+
+/* SYNTAX HIGHLIGHTING — Corporate */
+.code-keyword{color:#FEB85C}.code-string{color:#84C041}.code-function{color:#5BE3D6}
+.code-comment{color:#7B7BA0}.code-number{color:#FDC83A}.code-property{color:#E2C39A}
+.code-operator{color:#1195EB}.code-tag{color:#FE8F11}.code-attr{color:#E2C39A}
+
+/* CARDS */
+.pattern-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--space-4);margin:var(--space-8) 0}
+.pattern-card{background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-6);box-shadow:var(--shadow-sm);transition:transform var(--duration-normal) var(--ease-out),box-shadow var(--duration-normal)}
+.pattern-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pattern-icon{width:44px;height:44px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:var(--space-3);color:white}
+.pattern-title{font-family:var(--font-display);font-weight:600;font-size:var(--text-base);margin-bottom:var(--space-2)}
+.pattern-desc{color:var(--color-text-secondary);font-size:var(--text-sm)}
+
+/* CALLOUTS */
+.callout{display:flex;gap:var(--space-4);padding:var(--space-5) var(--space-6);border-radius:var(--radius-md);margin:var(--space-6) 0}
+.callout-accent{background:var(--color-accent-light);border-left:4px solid var(--color-accent)}
+.callout-info{background:var(--color-info-light);border-left:4px solid var(--color-info)}
+.callout-warning{background:var(--color-error-light);border-left:4px solid var(--color-error)}
+.callout-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.callout-title{font-family:var(--font-display);font-weight:600;display:block;margin-bottom:var(--space-1)}
+.callout-content p{font-size:var(--text-sm);margin:0;line-height:var(--leading-normal)}
+
+/* STEP CARDS */
+.step-cards{display:flex;flex-direction:column;gap:var(--space-3);margin:var(--space-6) 0}
+.step-card{display:flex;align-items:flex-start;gap:var(--space-4);padding:var(--space-4) var(--space-5);background:var(--color-surface);border-radius:var(--radius-md);border-left:3px solid var(--color-accent);box-shadow:var(--shadow-sm)}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--color-accent);color:white;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);flex-shrink:0;font-size:var(--text-sm)}
+.step-body strong{font-family:var(--font-display);font-weight:600}
+.step-body p{margin:var(--space-1) 0 0;color:var(--color-text-secondary);font-size:var(--text-sm)}
+
+/* FLOW DIAGRAMS */
+.flow-steps{display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap;justify-content:center;margin:var(--space-8) 0}
+.flow-step{background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5);box-shadow:var(--shadow-sm);text-align:center;min-width:120px}
+.flow-step-num{width:28px;height:28px;border-radius:50%;background:var(--color-accent);color:white;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-2);font-size:var(--text-xs);font-family:var(--font-display)}
+.flow-step p{font-size:var(--text-sm);margin:0}
+.flow-arrow{font-size:1.3rem;color:var(--color-accent);font-weight:700;flex-shrink:0}
+.flow-step.gate{border:2px solid var(--color-accent);background:var(--color-accent-light)}
+
+/* ICON ROWS */
+.icon-rows{display:flex;flex-direction:column;gap:var(--space-4);margin:var(--space-6) 0}
+.icon-row{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4);background:var(--color-surface);border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}
+.icon-row p{margin:0;color:var(--color-text-secondary);font-size:var(--text-sm)}
+.icon-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;color:white}
+
+/* CHAT ANIMATION */
+.chat-window{background:var(--color-surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;margin:var(--space-8) 0;max-width:600px}
+.chat-header{background:#0A0A40;color:#D4D4F0;padding:var(--space-3) var(--space-5);font-family:var(--font-display);font-weight:600;font-size:var(--text-sm)}
+.chat-messages{padding:var(--space-4) var(--space-5);min-height:180px;max-height:400px;overflow-y:auto}
+.chat-message{display:flex;gap:var(--space-3);margin-bottom:var(--space-4);align-items:flex-start}
+.chat-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:var(--text-xs);color:white;flex-shrink:0;font-family:var(--font-mono)}
+.chat-bubble{background:var(--color-bg);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);max-width:80%}
+.chat-sender{font-weight:600;font-size:var(--text-xs);display:block;margin-bottom:var(--space-1)}
+.chat-bubble p{font-size:var(--text-sm);margin:0}
+.chat-controls{display:flex;gap:var(--space-3);padding:var(--space-3) var(--space-5);border-top:1px solid var(--color-border-light);flex-wrap:wrap}
+.chat-controls button{padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);border:1px solid var(--color-border);background:var(--color-surface);cursor:pointer;font-size:var(--text-xs);font-family:var(--font-body);transition:all var(--duration-fast)}
+.chat-controls button:hover{border-color:var(--color-accent);color:var(--color-accent)}
+.chat-typing{display:flex;gap:var(--space-3);align-items:center;padding:0 var(--space-5);margin-bottom:var(--space-3)}
+.chat-typing-dots{display:flex;gap:4px}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:var(--color-text-muted);animation:typingBounce 1.4s infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* QUIZZES */
+.quiz-container{margin:var(--space-8) 0}
+.quiz-question-block{margin-bottom:var(--space-8);background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-6);box-shadow:var(--shadow-sm)}
+.quiz-question{font-family:var(--font-display);font-size:var(--text-lg);font-weight:600;margin-bottom:var(--space-5)}
+.quiz-scenario{background:var(--color-bg-warm);padding:var(--space-4) var(--space-5);border-radius:var(--radius-sm);margin-bottom:var(--space-5);font-size:var(--text-sm);border-left:3px solid var(--color-info)}
+.quiz-scenario-label{font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.08em;color:var(--color-info);margin-bottom:var(--space-2);display:block}
+.quiz-options{display:flex;flex-direction:column;gap:var(--space-3)}
+.quiz-option{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-4);border:2px solid var(--color-border);border-radius:var(--radius-sm);background:var(--color-surface);cursor:pointer;width:100%;text-align:left;font-family:var(--font-body);font-size:var(--text-sm);transition:border-color var(--duration-fast),background var(--duration-fast)}
+.quiz-option:hover{border-color:var(--color-accent-muted)}
+.quiz-option.selected{border-color:var(--color-accent);background:var(--color-accent-light)}
+.quiz-option.correct{border-color:var(--color-success);background:var(--color-success-light)}
+.quiz-option.incorrect{border-color:var(--color-error);background:var(--color-error-light)}
+.quiz-option-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--color-border);flex-shrink:0;transition:all var(--duration-fast)}
+.quiz-option.selected .quiz-option-radio{border-color:var(--color-accent);background:var(--color-accent);box-shadow:inset 0 0 0 3px white}
+.quiz-option.correct .quiz-option-radio{border-color:var(--color-success);background:var(--color-success);box-shadow:inset 0 0 0 3px white}
+.quiz-feedback{max-height:0;overflow:hidden;opacity:0;transition:max-height var(--duration-normal),opacity var(--duration-normal),padding var(--duration-normal);font-size:var(--text-sm);border-radius:var(--radius-sm)}
+.quiz-feedback.show{max-height:200px;opacity:1;padding:var(--space-3) var(--space-4);margin-top:var(--space-3)}
+.quiz-feedback.success{background:var(--color-success-light);color:#1a5c37}
+.quiz-feedback.error{background:var(--color-error-light);color:#8a2828}
+.quiz-check-btn{padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);border:none;background:var(--color-accent);color:white;font-weight:600;cursor:pointer;font-family:var(--font-body);font-size:var(--text-sm);transition:background var(--duration-fast);margin-top:var(--space-4)}
+.quiz-check-btn:hover{background:var(--color-accent-hover)}
+
+/* GLOSSARY TOOLTIPS */
+.term{border-bottom:1.5px dashed var(--color-accent-muted);cursor:pointer;position:relative}
+.term:hover,.term.active{border-bottom-color:var(--color-accent);color:var(--color-accent)}
+.term-tooltip{position:fixed;background:#000066;color:#D0D0E8;padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm);font-size:var(--text-sm);font-family:var(--font-body);line-height:var(--leading-normal);width:max(200px,min(320px,80vw));box-shadow:var(--shadow-lg);pointer-events:none;opacity:0;transition:opacity var(--duration-fast);z-index:10000}
+.term-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#0A0A40}
+.term-tooltip.visible{opacity:1}
+.term-tooltip.flip::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:#0A0A40}
+
+/* BADGE LIST */
+.badge-list{display:flex;flex-direction:column;gap:var(--space-2);margin:var(--space-6) 0}
+.badge-item{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:1px solid var(--color-border-light);border-radius:var(--radius-sm);transition:border-color var(--duration-fast)}
+.badge-item:hover{border-color:var(--color-accent-muted)}
+.badge-code{font-family:var(--font-mono);font-size:var(--text-sm);background:#0A0A40;color:#B4A0FF;padding:var(--space-1) var(--space-3);border-radius:var(--radius-sm);white-space:nowrap}
+.badge-desc{font-size:var(--text-sm);color:var(--color-text-secondary)}
+.badge-severity{font-family:var(--font-mono);font-size:var(--text-xs);padding:2px 8px;border-radius:var(--radius-full);font-weight:600}
+.sev-f4{background:#C93B3B;color:white}
+.sev-f3{background:#D4A843;color:white}
+.sev-f2{background:var(--color-info);color:white}
+.sev-f1{background:var(--color-text-muted);color:white}
+.sev-f0{background:var(--color-success);color:white}
+
+/* PIPELINE VIZ */
+.pipeline{display:flex;flex-direction:column;gap:var(--space-2);margin:var(--space-8) 0}
+.pipe-row{display:flex;align-items:center;gap:var(--space-3)}
+.pipe-node{padding:var(--space-2) var(--space-4);border-radius:var(--radius-sm);font-size:var(--text-sm);font-family:var(--font-display);font-weight:600;white-space:nowrap}
+.pipe-mode{background:var(--color-surface);border:1px solid var(--color-border);cursor:pointer;transition:all var(--duration-fast)}
+.pipe-mode:hover,.pipe-mode.active{border-color:var(--color-accent);background:var(--color-accent-light);transform:scale(1.05)}
+.pipe-gate{background:var(--color-accent);color:white;font-family:var(--font-mono);font-size:var(--text-xs);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full)}
+.pipe-arrow{color:var(--color-accent);font-weight:700;font-size:.9rem}
+.pipe-desc{font-size:var(--text-sm);color:var(--color-text-secondary);max-height:0;overflow:hidden;transition:max-height var(--duration-normal);padding:0 var(--space-4)}
+.pipe-desc.show{max-height:100px;padding:var(--space-2) var(--space-4)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  :root{--text-4xl:1.875rem;--text-5xl:2.25rem;--text-6xl:3rem}
+  .translation-block{grid-template-columns:1fr}
+  .translation-english{border-left:none;border-top:3px solid var(--color-accent)}
+  .pattern-cards{grid-template-columns:1fr 1fr}
+  .flow-steps{flex-direction:column}.flow-arrow{transform:rotate(90deg)}
+}
+@media(max-width:480px){
+  :root{--text-4xl:1.5rem;--text-5xl:1.875rem;--text-6xl:2.25rem}
+  .module{padding:var(--space-8) var(--space-4)}
+  .pattern-cards{grid-template-columns:1fr}
+  .nav-title{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAVIGATION ========== -->
+<nav class="nav">
+  <div class="progress-bar" role="progressbar" aria-valuenow="0"></div>
+  <div class="nav-inner">
+    <span class="nav-title">SpecForge verstehen</span>
+    <div class="nav-dots">
+      <button class="nav-dot" data-target="module-0" aria-label="Intro"></button>
+      <button class="nav-dot" data-target="module-1" aria-label="Was ist SpecForge"></button>
+      <button class="nav-dot" data-target="module-2" aria-label="Die 10 Werkzeuge"></button>
+      <button class="nav-dot" data-target="module-3" aria-label="Die Pipeline"></button>
+      <button class="nav-dot" data-target="module-4" aria-label="Sprache der Specs"></button>
+      <button class="nav-dot" data-target="module-5" aria-label="Wächter & Enforcement"></button>
+      <button class="nav-dot" data-target="module-6" aria-label="STRIDE Security"></button>
+      <button class="nav-dot" data-target="module-7" aria-label="Konfiguration & Extensions"></button>
+      <button class="nav-dot" data-target="module-8" aria-label="Kompletter Durchlauf"></button>
+      <button class="nav-dot" data-target="module-9" aria-label="Quiz & Abschluss"></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== MODULE 0: HERO ========== -->
+<section class="module" id="module-0" style="background:var(--color-bg);display:flex;align-items:center">
+  <div class="module-content" style="text-align:center">
+    <div class="animate-in">
+      <div style="font-size:4rem;margin-bottom:var(--space-6)">🔨</div>
+      <h1 style="font-family:var(--font-display);font-size:var(--text-5xl);font-weight:800;line-height:var(--leading-tight);margin-bottom:var(--space-4)">
+        SpecForge verstehen
+      </h1>
+      <p style="font-size:var(--text-xl);color:var(--color-text-secondary);max-width:560px;margin:0 auto var(--space-8)">
+        Wie ein KI-Skill Requirements Engineering automatisiert — mit Governance, die wie ein Compiler funktioniert, nicht wie ein Komitee.
+      </p>
+      <div style="display:flex;gap:var(--space-3);justify-content:center;flex-wrap:wrap">
+        <span style="background:var(--color-accent-light);color:var(--color-accent);padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:500">7 Module</span>
+        <span style="background:var(--color-info-light);color:var(--color-info);padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:500">Interaktive Quizzes</span>
+        <span style="background:var(--color-success-light);color:var(--color-success);padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:500">Kein Vorwissen nötig</span>
+      </div>
+      <p style="margin-top:var(--space-10);color:var(--color-text-muted);font-size:var(--text-sm)">↓ Scrolle nach unten oder drücke die Pfeiltasten</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MODULE 1: WAS IST SPECFORGE ========== -->
+<section class="module" id="module-1" style="background:var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">01</span>
+      <h1 class="module-title">Was schmiedet SpecForge?</h1>
+      <p class="module-subtitle">Vom vagen Feature-Wunsch zum wasserdichten Bauplan</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Das Problem ohne SpecForge</h2>
+      <p>Stell dir vor, du sagst einem KI-Tool: "Bau mir eine Authentifizierung." Was passiert? Es schreibt sofort Code — ohne zu fragen, welche Sicherheitsstandards gelten, ob es <span class="term" data-definition="Zwei-Faktor-Authentifizierung: Ein Sicherheitsverfahren bei dem du neben deinem Passwort noch einen zweiten Nachweis brauchst — z.B. einen Code aus einer App auf deinem Handy.">MFA</span> braucht, oder was passiert wenn jemand 100 Mal das falsche Passwort eingibt.</p>
+      <p>Das Ergebnis: Code der "funktioniert" — aber Sicherheitslücken hat, keine klaren Anforderungen, und niemand weiß ob er vollständig ist.</p>
+
+      <div class="callout callout-accent">
+        <div class="callout-icon">💡</div>
+        <div class="callout-content">
+          <strong class="callout-title">Die Kernidee</strong>
+          <p>SpecForge dreht den Prozess um: Erst spezifizieren, dann bauen. "Governance ist ein Compiler, kein Komitee" — Regeln werden automatisch geprüft, nicht in Meetings diskutiert.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Was SpecForge tut — in 30 Sekunden</h2>
+      <p>SpecForge ist ein <span class="term" data-definition="Ein Claude-Skill ist eine Erweiterung die Claude beibringt, wie er eine bestimmte Art von Aufgabe angehen soll — mit festen Regeln, Templates und Qualitätsprüfungen.">Claude-Skill</span> der aus deiner Feature-Beschreibung einen kompletten Satz an Dokumenten erzeugt:</p>
+
+      <div class="step-cards stagger-children">
+        <div class="step-card animate-in">
+          <div class="step-num">1</div>
+          <div class="step-body"><strong>Du beschreibst ein Feature</strong><p>"Kunden sollen sich mit MFA einloggen können"</p></div>
+        </div>
+        <div class="step-card animate-in">
+          <div class="step-num">2</div>
+          <div class="step-body"><strong>SpecForge stellt kluge Fragen</strong><p>Welche MFA-Methoden? Welche Regulierung gilt? Wer sind die Nutzer?</p></div>
+        </div>
+        <div class="step-card animate-in">
+          <div class="step-num">3</div>
+          <div class="step-body"><strong>SpecForge erzeugt Artefakte</strong><p>spec.md, plan.md, tasks.md — mit automatischer Qualitätsprüfung</p></div>
+        </div>
+        <div class="step-card animate-in">
+          <div class="step-num">4</div>
+          <div class="step-body"><strong>Du bekommst einen geprüften Bauplan</strong><p>Keine vagen Begriffe, keine Sicherheitslücken, keine vergessenen Edge-Cases</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Die drei Gesichter von SpecForge</h2>
+      <p>Je nach Risiko deines Projekts passt SpecForge die Strenge an — wie ein Bauamt das für einen Gartenschuppen andere Regeln hat als für ein Krankenhaus.</p>
+
+      <div class="pattern-cards stagger-children">
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-success)">
+          <div class="pattern-icon" style="background:var(--color-success)">🚀</div>
+          <div class="pattern-title">Startup</div>
+          <div class="pattern-desc">Schnell und schlank. Nur die wichtigsten Prüfungen. Für MVPs und Prototypen wo Geschwindigkeit zählt.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-info)">
+          <div class="pattern-icon" style="background:var(--color-info)">🏢</div>
+          <div class="pattern-title">Standard</div>
+          <div class="pattern-desc">Die goldene Mitte. Security und Performance werden geprüft. Für die meisten Geschäftsanwendungen.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-error)">
+          <div class="pattern-icon" style="background:var(--color-error)">🏥</div>
+          <div class="pattern-title">KRITIS</div>
+          <div class="pattern-desc">Maximale Strenge. Alle Prüfungen Pflicht. Für kritische Infrastruktur: Stromnetze, Krankenhäuser, Banken.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 2: DIE 10 WERKZEUGE ========== -->
+<section class="module" id="module-2" style="background:var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">02</span>
+      <h1 class="module-title">Die 10 Werkzeuge der Schmiede</h1>
+      <p class="module-subtitle">Jeder Modus hat einen Job — zusammen decken sie den ganzen Prozess ab</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Die Modi auf einen Blick</h2>
+      <p>SpecForge hat 10 Modi — wie ein Schweizer Taschenmesser für <span class="term" data-definition="Requirements Engineering (RE) ist der Prozess, bei dem du herausfindest und aufschreibst WAS ein System tun soll — bevor du anfängst es zu bauen. Wie ein Architekt der erst den Bauplan zeichnet.">Requirements Engineering</span>. Jeder Modus hat eine klar abgegrenzte Aufgabe.</p>
+
+      <div class="pattern-cards stagger-children">
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-1)">
+          <div class="pattern-icon" style="background:var(--color-actor-1)">📝</div>
+          <div class="pattern-title">1 · Specify</div>
+          <div class="pattern-desc">Neue Anforderungen aus einer Idee schmieden</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-2)">
+          <div class="pattern-icon" style="background:var(--color-actor-2)">🔍</div>
+          <div class="pattern-title">2 · Clarify</div>
+          <div class="pattern-desc">Unklarheiten und Lücken aufdecken</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-3)">
+          <div class="pattern-icon" style="background:var(--color-actor-3)">🗂️</div>
+          <div class="pattern-title">3 · Plan & Tasks</div>
+          <div class="pattern-desc">Technischen Plan und Aufgaben ableiten</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-4)">
+          <div class="pattern-icon" style="background:var(--color-actor-4)">🔬</div>
+          <div class="pattern-title">4 · Analyze</div>
+          <div class="pattern-desc">Konsistenz zwischen Dokumenten prüfen</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-5)">
+          <div class="pattern-icon" style="background:var(--color-actor-5)">✅</div>
+          <div class="pattern-title">5 · Checklist</div>
+          <div class="pattern-desc">Prüflisten für jeden Anlass generieren</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-1)">
+          <div class="pattern-icon" style="background:var(--color-actor-1)">🎭</div>
+          <div class="pattern-title">6 · Stakeholder-Sim</div>
+          <div class="pattern-desc">Perspektiven simulieren (Security Officer, CTO...)</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-2)">
+          <div class="pattern-icon" style="background:var(--color-actor-2)">📋</div>
+          <div class="pattern-title">7 · Review</div>
+          <div class="pattern-desc">Einzelne Requirements prüfen und verbessern</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-3)">
+          <div class="pattern-icon" style="background:var(--color-actor-3)">📊</div>
+          <div class="pattern-title">8 · Management</div>
+          <div class="pattern-desc">Traceability, Tech-Debt, Diffs verwalten</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-4)">
+          <div class="pattern-icon" style="background:var(--color-actor-4)">🔄</div>
+          <div class="pattern-title">9 · Discover</div>
+          <div class="pattern-desc">Bestehenden Code reverse-engineeren</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-5)">
+          <div class="pattern-icon" style="background:var(--color-actor-5)">🧪</div>
+          <div class="pattern-title">10 · Derive</div>
+          <div class="pattern-desc">Testfälle aus Specs ableiten</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Wie die Modi zusammenarbeiten</h2>
+      <p>Die Modi sind keine isolierten Tools — sie bilden eine Kette. Wie in einer Schmiede: erst das Rohmaterial (Specify), dann formen (Clarify), dann den Plan schmieden (Plan), dann die Qualität prüfen (Analyze).</p>
+
+      <div class="chat-window" id="chat-modi">
+        <div class="chat-header">💬 SpecForge Gruppen-Chat</div>
+        <div class="chat-messages" id="chat-modi-msgs">
+          <div class="chat-message" data-sender="user" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-text-muted)">DU</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-text-muted)">Du</span><p>Ich brauche eine MFA-Authentifizierung für unser Portal.</p></div>
+          </div>
+          <div class="chat-message" data-sender="specify" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-1)">SP</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-1)">Specify</span><p>Verstanden! Ich erzeuge eine spec.md mit EARS-Requirements und Gherkin-Szenarien. Welches Profil: Standard oder KRITIS?</p></div>
+          </div>
+          <div class="chat-message" data-sender="clarify" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-2)">CL</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-2)">Clarify</span><p>Moment — "MFA" ist vage. TOTP-App? SMS? Passkeys? Und was passiert bei Geräteverlust? Ich hab 3 offene Punkte gefunden.</p></div>
+          </div>
+          <div class="chat-message" data-sender="plan" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-3)">PL</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-3)">Plan & Tasks</span><p>Aus den 5 Stories leite ich 12 Tasks ab. Task 3 ändert 8 Dateien — dafür braucht's einen ExecPlan (GP-04).</p></div>
+          </div>
+          <div class="chat-message" data-sender="analyze" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-4)">AN</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-4)">Analyze</span><p>🔍 Konsistenz-Check: Task 7 referenziert eine Story die in der Spec fehlt. Das ist ein F3-Befund — Scope Creep (AP-05)!</p></div>
+          </div>
+        </div>
+        <div class="chat-typing" id="chat-modi-typing" style="display:none">
+          <div class="chat-avatar" id="chat-modi-typing-avatar" style="background:var(--color-text-muted)">?</div>
+          <div class="chat-typing-dots"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>
+        </div>
+        <div class="chat-controls">
+          <button onclick="playChatNext('modi')">Nächste Nachricht</button>
+          <button onclick="playChatAll('modi')">Alle abspielen</button>
+          <button onclick="resetChat('modi')">Replay</button>
+          <span id="chat-modi-progress" style="font-size:var(--text-xs);color:var(--color-text-muted);align-self:center">0 / 5</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 3: DIE PIPELINE ========== -->
+<section class="module" id="module-3" style="background:var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">03</span>
+      <h1 class="module-title">Die Pipeline — Vom Funken zum Schwert</h1>
+      <p class="module-subtitle">Jeder Schritt hat ein Qualitätstor. Kein Durchkommen ohne Prüfung.</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Der Workflow als Fließband</h2>
+      <p>Stell dir eine Flughafenkontrolle vor: Bevor du ins Flugzeug darfst, musst du durch mehrere Checkpoints. Jeder prüft etwas anderes — Ausweis, Gepäck, Boarding-Pass. So funktionieren die <span class="term" data-definition="Phase Gates sind Qualitätstore zwischen den Arbeitsschritten. Wie Checkpoints die sicherstellen dass alles stimmt bevor es weitergeht. Wenn etwas fehlt, wird gestoppt.">Phase Gates</span> in SpecForge.</p>
+
+      <div class="flow-steps stagger-children">
+        <div class="flow-step animate-in"><div class="flow-step-num">0</div><p>Profil wählen</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step gate animate-in"><p style="font-family:var(--font-mono);font-weight:700;font-size:var(--text-xs)">G0</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">1</div><p>Specify</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step gate animate-in"><p style="font-family:var(--font-mono);font-weight:700;font-size:var(--text-xs)">G1</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">2</div><p>Clarify</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step gate animate-in"><p style="font-family:var(--font-mono);font-weight:700;font-size:var(--text-xs)">G2</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">3</div><p>Plan+Tasks</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step gate animate-in"><p style="font-family:var(--font-mono);font-weight:700;font-size:var(--text-xs)">G3</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">4</div><p>Analyze</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step gate animate-in"><p style="font-family:var(--font-mono);font-weight:700;font-size:var(--text-xs)">G4</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in" style="background:var(--color-success-light);border:2px solid var(--color-success)"><p style="font-weight:700">✅ Implement</p></div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Das F-Stufen-System</h2>
+      <p>Jeder Check an einem Gate hat einen Schweregrad — die <span class="term" data-definition="F-Stufen (F0 bis F5) sind Schweregrade für Befunde. F0 = alles gut, F4 = schwerer Fehler der das Gate blockiert. Wie Noten, aber für Qualitätsmängel.">F-Stufen</span>. Je höher die Stufe, desto ernster der Befund. Denk an eine Ampel: Grün (weiter), Gelb (Achtung), Rot (Stopp).</p>
+
+      <div class="badge-list stagger-children">
+        <div class="badge-item animate-in">
+          <span class="badge-severity sev-f0">F0</span>
+          <span class="badge-desc"><strong>PASS</strong> — Kein Mangel. Alles in Ordnung, weiter geht's.</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-severity sev-f1">F1</span>
+          <span class="badge-desc"><strong>INFO</strong> — Kleinigkeit. Empfehlung notiert, Gate passierbar.</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-severity sev-f2">F2</span>
+          <span class="badge-desc"><strong>WARNING</strong> — Mittelgewicht. Gate passierbar, aber Pflicht-Task vor Go-Live.</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-severity sev-f3">F3</span>
+          <span class="badge-desc"><strong>CONDITIONAL</strong> — Gewichtig. Nur weiter mit dokumentierter Risiko-Akzeptanz.</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-severity sev-f4">F4</span>
+          <span class="badge-desc"><strong>FAIL</strong> — Schwer. Gate blockiert. Muss behoben werden.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">So sieht ein Gate-Check aus</h2>
+      <p>Hier ein echtes Beispiel wie SpecForge einen Gate-Check ausgibt:</p>
+
+      <div class="translation-block">
+        <div class="translation-code">
+          <span class="translation-label">GATE OUTPUT</span>
+          <pre><code><span class="code-comment">── Gate G4: Analyze → Implement ──</span>
+<span class="code-string">✅ [F0]</span> EARS-Formulierung: 5/5 Stories
+<span class="code-string">✅ [F0]</span> Gherkin-Szenarien: 12 (min. 10)
+<span class="code-string">✅ [F0]</span> Constitution: vorhanden
+<span class="code-number">⚠️ [F3]</span> STRIDE: 2/5 Stories offen
+   <span class="code-comment">└─ Risiko-Akzeptanz erforderlich</span>
+<span class="code-keyword">⚠️ [F2]</span> NFR DAT-03: Verschlüsselung
+   <span class="code-comment">└─ Pflicht-Task vor Go-Live</span>
+<span class="code-comment">── Ergebnis: CONDITIONAL ──</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">KLARTEXT</span>
+          <div class="translation-lines">
+            <p class="tl">Die Überschrift zeigt: Wir prüfen den Übergang von Analyze zu Implement.</p>
+            <p class="tl">Drei Prüfpunkte sind bestanden (F0) — alle Stories haben EARS, genug Gherkin-Tests, und die Constitution existiert.</p>
+            <p class="tl">Aber: Bei 2 von 5 Stories fehlt noch die STRIDE-Sicherheitsanalyse. Das ist ein F3 — weiter nur mit Chef-Unterschrift.</p>
+            <p class="tl">Außerdem fehlt die Transport-Verschlüsselung (F2) — weiter geht's, aber ein Fix-Task muss vor dem Launch erledigt werden.</p>
+            <p class="tl">Ergebnis: CONDITIONAL — das Gate ist nicht blockiert, aber jemand muss das Risiko formal akzeptieren.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">🧠</div>
+        <div class="callout-content">
+          <strong class="callout-title">Warum das wichtig ist</strong>
+          <p>Gate-Checks verhindern dass Probleme sich aufstauen. Ohne sie merkst du erst beim Launch dass etwas fehlt — wenn es 10x teurer ist es zu fixen.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 4: SPRACHE DER SPECS ========== -->
+<section class="module" id="module-4" style="background:var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">04</span>
+      <h1 class="module-title">Die Sprache der Specs</h1>
+      <p class="module-subtitle">Warum "soll schnell laden" nie in einer Spec stehen darf</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">EARS — 5 Satzbaupläne für Anforderungen</h2>
+      <p>SpecForge benutzt <span class="term" data-definition="EARS steht für 'Easy Approach to Requirements Syntax' — 5 Satzmuster die dir helfen, Anforderungen so zu formulieren dass sie eindeutig, testbar und vollständig sind. Wie Schablonen für perfekte Sätze.">EARS-Syntax</span>: Feste Satzmuster die dafür sorgen, dass jede Anforderung eindeutig und testbar ist. Wie Grammatikregeln, aber für Software-Anforderungen.</p>
+
+      <div class="pattern-cards stagger-children">
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-5)">
+          <div class="pattern-title">🌍 Ubiquitous</div>
+          <div class="pattern-desc">Gilt immer. "Das System <strong>soll</strong> alle Responses im JSON-Format ausliefern."</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-1)">
+          <div class="pattern-title">⚡ Event-Driven</div>
+          <div class="pattern-desc"><strong>Wenn</strong> [Ereignis], soll das System [Reaktion]. Ausgelöst durch ein Ereignis.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-2)">
+          <div class="pattern-title">🔄 State-Driven</div>
+          <div class="pattern-desc"><strong>Solange</strong> [Zustand], soll das System [Verhalten]. Gilt während eines Zustands.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-3)">
+          <div class="pattern-title">⚙️ Optional</div>
+          <div class="pattern-desc"><strong>Wenn</strong> [Konfiguration], soll das System [Funktion]. Nur wenn aktiviert.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-error)">
+          <div class="pattern-title">🛡️ Unwanted</div>
+          <div class="pattern-desc"><strong>Wenn</strong> [Fehler/Angriff], soll das System [Schutzmaßnahme]. Für Fehlerfälle.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Verbotene Wörter</h2>
+      <p>SpecForge hat eine Blocklist — Wörter die in einer <span class="term" data-definition="Eine Spec (Spezifikation) ist ein Dokument das genau beschreibt WAS ein System tun soll. Nicht WIE es gebaut wird — das ist der Plan. Die Spec ist der Vertrag zwischen 'was wollen wir' und 'was bauen wir'.">Spec</span> nichts verloren haben, weil sie vage und nicht testbar sind:</p>
+
+      <div class="badge-list stagger-children">
+        <div class="badge-item animate-in">
+          <span class="badge-code" style="text-decoration:line-through;color:#F38BA8">"schnell"</span>
+          <span class="badge-desc">→ <strong>"≤200ms (p95)"</strong> — messbar, testbar</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code" style="text-decoration:line-through;color:#F38BA8">"viele"</span>
+          <span class="badge-desc">→ <strong>"≥10.000 gleichzeitige Verbindungen"</strong></span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code" style="text-decoration:line-through;color:#F38BA8">"sicher"</span>
+          <span class="badge-desc">→ <strong>"AES-256-GCM Verschlüsselung nach BSI TR-02102"</strong></span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code" style="text-decoration:line-through;color:#F38BA8">"einfach"</span>
+          <span class="badge-desc">→ <strong>"≤3 Klicks bis zur Zielaktion"</strong></span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code" style="text-decoration:line-through;color:#F38BA8">"in Echtzeit"</span>
+          <span class="badge-desc">→ <strong>"≤100ms Latenz"</strong></span>
+        </div>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-content">
+          <strong class="callout-title">Anti-Pattern AP-04</strong>
+          <p>Wenn eines dieser Wörter in einer Story auftaucht, ist das ein F4-Befund (FAIL). Das Gate blockiert — die Story muss überarbeitet werden bis sie messbar ist.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Gherkin — Tests als Geschichten</h2>
+      <p>Jede Story bekommt mindestens 2 <span class="term" data-definition="Gherkin ist eine Sprache um Testszenarien in Alltagssprache zu schreiben. 'Gegeben X, wenn Y, dann Z' — verständlich für alle, aber gleichzeitig automatisch testbar.">Gherkin</span>-Szenarien: Einen Happy Path (alles geht gut) und einen Fehlerfall (was wenn etwas schiefgeht).</p>
+
+      <div class="translation-block">
+        <div class="translation-code">
+          <span class="translation-label">GHERKIN</span>
+          <pre><code><span class="code-keyword">Szenario:</span> <span class="code-string">Erfolgreicher Login mit MFA</span>
+<span class="code-keyword">  Gegeben</span> ein registrierter Benutzer
+    <span class="code-keyword">und</span> TOTP ist aktiviert
+<span class="code-keyword">  Wenn</span> er E-Mail + Passwort eingibt
+    <span class="code-keyword">und</span> den korrekten TOTP-Code
+<span class="code-keyword">  Dann</span> wird eine Session erstellt
+    <span class="code-keyword">und</span> er sieht das Dashboard
+
+<span class="code-keyword">Szenario:</span> <span class="code-string">Login mit falschem TOTP</span>
+<span class="code-keyword">  Gegeben</span> ein registrierter Benutzer
+<span class="code-keyword">  Wenn</span> er einen falschen TOTP-Code eingibt
+<span class="code-keyword">  Dann</span> wird der Zugang verweigert
+    <span class="code-keyword">und</span> der Vorfall wird geloggt</code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">KLARTEXT</span>
+          <div class="translation-lines">
+            <p class="tl"><strong>Happy Path:</strong> Wenn alles richtig läuft — Benutzer gibt alle Daten korrekt ein und bekommt Zugang.</p>
+            <p class="tl">"Gegeben" beschreibt die Ausgangssituation: Es gibt einen Benutzer, und der hat MFA aktiviert.</p>
+            <p class="tl">"Wenn" beschreibt die Aktion: Was der Benutzer tut.</p>
+            <p class="tl">"Dann" beschreibt das erwartete Ergebnis: Was das System tun soll.</p>
+            <p class="tl"><strong>Fehlerfall:</strong> Was passiert wenn etwas schiefgeht — falscher Code → Zugang verweigert + Security-Log.</p>
+            <p class="tl">Mindestens 2 Szenarien pro Story (AP-06). Sonst fehlt die Absicherung gegen Fehler.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 5: WÄCHTER & ENFORCEMENT ========== -->
+<section class="module" id="module-5" style="background:var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">05</span>
+      <h1 class="module-title">Die Wächter</h1>
+      <p class="module-subtitle">10 Golden Principles, 8 Anti-Patterns — und eine Enforcement Engine</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Die 10 Gebote — Golden Principles</h2>
+      <p>SpecForge hat 10 unverletzliche Regeln — die <span class="term" data-definition="Golden Principles (GP-01 bis GP-10) sind 10 Grundregeln die jedes SpecForge-Projekt einhält. Wie die Grundgesetze eines Staates — sie stehen über allem anderen. Verstöße blockieren den Fortschritt.">Golden Principles</span>. Sie sind wie die Grundgesetze deines Projekts — keine Verhandlungssache. Hier die wichtigsten:</p>
+
+      <div class="step-cards stagger-children">
+        <div class="step-card animate-in" style="border-left-color:var(--color-error)">
+          <div class="step-num" style="background:var(--color-error)">2</div>
+          <div class="step-body"><strong>GP-02: Spec-before-Code</strong><p>Keine einzige Zeile Code ohne passenden Spec-Eintrag. Wie ein Baugenehmigung — ohne Plan kein Bau.</p></div>
+        </div>
+        <div class="step-card animate-in" style="border-left-color:var(--color-actor-2)">
+          <div class="step-num" style="background:var(--color-actor-2)">3</div>
+          <div class="step-body"><strong>GP-03: ADR-Disziplin</strong><p>Jede wichtige technische Entscheidung wird in einem ADR dokumentiert — damit man in 6 Monaten noch weiß WARUM.</p></div>
+        </div>
+        <div class="step-card animate-in" style="border-left-color:var(--color-actor-3)">
+          <div class="step-num" style="background:var(--color-actor-3)">8</div>
+          <div class="step-body"><strong>GP-08: Prinzip-Unverletzlichkeit</strong><p>Das Meta-Prinzip: GP-Verstöße blockieren ALLES bis sie behoben sind. Kein Wegschauen möglich.</p></div>
+        </div>
+      </div>
+
+      <div class="callout callout-accent">
+        <div class="callout-icon">💡</div>
+        <div class="callout-content">
+          <strong class="callout-title">Governance als Compiler</strong>
+          <p>In der Softwareentwicklung ist ein Compiler ein Programm das deinen Code prüft und dir sofort sagt was falsch ist — bevor du es ausführst. SpecForge macht dasselbe mit deinen Anforderungen: Es prüft automatisch und blockiert bei Verstößen. Kein Komitee das entscheidet, sondern eine Maschine die durchsetzt.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Anti-Patterns — Die 8 Todsünden</h2>
+      <p>SpecForge kennt 8 häufige Fehler in Anforderungen und erkennt sie automatisch:</p>
+
+      <div class="pattern-cards stagger-children">
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-error)">
+          <div class="pattern-title">AP-01 · Implementation Bias</div>
+          <div class="pattern-desc">WIE statt WAS beschreiben. "Benutze Redis für Caching" → soll heißen WAS gecacht wird.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-4)">
+          <div class="pattern-title">AP-04 · Vage Quantifizierung</div>
+          <div class="pattern-desc">"Schnell", "sicher", "viele" — alles nicht messbar. Sofort F4 (FAIL).</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-1)">
+          <div class="pattern-title">AP-05 · Scope Creep</div>
+          <div class="pattern-desc">Tasks die keinen Bezug zur Spec haben. Code ohne Auftrag = außer Kontrolle.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-2)">
+          <div class="pattern-title">AP-06 · Missing Negative</div>
+          <div class="pattern-desc">Nur Happy Path, keine Fehlerfälle. Wenn du nicht planst was schiefgehen kann, WIRD es schiefgehen.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 6: STRIDE SECURITY ========== -->
+<section class="module" id="module-6" style="background:var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">06</span>
+      <h1 class="module-title">STRIDE — Das Sicherheits-Röntgen</h1>
+      <p class="module-subtitle">6 Bedrohungskategorien die SpecForge bei jeder sicherheitsrelevanten Story prüft</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Was ist STRIDE?</h2>
+      <p>Stell dir vor, du baust ein Haus. Ein Sicherheitsexperte geht durch und prüft: Kann man die Tür aufbrechen? Kann jemand durchs Fenster klettern? Kann man die Alarmanlage umgehen? <span class="term" data-definition="STRIDE ist ein Threat-Modeling-Framework von Microsoft. Es prüft 6 Bedrohungskategorien systematisch durch: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege.">STRIDE</span> macht dasselbe für Software — nur systematischer.</p>
+
+      <div class="pattern-cards stagger-children">
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-error)">
+          <div class="pattern-icon" style="background:var(--color-error)">🎭</div>
+          <div class="pattern-title">S · Spoofing</div>
+          <div class="pattern-desc">Kann sich jemand als ein anderer ausgeben? Wie ein gefälschter Ausweis an der Tür.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-4)">
+          <div class="pattern-icon" style="background:var(--color-actor-4)">✏️</div>
+          <div class="pattern-title">T · Tampering</div>
+          <div class="pattern-desc">Kann jemand Daten unterwegs verändern? Wie ein Brief der auf dem Postweg geöffnet wird.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-3)">
+          <div class="pattern-icon" style="background:var(--color-actor-3)">🙈</div>
+          <div class="pattern-title">R · Repudiation</div>
+          <div class="pattern-desc">Kann jemand abstreiten was er getan hat? Wie eine Transaktion ohne Quittung.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-info)">
+          <div class="pattern-icon" style="background:var(--color-info)">🔓</div>
+          <div class="pattern-title">I · Info Disclosure</div>
+          <div class="pattern-desc">Können vertrauliche Daten nach außen gelangen? Wie ein offenes Fenster zum Tresorraum.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-text-muted)">
+          <div class="pattern-icon" style="background:var(--color-text-muted)">🔌</div>
+          <div class="pattern-title">D · Denial of Service</div>
+          <div class="pattern-desc">Kann jemand das System lahmlegen? Wie wenn 10.000 Leute gleichzeitig durch eine Drehtür wollen.</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-1)">
+          <div class="pattern-icon" style="background:var(--color-actor-1)">👑</div>
+          <div class="pattern-title">E · Elevation of Privilege</div>
+          <div class="pattern-desc">Kann sich ein normaler Nutzer Admin-Rechte verschaffen? Wie ein Praktikant der den Tresorschlüssel findet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Wie streng ist STRIDE?</h2>
+      <p>Das hängt vom Profil ab — SpecForge passt die Anforderungen ans Risiko an:</p>
+
+      <div class="step-cards stagger-children">
+        <div class="step-card animate-in" style="border-left-color:var(--color-error)">
+          <div class="step-num" style="background:var(--color-error)">K</div>
+          <div class="step-body"><strong>KRITIS:</strong> Alle 6 Kategorien Pflicht für JEDE Story.<p>F4 (FAIL) wenn STRIDE fehlt. Kein Durchkommen ohne vollständige Analyse.</p></div>
+        </div>
+        <div class="step-card animate-in" style="border-left-color:var(--color-info)">
+          <div class="step-num" style="background:var(--color-info)">S</div>
+          <div class="step-body"><strong>Standard:</strong> Pflicht für sicherheitsrelevante Stories.<p>F3 (CONDITIONAL) wenn es fehlt. Weiter nur mit Risiko-Akzeptanz.</p></div>
+        </div>
+        <div class="step-card animate-in" style="border-left-color:var(--color-success)">
+          <div class="step-num" style="background:var(--color-success)">U</div>
+          <div class="step-body"><strong>Startup:</strong> Optional, empfohlen bei Auth/Payment.<p>F1 (INFO) wenn es fehlt. Nur eine Empfehlung.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">So sieht eine STRIDE-Bewertung aus</h2>
+
+      <div class="translation-block">
+        <div class="translation-code">
+          <span class="translation-label">STRIDE OUTPUT</span>
+          <pre><code><span class="code-comment">#### STRIDE: SF-SEC-001 (MFA-Login)</span>
+
+<span class="code-property">| Kategorie</span>        <span class="code-property">| Rel.</span> <span class="code-property">| Risiko</span>  <span class="code-property">| Status</span>    |
+| Spoofing         | <span class="code-string">Ja</span>   | <span class="code-number">Hoch</span>   | <span class="code-string">Mitigiert</span> |
+| Tampering        | <span class="code-string">Ja</span>   | <span class="code-keyword">Mittel</span> | <span class="code-string">Mitigiert</span> |
+| Repudiation      | <span class="code-string">Ja</span>   | <span class="code-keyword">Mittel</span> | <span class="code-string">Mitigiert</span> |
+| Info Disclosure  | <span class="code-string">Ja</span>   | <span class="code-number">Hoch</span>   | <span class="code-number">Offen</span>     |
+| Denial of Service| <span class="code-string">Ja</span>   | <span class="code-keyword">Mittel</span> | <span class="code-string">Mitigiert</span> |
+| Elev. of Priv.   | <span class="code-string">Ja</span>   | <span class="code-keyword">Niedrig</span>| <span class="code-string">Mitigiert</span> |
+
+<span class="code-comment">Offene Risiken: 1</span>
+<span class="code-number">Höchstes Risiko: Info Disclosure (Hoch)</span></code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">KLARTEXT</span>
+          <div class="translation-lines">
+            <p class="tl">Jede der 6 STRIDE-Kategorien wird einzeln bewertet: Ist sie relevant? Wie hoch das Risiko? Ist es behoben?</p>
+            <p class="tl"><strong>Spoofing (Hoch, Mitigiert):</strong> Identitätstäuschung ist relevant — aber durch MFA + JWT-Validierung abgesichert.</p>
+            <p class="tl"><strong>Info Disclosure (Hoch, Offen):</strong> Es fehlt noch eine Maßnahme gegen Informationsoffenlegung. Das ist ein offener Befund!</p>
+            <p class="tl">Ein offenes Risiko bei "Hoch" wird zum F3-Befund im nächsten Gate — das heißt: CONDITIONAL, jemand muss das Risiko akzeptieren oder es muss gefixt werden.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-accent">
+        <div class="callout-icon">💡</div>
+        <div class="callout-content">
+          <strong class="callout-title">Defense in Depth</strong>
+          <p>STRIDE zwingt dich, an Angriffe zu denken BEVOR du Code schreibst. In der Sicherheitswelt heißt das "Defense in Depth" — mehrere Schutzschichten, wie eine Burg mit Graben, Mauer und Wachtürmen. Keine einzelne Maßnahme reicht allein.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 7: KONFIGURATION & EXTENSIONS ========== -->
+<section class="module" id="module-7" style="background:var(--color-bg-warm)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">07</span>
+      <h1 class="module-title">Das Nervensystem — specforge.json</h1>
+      <p class="module-subtitle">Eine einzige Datei steuert das gesamte Verhalten</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">specforge.json — Das Gehirn</h2>
+      <p>Jedes SpecForge-Projekt hat eine zentrale Steuerdatei. Stell sie dir vor wie die DNA eines Lebewesens — sie bestimmt wie streng geprüft wird, welche Regeln gelten, und wo die Artefakte landen. Wie die Einstellungen-App auf deinem Handy, nur für dein ganzes Projekt.</p>
+
+      <div class="translation-block">
+        <div class="translation-code">
+          <span class="translation-label">SPECFORGE.JSON</span>
+          <pre><code>{
+  <span class="code-property">"project"</span>: <span class="code-string">"Kundenportal"</span>,
+  <span class="code-property">"profile"</span>: <span class="code-string">"Standard"</span>,
+  <span class="code-property">"stack"</span>: {
+    <span class="code-property">"framework"</span>: <span class="code-string">"Next.js"</span>,
+    <span class="code-property">"language"</span>: <span class="code-string">"TypeScript"</span>,
+    <span class="code-property">"database"</span>: <span class="code-string">"PostgreSQL"</span>
+  },
+  <span class="code-property">"regulations"</span>: [<span class="code-string">"DSGVO"</span>],
+  <span class="code-property">"active_gps"</span>: [<span class="code-number">1,2,3,4,5,6,7,8</span>],
+  <span class="code-property">"audit"</span>: <span class="code-keyword">true</span>
+}</code></pre>
+        </div>
+        <div class="translation-english">
+          <span class="translation-label">KLARTEXT</span>
+          <div class="translation-lines">
+            <p class="tl"><strong>project:</strong> Wie heißt das Projekt? Wird in allen Artefakten als Titel verwendet.</p>
+            <p class="tl"><strong>profile:</strong> Standard = mittlere Strenge. Bestimmt welche Checks Pflicht sind und welche optional.</p>
+            <p class="tl"><strong>stack:</strong> Die Technologien. SpecForge nutzt das um den Plan und die Tasks framework-spezifisch zu generieren.</p>
+            <p class="tl"><strong>regulations:</strong> Welche Gesetze gelten? DSGVO aktiviert automatisch Datenschutz-Checks (DAT-01 bis DAT-07).</p>
+            <p class="tl"><strong>active_gps:</strong> Welche der 10 Golden Principles sind aktiv? Standard hat GP 1–8, KRITIS alle 10.</p>
+            <p class="tl"><strong>audit:</strong> Soll ein Audit Trail geführt werden? Bei KRITIS immer true.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Extensions — Das Plugin-System</h2>
+      <p>SpecForge ist erweiterbar ohne den Kern zu ändern. Wie bei einem Smartphone: Die Basis-Apps sind vorinstalliert, aber du kannst Apps nachinstallieren. Extensions leben in <code style="background:var(--color-bg-code);color:#CBA6F7;padding:2px 6px;border-radius:4px;font-size:var(--text-sm)">references/custom/</code>.</p>
+
+      <div class="icon-rows stagger-children">
+        <div class="icon-row animate-in">
+          <div class="icon-circle" style="background:var(--color-actor-1)">🏦</div>
+          <div><strong>Branchen-Compliance</strong><p>z.B. DORA für Banken, BAIT für IT-Dienstleister, EnWG für Energieversorger</p></div>
+        </div>
+        <div class="icon-row animate-in">
+          <div class="icon-circle" style="background:var(--color-actor-2)">👥</div>
+          <div><strong>Review-Rollen</strong><p>Eigene Stakeholder-Perspektiven definieren: Compliance Officer, Data Protection Officer...</p></div>
+        </div>
+        <div class="icon-row animate-in">
+          <div class="icon-circle" style="background:var(--color-actor-3)">📏</div>
+          <div><strong>Custom Anti-Patterns</strong><p>Projektspezifische Fehler die automatisch erkannt werden sollen (AP-09+)</p></div>
+        </div>
+        <div class="icon-row animate-in">
+          <div class="icon-circle" style="background:var(--color-actor-5)">🔌</div>
+          <div><strong>Auto-Detection</strong><p>Extensions laden sich automatisch wenn bestimmte Trigger-Begriffe im Input auftauchen</p></div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">🧩</div>
+        <div class="callout-content">
+          <strong class="callout-title">Manifest-Auto-Detection</strong>
+          <p>Jede Extension hat eine manifest.md mit Trigger-Begriffen. Wenn du "DORA" oder "Finanzunternehmen" sagst, erkennt SpecForge automatisch dass die DORA-Extension geladen werden muss — du musst sie nicht manuell aktivieren.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">KRITIS-NFRs — 41 automatische Prüfpunkte</h2>
+      <p>Für regulierte Projekte hat SpecForge eine eingebaute Checkliste mit 41 <span class="term" data-definition="NFRs (Non-Functional Requirements) beschreiben WIE gut ein System etwas tun soll — nicht WAS es tut. Zum Beispiel: Wie schnell, wie sicher, wie verfügbar. Wie die Sterne-Bewertung eines Hotels neben der Zimmeranzahl.">nicht-funktionalen Anforderungen</span> in 6 Kategorien:</p>
+
+      <div class="pattern-cards stagger-children">
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-success)">
+          <div class="pattern-title">🟢 AVA · Verfügbarkeit</div>
+          <div class="pattern-desc">8 Checks: Uptime ≥99,9%, RTO ≤4h, Redundanz, Failover, Backup 3-2-1-Regel</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-error)">
+          <div class="pattern-title">🔴 SEC · Sicherheit</div>
+          <div class="pattern-desc">10 Checks: MFA, RBAC, AES-256, TLS 1.3, Secrets Management, Pen-Testing</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-3)">
+          <div class="pattern-title">🟣 AUD · Audit & Logging</div>
+          <div class="pattern-desc">6 Checks: Tamper-Proof Logs, SIEM, 90+ Tage Retention, NIS2-Meldepflicht</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-actor-4)">
+          <div class="pattern-title">🟡 PER · Performance</div>
+          <div class="pattern-desc">5 Checks: Response Time p95, Throughput, Concurrent Users, Auto-Scaling</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-info)">
+          <div class="pattern-title">🔵 DAT · Datenschutz</div>
+          <div class="pattern-desc">7 Checks: DSGVO Art. 6, Löschkonzept, Datenminimierung, DSFA, AVV</div>
+        </div>
+        <div class="pattern-card animate-in" style="border-top:3px solid var(--color-text-muted)">
+          <div class="pattern-title">⚙️ OPS · Betrieb</div>
+          <div class="pattern-desc">5 Checks: Monitoring, Zero-Downtime Deploy, Incident Response, Kapazitätsplanung</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 8: KOMPLETTER DURCHLAUF ========== -->
+<section class="module" id="module-8" style="background:var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">08</span>
+      <h1 class="module-title">Der komplette Durchlauf</h1>
+      <p class="module-subtitle">Von "Ich brauche ein Feature" bis zum implementierungsreifen Backlog</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Ein Feature von A bis Z</h2>
+      <p>Verfolgen wir ein konkretes Beispiel durch die gesamte Pipeline. Du sagst: "Kunden sollen sich mit Zwei-Faktor-Authentifizierung einloggen können."</p>
+
+      <div class="chat-window" id="chat-walkthrough">
+        <div class="chat-header">🔨 Kompletter SpecForge-Durchlauf</div>
+        <div class="chat-messages" id="chat-walkthrough-msgs">
+          <div class="chat-message" data-sender="user" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-text-muted)">DU</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-text-muted)">Du</span><p>Ich brauche MFA für unser Kundenportal. TOTP und SMS als Methoden.</p></div>
+          </div>
+          <div class="chat-message" data-sender="specify" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-1)">SF</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-1)">SpecForge · Specify</span><p>📝 Profil erkannt: Standard (kein KRITIS-Kontext). Ich erzeuge specforge.json + constitution.md + spec.md mit 5 Stories in EARS-Syntax.</p></div>
+          </div>
+          <div class="chat-message" data-sender="specify" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-1)">SF</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-1)">SpecForge · Gate G1</span><p>✅ EARS: 5/5 · ✅ Gherkin: 12 Szenarien · ✅ Constitution vorhanden · ⚠️ [F3] STRIDE: nur 3/5 Stories → CONDITIONAL</p></div>
+          </div>
+          <div class="chat-message" data-sender="clarify" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-2)">SF</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-2)">SpecForge · Clarify</span><p>🔍 3 offene Punkte gefunden: (1) Recovery bei Geräteverlust? (2) Session-Timeout nach MFA? (3) Admin-Override für gesperrte Accounts?</p></div>
+          </div>
+          <div class="chat-message" data-sender="user" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-text-muted)">DU</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-text-muted)">Du</span><p>Recovery per Backup-Codes. Session-Timeout 8h. Admin-Override mit 4-Augen-Prinzip.</p></div>
+          </div>
+          <div class="chat-message" data-sender="plan" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-3)">SF</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-3)">SpecForge · Plan & Tasks</span><p>🗂️ plan.md + tasks.md erzeugt: 14 Tasks, 2 ADRs (TOTP-Library-Wahl, SMS-Provider). Task 3 hat 9 Dateiänderungen → ExecPlan EP-001 erstellt (GP-04).</p></div>
+          </div>
+          <div class="chat-message" data-sender="analyze" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-actor-4)">SF</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-4)">SpecForge · Analyze</span><p>🔬 Konsistenz-Check: ✅ Spec↔Plan: vollständig · ✅ GP-Score: 8/10 · ⚠️ [F2] SEC-04: SMS-Kanal nicht verschlüsselt → Pflicht-Task. Gate G4: PASS (mit Warning).</p></div>
+          </div>
+          <div class="chat-message" data-sender="specify" style="display:none">
+            <div class="chat-avatar" style="background:var(--color-success)">SF</div>
+            <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-success)">SpecForge · Ergebnis</span><p>✅ Fertig! 5 Stories, 14 Tasks, 2 ADRs, 1 ExecPlan, 12 Gherkin-Szenarien, STRIDE komplett. Bereit für Implementierung.</p></div>
+          </div>
+        </div>
+        <div class="chat-typing" id="chat-walkthrough-typing" style="display:none">
+          <div class="chat-avatar" id="chat-walkthrough-typing-avatar" style="background:var(--color-text-muted)">?</div>
+          <div class="chat-typing-dots"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>
+        </div>
+        <div class="chat-controls">
+          <button onclick="playChatNext('walkthrough')">Nächster Schritt</button>
+          <button onclick="playChatAll('walkthrough')">Alle abspielen</button>
+          <button onclick="resetChat('walkthrough')">Replay</button>
+          <span id="chat-walkthrough-progress" style="font-size:var(--text-xs);color:var(--color-text-muted);align-self:center">0 / 8</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Artefakte die dabei entstehen</h2>
+      <p>Am Ende eines Durchlaufs hat SpecForge folgende Dateien erzeugt — jede als echte Datei, nicht nur als Chat-Text:</p>
+
+      <div class="badge-list stagger-children" style="font-family:var(--font-mono);font-size:var(--text-sm)">
+        <div class="badge-item animate-in">
+          <span class="badge-code">specforge.json</span>
+          <span class="badge-desc">Projektkonfiguration — Profil, Stack, aktive Regeln</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code">constitution.md</span>
+          <span class="badge-desc">Projektprinzipien, Golden Principles, Sicherheits-Baseline</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code">specs/.../spec.md</span>
+          <span class="badge-desc">Die eigentliche Spezifikation mit EARS + Gherkin + STRIDE</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code">specs/.../plan.md</span>
+          <span class="badge-desc">Technischer Implementierungsplan</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code">specs/.../tasks.md</span>
+          <span class="badge-desc">Aufgaben-Breakdown, ready für das Backlog</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code">specs/decisions/adr-*.md</span>
+          <span class="badge-desc">Architecture Decision Records für jede wichtige Entscheidung</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code">plans/active/EP-*.md</span>
+          <span class="badge-desc">ExecPlans für komplexe Tasks (5+ Dateiänderungen)</span>
+        </div>
+        <div class="badge-item animate-in">
+          <span class="badge-code">specforge-audit.md</span>
+          <span class="badge-desc">Automatisches Prüfprotokoll aller Gate-Checks</span>
+        </div>
+      </div>
+
+      <div class="callout callout-accent">
+        <div class="callout-icon">💡</div>
+        <div class="callout-content">
+          <strong class="callout-title">Lückenlose Rückverfolgbarkeit</strong>
+          <p>Jeder Task verweist auf eine Story, jede Story auf die Spec, die Spec auf die Constitution. Wenn in 6 Monaten jemand fragt "Warum wurde das so gebaut?" — die Antwort steht in der Kette. Das nennt man Traceability, und SpecForge erzwingt es automatisch (GP-05).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Discover — Der Rückwärtsgang</h2>
+      <p>Was wenn du nicht ein neues Feature baust, sondern bestehenden Code verstehen willst? Dafür gibt es <span class="term" data-definition="Discover (Modus 9) ist der Reverse-Engineering-Modus von SpecForge. Er liest bestehenden Code und erzeugt daraus eine vollwertige Spezifikation — wie ein Archäologe der aus Ruinen den originalen Bauplan rekonstruiert.">Discover</span> — den Reverse-Engineering-Modus.</p>
+
+      <div class="flow-steps stagger-children">
+        <div class="flow-step animate-in"><div class="flow-step-num">1</div><p>Code lesen</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">2</div><p>5W-Analyse</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">3</div><p>Discovery-Protokoll</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">4</div><p>Spec generieren</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in"><div class="flow-step-num">5</div><p>QS-Schleifen</p></div>
+        <div class="flow-arrow animate-in">→</div>
+        <div class="flow-step animate-in" style="background:var(--color-success-light);border:2px solid var(--color-success)"><p style="font-weight:700">✅ Spec fertig</p></div>
+      </div>
+
+      <p style="margin-top:var(--space-6)">Die 5W-Analyse beantwortet: <strong>WER</strong> sind die Akteure? <strong>WAS</strong> sind die Kernfunktionen? <strong>WARUM</strong> existiert das System? <strong>WIE</strong> ist es gebaut? <strong>WANN</strong> passiert was? Aus diesen Antworten generiert SpecForge eine vollwertige spec.md — mit demselben Qualitätsanspruch wie bei einem neuen Feature.</p>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 9: QUIZ & ABSCHLUSS ========== -->
+<section class="module" id="module-9" style="background:var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">09</span>
+      <h1 class="module-title">Teste dein Wissen</h1>
+      <p class="module-subtitle">Kannst du das Gelernte anwenden?</p>
+    </header>
+
+    <section class="screen animate-in" id="quiz-section">
+      <div class="quiz-container">
+
+        <div class="quiz-question-block" data-correct="opt-1b">
+          <div class="quiz-scenario">
+            <span class="quiz-scenario-label">Szenario</span>
+            <p>Ein Kollege schreibt in die Spec: "Das System soll Daten sicher speichern." SpecForge markiert das als Befund. Warum?</p>
+          </div>
+          <h3 class="quiz-question">Welches Anti-Pattern liegt vor?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="opt-1a" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>AP-01 Implementation Bias — es beschreibt das WIE</span>
+            </button>
+            <button class="quiz-option" data-value="opt-1b" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>AP-04 Vage Quantifizierung — "sicher" ist nicht messbar</span>
+            </button>
+            <button class="quiz-option" data-value="opt-1c" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>AP-06 Missing Negative — es fehlt der Fehlerfall</span>
+            </button>
+          </div>
+          <div class="quiz-feedback" data-correct-text="<strong>Genau!</strong> 'Sicher' steht auf der Blocklist — es ist nicht testbar. Besser: 'AES-256-GCM Verschlüsselung nach BSI TR-02102' oder 'TLS 1.3 für Daten in Transit'." data-incorrect-text="<strong>Nicht ganz.</strong> Das Problem ist das Wort 'sicher' — es steht auf SpecForges Blocklist weil es nicht messbar und nicht testbar ist. Das ist AP-04."></div>
+        </div>
+
+        <div class="quiz-question-block" data-correct="opt-2c">
+          <div class="quiz-scenario">
+            <span class="quiz-scenario-label">Szenario</span>
+            <p>Du bekommst ein Gate-Ergebnis: G1 zeigt einen F3-Befund bei STRIDE. Das Profil ist "Standard".</p>
+          </div>
+          <h3 class="quiz-question">Was passiert jetzt?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="opt-2a" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Das Gate blockiert komplett — nichts geht weiter</span>
+            </button>
+            <button class="quiz-option" data-value="opt-2b" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Kein Problem, F3 ist nur eine Info</span>
+            </button>
+            <button class="quiz-option" data-value="opt-2c" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>CONDITIONAL — weiter geht's nur mit dokumentierter Risiko-Akzeptanz</span>
+            </button>
+          </div>
+          <div class="quiz-feedback" data-correct-text="<strong>Richtig!</strong> F3 = CONDITIONAL. Das Gate ist nicht komplett blockiert (das wäre F4), aber jemand mit Verantwortung muss formal bestätigen dass das Risiko akzeptiert wird." data-incorrect-text="<strong>Nicht ganz.</strong> F3 blockiert nicht komplett (das wäre F4) und ist auch nicht nur eine Info (das wäre F1). F3 = CONDITIONAL: Weiter nur mit expliziter Risiko-Akzeptanz."></div>
+        </div>
+
+        <div class="quiz-question-block" data-correct="opt-3b">
+          <div class="quiz-scenario">
+            <span class="quiz-scenario-label">Szenario</span>
+            <p>Du beschreibst ein Feature: "Benutzer können Favoriten speichern." SpecForge soll eine Spec erstellen. In welchem EARS-Pattern würde die Kernanforderung formuliert?</p>
+          </div>
+          <h3 class="quiz-question">Welches EARS-Pattern passt am besten?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="opt-3a" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Ubiquitous — gilt immer, keine Bedingung</span>
+            </button>
+            <button class="quiz-option" data-value="opt-3b" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Event-Driven — ausgelöst wenn der Benutzer "Favorit speichern" klickt</span>
+            </button>
+            <button class="quiz-option" data-value="opt-3c" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Unwanted — Schutz vor versehentlichem Löschen</span>
+            </button>
+          </div>
+          <div class="quiz-feedback" data-correct-text="<strong>Genau!</strong> 'WENN der Benutzer auf Favorit klickt, SOLL das System den Eintrag in der Favoritenliste speichern.' — ein klassisches Event-Driven Pattern. Ein Unwanted-Szenario käme dazu, z.B. für versehentliches Entfernen." data-incorrect-text="<strong>Nicht ganz.</strong> Die Aktion wird durch ein Ereignis ausgelöst (Benutzer klickt), also ist es Event-Driven: 'WENN der Benutzer auf Favorit klickt, SOLL das System...' Ubiquitous gilt ohne Bedingung, Unwanted ist für Fehlerfälle."></div>
+        </div>
+
+        <div class="quiz-question-block" data-correct="opt-4a">
+          <div class="quiz-scenario">
+            <span class="quiz-scenario-label">Szenario</span>
+            <p>Ein Entwickler hat ein neues API-Endpoint implementiert. Es funktioniert perfekt. Aber es gibt keinen Eintrag in spec.md dafür.</p>
+          </div>
+          <h3 class="quiz-question">Wie bewertet SpecForge diese Situation?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="opt-4a" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>GP-02 Verstoß (BLOCKER) — Code ohne Spec ist verboten</span>
+            </button>
+            <button class="quiz-option" data-value="opt-4b" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Kein Problem — der Code funktioniert ja</span>
+            </button>
+            <button class="quiz-option" data-value="opt-4c" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>AP-01 Implementation Bias — Technik statt Anforderung</span>
+            </button>
+          </div>
+          <div class="quiz-feedback" data-correct-text="<strong>Genau!</strong> GP-02 'Spec-before-Code' ist eines der wichtigsten Prinzipien: Keine Implementierung ohne Spec-Eintrag. Das ist ein BLOCKER — der Code muss nachspezifiziert werden, egal wie gut er funktioniert." data-incorrect-text="<strong>Nicht ganz.</strong> Egal ob der Code funktioniert — GP-02 sagt: Keine Implementierung ohne Spec-Eintrag. Das ist ein BLOCKER-Verstoß. Der Code muss nachspezifiziert werden."></div>
+        </div>
+
+        <div class="quiz-question-block" data-correct="opt-5b">
+          <div class="quiz-scenario">
+            <span class="quiz-scenario-label">Szenario</span>
+            <p>Du baust einen Login-Endpoint. Die STRIDE-Analyse zeigt: Spoofing ist "Hoch" und "Offen". Das Profil ist Standard.</p>
+          </div>
+          <h3 class="quiz-question">Was sollte als nächstes passieren?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="opt-5a" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Ignorieren — Standard-Profil hat keine STRIDE-Pflicht</span>
+            </button>
+            <button class="quiz-option" data-value="opt-5b" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Mitigation definieren — z.B. MFA + JWT-Validierung gegen Spoofing</span>
+            </button>
+            <button class="quiz-option" data-value="opt-5c" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Das Profil auf KRITIS hochstufen</span>
+            </button>
+          </div>
+          <div class="quiz-feedback" data-correct-text="<strong>Genau!</strong> Ein Login-Endpoint ist sicherheitsrelevant — auch im Standard-Profil ist STRIDE dafür Pflicht. Ein offenes 'Hoch'-Risiko bei Spoofing schreit nach konkreten Maßnahmen: MFA, JWT mit kurzer Laufzeit, Session-Binding." data-incorrect-text="<strong>Nicht ganz.</strong> Auch im Standard-Profil ist STRIDE für sicherheitsrelevante Stories Pflicht. Ein offenes 'Hoch'-Spoofing-Risiko bei einem Login-Endpoint braucht konkrete Mitigations — nicht ignorieren und nicht gleich das ganze Profil ändern."></div>
+        </div>
+
+        <div class="quiz-question-block" data-correct="opt-6c">
+          <div class="quiz-scenario">
+            <span class="quiz-scenario-label">Szenario</span>
+            <p>Dein Projekt verarbeitet Finanzdaten. Du tippst "Erstelle eine Spec für Kontoübersichten". SpecForge meldet: "[Extension geladen: @dora-compliance]". Du hast das nie konfiguriert.</p>
+          </div>
+          <h3 class="quiz-question">Warum hat SpecForge die Extension automatisch geladen?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option" data-value="opt-6a" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Fehler — Extensions müssen immer manuell aktiviert werden</span>
+            </button>
+            <button class="quiz-option" data-value="opt-6b" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Das KRITIS-Profil lädt immer alle Extensions</span>
+            </button>
+            <button class="quiz-option" data-value="opt-6c" onclick="selectOption(this)">
+              <div class="quiz-option-radio"></div><span>Manifest-Auto-Detection — "Kontoübersichten" matcht einen Trigger-Begriff in der DORA-Extension</span>
+            </button>
+          </div>
+          <div class="quiz-feedback" data-correct-text="<strong>Richtig!</strong> SpecForge scannt beim Start alle manifest.md-Dateien der Extensions nach Trigger-Begriffen. 'Konto', 'Finanz' oder ähnliches matcht die DORA-Extension automatisch. Das ist Manifest-Auto-Detection — kein manuelles Aktivieren nötig." data-incorrect-text="<strong>Nicht ganz.</strong> Extensions können sich dank Manifest-Auto-Detection automatisch laden. Jede Extension hat eine manifest.md mit Trigger-Begriffen. Wenn dein Input einen dieser Begriffe enthält, wird die Extension geladen — ganz ohne manuelle Konfiguration."></div>
+        </div>
+
+        <button class="quiz-check-btn" onclick="checkAllQuizzes()">Antworten prüfen</button>
+      </div>
+    </section>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Das große Ganze</h2>
+      <p>SpecForge ist ein Ökosystem das drei Dinge zusammenbringt:</p>
+
+      <div class="icon-rows stagger-children">
+        <div class="icon-row animate-in">
+          <div class="icon-circle" style="background:var(--color-actor-1)">📐</div>
+          <div><strong>Struktur</strong><p>10 Modi, klare Pipeline, definierte Artefakte. Jeder weiß was als nächstes kommt.</p></div>
+        </div>
+        <div class="icon-row animate-in">
+          <div class="icon-circle" style="background:var(--color-actor-2)">🔒</div>
+          <div><strong>Governance</strong><p>Golden Principles, F-Stufen, Phase Gates. Qualität wird automatisch durchgesetzt.</p></div>
+        </div>
+        <div class="icon-row animate-in">
+          <div class="icon-circle" style="background:var(--color-actor-5)">🔌</div>
+          <div><strong>Erweiterbarkeit</strong><p>Custom-Checklisten, Extensions mit Manifests, profilspezifische Schweregrade. Wächst mit deinem Projekt.</p></div>
+        </div>
+      </div>
+
+      <div class="callout callout-accent" style="margin-top:var(--space-10)">
+        <div class="callout-icon">🔨</div>
+        <div class="callout-content">
+          <strong class="callout-title">Specs schmieden, nicht schreiben</strong>
+          <p>SpecForge heißt nicht umsonst "Forge" — eine Schmiede. Gute Spezifikationen entstehen nicht durch Tippen, sondern durch Erhitzen (Analyse), Hämmern (Clarify), Formen (Plan) und Härten (Enforce). Jetzt kennst du die Werkzeuge.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+(function() {
+  // === INTERSECTION OBSERVER ===
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+  document.querySelectorAll('.animate-in').forEach(el => obs.observe(el));
+
+  // === STAGGER ===
+  document.querySelectorAll('.stagger-children').forEach(p =>
+    Array.from(p.children).forEach((c, i) => c.style.setProperty('--stagger-index', i)));
+
+  // === PROGRESS BAR ===
+  const pb = document.querySelector('.progress-bar');
+  window.addEventListener('scroll', () =>
+    requestAnimationFrame(() => { if (pb) pb.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%'; })
+  , { passive: true });
+
+  // === NAV DOTS ===
+  const dots = document.querySelectorAll('.nav-dot');
+  const modules = document.querySelectorAll('.module');
+  dots.forEach(d => d.addEventListener('click', () => {
+    document.getElementById(d.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+  }));
+
+  const modObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        dots.forEach(d => {
+          d.classList.toggle('active', d.dataset.target === id);
+          if (d.dataset.target === id) d.classList.add('visited');
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+  modules.forEach(m => modObs.observe(m));
+
+  // === KEYBOARD NAV ===
+  function currentModIdx() { let idx = 0; modules.forEach((m, i) => { if (m.getBoundingClientRect().top <= 100) idx = i; }); return idx; }
+  window.nextModule = () => { const i = Math.min(currentModIdx() + 1, modules.length - 1); modules[i].scrollIntoView({ behavior: 'smooth' }); };
+  window.prevModule = () => { const i = Math.max(currentModIdx() - 1, 0); modules[i].scrollIntoView({ behavior: 'smooth' }); };
+  document.addEventListener('keydown', e => {
+    if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { nextModule(); e.preventDefault(); }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { prevModule(); e.preventDefault(); }
+  });
+
+  // === CHAT ANIMATION ===
+  const chats = {};
+  function initChat(id) {
+    const msgs = document.querySelectorAll(`#chat-${id}-msgs .chat-message`);
+    chats[id] = { msgs, index: 0 };
+  }
+  initChat('modi');
+  initChat('walkthrough');
+
+  const actorMap = {
+    user: { initials: 'DU', color: 'var(--color-text-muted)' },
+    specify: { initials: 'SP', color: 'var(--color-actor-1)' },
+    clarify: { initials: 'CL', color: 'var(--color-actor-2)' },
+    plan: { initials: 'PL', color: 'var(--color-actor-3)' },
+    analyze: { initials: 'AN', color: 'var(--color-actor-4)' }
+  };
+
+  window.playChatNext = function(id) {
+    const c = chats[id]; if (!c || c.index >= c.msgs.length) return;
+    const msg = c.msgs[c.index];
+    const sender = msg.dataset.sender;
+    const typing = document.getElementById(`chat-${id}-typing`);
+    const avatar = document.getElementById(`chat-${id}-typing-avatar`);
+    const actor = actorMap[sender] || { initials: '?', color: 'gray' };
+    avatar.textContent = actor.initials; avatar.style.background = actor.color;
+    typing.style.display = 'flex';
+    setTimeout(() => {
+      typing.style.display = 'none';
+      msg.style.display = 'flex'; msg.style.animation = 'fadeSlideUp .3s var(--ease-out)';
+      c.index++;
+      const prog = document.getElementById(`chat-${id}-progress`);
+      if (prog) prog.textContent = `${c.index} / ${c.msgs.length}`;
+      // Scroll chat to bottom
+      const container = document.getElementById(`chat-${id}-msgs`);
+      container.scrollTop = container.scrollHeight;
+    }, 700);
+  };
+  window.playChatAll = function(id) {
+    const c = chats[id]; if (!c) return;
+    const iv = setInterval(() => { if (c.index >= c.msgs.length) { clearInterval(iv); return; } playChatNext(id); }, 1200);
+  };
+  window.resetChat = function(id) {
+    const c = chats[id]; if (!c) return; c.index = 0;
+    c.msgs.forEach(m => { m.style.display = 'none'; m.style.animation = ''; });
+    const prog = document.getElementById(`chat-${id}-progress`);
+    if (prog) prog.textContent = `0 / ${c.msgs.length}`;
+  };
+
+  // === QUIZZES ===
+  window.selectOption = function(btn) {
+    const block = btn.closest('.quiz-question-block');
+    block.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    btn.classList.add('selected');
+  };
+
+  window.checkAllQuizzes = function() {
+    document.querySelectorAll('.quiz-question-block').forEach(q => {
+      const selected = q.querySelector('.quiz-option.selected');
+      const feedbackEl = q.querySelector('.quiz-feedback');
+      const correctValue = q.dataset.correct;
+      if (!selected) {
+        feedbackEl.innerHTML = 'Wähle erst eine Antwort!';
+        feedbackEl.className = 'quiz-feedback show error';
+        return;
+      }
+      if (selected.dataset.value === correctValue) {
+        selected.classList.add('correct');
+        feedbackEl.innerHTML = feedbackEl.dataset.correctText;
+        feedbackEl.className = 'quiz-feedback show success';
+      } else {
+        selected.classList.add('incorrect');
+        const correctBtn = q.querySelector(`[data-value="${correctValue}"]`);
+        if (correctBtn) correctBtn.classList.add('correct');
+        feedbackEl.innerHTML = feedbackEl.dataset.incorrectText;
+        feedbackEl.className = 'quiz-feedback show error';
+      }
+      q.querySelectorAll('.quiz-option').forEach(o => { o.style.pointerEvents = 'none'; });
+    });
+  };
+
+  // === GLOSSARY TOOLTIPS ===
+  let activeTooltip = null;
+  function positionTooltip(term, tip) {
+    const rect = term.getBoundingClientRect();
+    const tipWidth = 300;
+    let left = Math.max(8, Math.min(rect.left + rect.width / 2 - tipWidth / 2, window.innerWidth - tipWidth - 8));
+    document.body.appendChild(tip);
+    const tipHeight = tip.offsetHeight;
+    if (rect.top - tipHeight - 8 < 0) {
+      tip.style.top = (rect.bottom + 8) + 'px';
+      tip.classList.add('flip');
+    } else {
+      tip.style.top = (rect.top - tipHeight - 8) + 'px';
+      tip.classList.remove('flip');
+    }
+    tip.style.left = left + 'px';
+  }
+  document.querySelectorAll('.term').forEach(term => {
+    const tip = document.createElement('span');
+    tip.className = 'term-tooltip'; tip.textContent = term.dataset.definition;
+    term.addEventListener('mouseenter', () => {
+      if (activeTooltip && activeTooltip !== tip) { activeTooltip.classList.remove('visible'); activeTooltip.remove(); }
+      positionTooltip(term, tip); requestAnimationFrame(() => tip.classList.add('visible')); activeTooltip = tip;
+    });
+    term.addEventListener('mouseleave', () => {
+      tip.classList.remove('visible');
+      setTimeout(() => { if (!tip.classList.contains('visible')) tip.remove(); }, 150); activeTooltip = null;
+    });
+    term.addEventListener('click', e => {
+      e.stopPropagation();
+      if (activeTooltip && activeTooltip !== tip) { activeTooltip.classList.remove('visible'); activeTooltip.remove(); }
+      if (tip.classList.contains('visible')) { tip.classList.remove('visible'); tip.remove(); activeTooltip = null; }
+      else { positionTooltip(term, tip); requestAnimationFrame(() => tip.classList.add('visible')); activeTooltip = tip; }
+    });
+  });
+  document.addEventListener('click', () => {
+    if (activeTooltip) { activeTooltip.classList.remove('visible'); activeTooltip.remove(); activeTooltip = null; }
+  });
+})();
+</script>
+</body>
+</html>
