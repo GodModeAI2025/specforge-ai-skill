@@ -235,7 +235,8 @@ pre,code{white-space:pre-wrap;word-break:break-word;overflow-x:hidden}
       <button class="nav-dot" data-target="module-6" aria-label="STRIDE Security"></button>
       <button class="nav-dot" data-target="module-7" aria-label="Konfiguration & Extensions"></button>
       <button class="nav-dot" data-target="module-8" aria-label="Kompletter Durchlauf"></button>
-      <button class="nav-dot" data-target="module-9" aria-label="Quiz & Abschluss"></button>
+      <button class="nav-dot" data-target="module-9" aria-label="Execution & Handoff"></button>
+      <button class="nav-dot" data-target="module-10" aria-label="Quiz & Abschluss"></button>
     </div>
   </div>
 </nav>
@@ -1072,11 +1073,59 @@ pre,code{white-space:pre-wrap;word-break:break-word;overflow-x:hidden}
   </div>
 </section>
 
-<!-- ========== MODULE 9: QUIZ & ABSCHLUSS ========== -->
-<section class="module" id="module-9" style="background:var(--color-bg)">
+<!-- ========== MODULE 9: EXECUTION & HANDOFF ========== -->
+<section class="module" id="module-9" style="background:var(--color-bg-warm)">
   <div class="module-content">
     <header class="module-header animate-in">
       <span class="module-number">09</span>
+      <h1 class="module-title">Execution & Handoff</h1>
+      <p class="module-subtitle">Enterprise-Ready Execution: SpecForge 🤝 GSD & MissionForge</p>
+    </header>
+
+    <section class="screen animate-in">
+      <h2 class="screen-heading">Die Spec ist fertig — was nun?</h2>
+      <p>SpecForge generiert audit-sichere Specs (Phase 1). Um diese Anforderungen nun in echten Code oder Aktionen umzuwandeln (Phase 2), gibt es zwei hochspezialisierte Ausführungspfade, die nahtlos in das <strong>Enterprise Skill Governance Framework</strong> integrieren.</p>
+
+      <div class="pattern-cards">
+        <div class="pattern-card">
+          <div class="pattern-header"><div class="pattern-type">Weg A: Terminal-Execution</div></div>
+          <p><strong>Get Shit Done (GSD)</strong></p>
+          <p>Ideal für massive Code-Änderungen. GSD läuft in der CLI (z.B. Claude Code), konsumiert die <code>spec.md</code> und arbeitet sie in isolierten 200k-Token-Subagenten ab.</p>
+          <ul style="list-style:none; padding:0; margin-top:1rem; font-size:0.9rem;">
+            <li>✅ Parallele Agenten-Ausführung</li>
+            <li>✅ Saubere, atomare Git-Commits</li>
+            <li>✅ Kein <em>Context Rot</em> bei großen Features</li>
+          </ul>
+        </div>
+        
+        <div class="pattern-card">
+          <div class="pattern-header"><div class="pattern-type">Weg B: In-Chat-Execution</div></div>
+          <p><strong>MissionForge & TaskPulse</strong></p>
+          <p>Ideal für komplexe Workflows direkt im Chat. Spawnt eine ganze Agenten-Company (Planung, Ausführung, QS). Jeder Sub-Agent erhält spezifische Tasks basierend auf den REQ-IDs aus SpecForge.</p>
+          <ul style="list-style:none; padding:0; margin-top:1rem; font-size:0.9rem;">
+            <li>✅ Komplett im Chat-Interface</li>
+            <li>✅ Nutzt TaskPulse-Protokolle (CMDB/ITIL konform)</li>
+            <li>✅ Hierarchische Agenten-Delegation</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top:var(--space-6)">
+        <div class="callout-icon">📋</div>
+        <div class="callout-content">
+          <strong class="callout-title">ITIL & Governance Compliance</strong>
+          <p>Sowohl GSD als auch MissionForge hinterlassen standardisierte Ausführungsprotokolle (z.B. via TaskPulse-Integration). So erfüllt die gesamte Wertschöpfungskette (vom Jira-Ticket zur Spec bis zum Git-Commit) die strengsten Auditing-Anforderungen des Skill Governance Frameworks.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ========== MODULE 10: QUIZ & ABSCHLUSS ========== -->
+<section class="module" id="module-10" style="background:var(--color-bg)">
+  <div class="module-content">
+    <header class="module-header animate-in">
+      <span class="module-number">10</span>
       <h1 class="module-title">Teste dein Wissen</h1>
       <p class="module-subtitle">Kannst du das Gelernte anwenden?</p>
     </header>

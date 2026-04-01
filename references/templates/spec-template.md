@@ -42,12 +42,13 @@ Danach: Pyramid Principle — max. 3 Schlüsselargumente als Stützen. Kein Tech
 |-------|----------|---------|
 | ... | ... | Hoch/Mittel/Gering |
 
-## 5. User Stories
+## 5. User Stories & Requirements
 
 ### [SF-XXX-001] [Titel]
 
 **Typ**: User Story | Technical Story | Enabler
 **Priorität**: MoSCoW: Must | Should | Could | Won't
+**REQ-ID**: [REQ-001] ← Wichtig für MissionForge Task-Generierung
 **Spec-First Steps**: [1,2,3,4,6,7]
 
 #### Story
@@ -69,7 +70,13 @@ Scenario: [Edge Case / Fehlerfall]
   When [Aktion]
   Then [Erwartetes Ergebnis]
 
-#### KRITIS-NFRs
+#### Execution Context (Für GSD & TaskPulse)
+- **Files/Components affected**: [src/components/..., api/...]
+- **Execution Action**: [Kurze maschinenlesbare Handlungsanweisung für GSD/Agents]
+- **Verification Command**: [Shell-Command oder curl zum Testen, z.B. `npm test -- -t SF-XXX-001`]
+
+#### KRITIS-NFRs & Governance
+**ITIL/CMDB Impact:** [High/Medium/Low - welche Services sind betroffen?]
 [Relevante Kategorien aus checklists/kritis-nfr.md]
 
 #### STRIDE-Bewertung
@@ -139,6 +146,8 @@ Dieses Modell beschreibt die Fachdomäne in der Sprache der Stakeholder. Technis
 
 - [ ] Alle User Stories haben EARS-Formulierung
 - [ ] Jede Story hat ≥2 Gherkin-Szenarien
+- [ ] Execution Context (Action & Verify Command) ist für GSD/Agents definiert
+- [ ] REQ-IDs für MissionForge Task-Generierung vergeben
 - [ ] NFR-Kategorien vollständig geprüft
 - [ ] STRIDE für security-relevante Stories durchgeführt
 - [ ] Keine vagen Begriffe ohne Quantifizierung
