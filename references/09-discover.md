@@ -3,6 +3,11 @@
 **Methode:** Reverse Engineering + Domain Analysis.
 **Trigger:** Bestehender Code/System, Bestandsdokumentation, Reverse-Engineer-Anfrage.
 
+**Prompt Diet & Execution Rules (RPI Framework):**
+- **Isoliertes Research:** Ignoriere zu Beginn (Phase 9a-9e) jegliche Feature-Tickets oder Soll-Zustände des Nutzers. Dokumentiere den Ist-Zustand absolut wertfrei und objektiv.
+- **Delta ganz am Schluss:** Wende das Feature-Ticket erst ganz am Ende an, um den Confirmation Bias zu umgehen.
+- Gehe in kleinen Schritten vor (Back-and-Forth). Max. 40 Instruktionen pro Interaktion.
+
 ## Profil-Steuerung
 
 - **KRITIS:** Beide QS-Schleifen Pflicht (keine Ausnahme); STRIDE + KRITIS-NFRs in generierter Spec; Keine offenen BLOCKER/MAJOR nach QS-2

@@ -5,6 +5,10 @@
 
 **Trigger:** spec.md existiert, offene Fragen oder unterspezifizierte Bereiche vorhanden.
 
+**Prompt Diet & Execution Rules (RPI Framework):**
+- **Iterativer Loop:** Research und Plan sind nicht linear. Wenn dir im Planungs- oder Klärungsprozess Systemwissen fehlt, stoppe sofort. Kehre in die Recherche zurück, lies den Code, und setze erst danach fort.
+- Arbeite in kleinen Schritten (Back-and-Forth) mit dem Nutzer. Max. 40 Instruktionen auf einmal verarbeiten!
+
 ---
 
 ## Wann Pflicht vs. Optional (profilabhängig)
