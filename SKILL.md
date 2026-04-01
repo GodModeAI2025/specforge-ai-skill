@@ -490,5 +490,10 @@ Nach jeder komplexen Session (≥3 Modi genutzt oder ≥5 Artefakte erzeugt) bie
 1. **Was lief gut?** — Welche Patterns und Entscheidungen haben funktioniert
 2. **Was war unklar?** — Wo musste nachgefragt werden, wo fehlte Kontext
 3. **Verbesserungsvorschläge** — Konkrete Vorschläge als `[IMPROVEMENT: ...]` Marker
+4. **RPI-Monitoring (Dexter Horthy):** 
+   - Wurde die "Prompt Diet" respektiert (Agent hat gewartet) oder gab es Eager Execution?
+   - Gab es False-Positives beim Plan Fidelity Check (F3 auf sinnvolles Refactoring)?
+   - War der Outline-Zwang angemessen oder zu viel Friction?
+   - Hat der iterative Research-Loop (Discover-Rücksprung) funktioniert?
 
-Die Retrospektive wird als `session-retro.md` geschrieben (optional, auf Nutzer-Wunsch). Ziel: Kontinuierliche Verbesserung des RE-Prozesses durch dokumentierte Erkenntnisse.
+Die Retrospektive wird als `session-retro.md` geschrieben (optional, auf Nutzer-Wunsch). Ziel: Kontinuierliche Verbesserung des RE-Prozesses durch dokumentierte Erkenntnisse, speziell zur Validierung der in `references/conventions/rpi-framework-evaluation.md` definierten RPI-Hypothesen.

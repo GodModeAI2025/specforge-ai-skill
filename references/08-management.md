@@ -189,6 +189,19 @@ Folgende Regeln werden bei jeder Management-Funktion **automatisch** durchgesetz
 | GP-09 | SFC-Audit: Consumer/Provider-Richtung |
 | GP-10 | Tech-Debt-Register |
 
+### Phase 8d: Skill-Improvement-Loop (RPI Evaluation)
+
+Auf Anfrage des Nutzers oder periodisch, scannt Modus 8 die angefallenen Logs (`specforge-audit.md` und `session-retro.md`), um die Wirksamkeit des RPI-Frameworks (Dexter Horthy Methodik) zu beurteilen.
+
+**Prüfkatalog (gemäß `references/conventions/rpi-framework-evaluation.md`):**
+1. **Gate G5 Failure Rate:** Wie oft schlägt der Plan Fidelity Check (F3) fehl? Zeigt dies, dass der Agent zu stark vom Plan abweicht (Drift)?
+2. **Eager Execution Rate:** Wie oft beschweren sich Nutzer in Retros (`[IMPROVEMENT: Agent hat ungefragt Code generiert]`) über verletzte "Prompt Diet"?
+3. **Outline Friction:** Gibt es übermäßigen Overhead bei trivialen Tasks (Outline statt direkter Fix)?
+4. **Research Loops:** Hat der Agent präzise auf Modus 9 umgeschaltet oder rät er weiterhin Code-Kontext?
+
+**Ergebnis:**
+Modus 8 erzeugt einen Report (`rpi-evaluation-report.md`), der aggregiert, ob die Architektur stabiler (höherer GP-Score) und der Code fehlerfreier (höhere Assertion Pass Rate in Unit Tests) wurde als vor Einführung des RPI-Frameworks.
+
 ## Erzeugte Artefakte
 
 | Artefakt | Pfad |
