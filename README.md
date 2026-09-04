@@ -312,19 +312,19 @@ specforge/
 - **Audit-freundlich** — jede Datei unabhängig bewertbar und testbar
 - **Context-Window-effizient** — Claude lädt Orchestrator plus benötigtes Modul, nicht den ganzen Payload
 
-### Was jedes Modul enthält (Standard-Sektionen)
+### Was die Fachmodule enthalten (Standard-Sektionen)
 
-Jedes der 10 Fachmodule (M01–M10) folgt einer einheitlichen Struktur:
+Die 10 Fachmodule folgen weitgehend derselben Struktur. In allen zehn stehen Fehlerbehandlung und Erzeugte Artefakte, bei den übrigen Sektionen nennt die Tabelle die Ausnahmen:
 
 | Sektion | Beschreibung |
 |---------|-------------|
-| Profil-Steuerung | KRITIS/Standard/Startup-spezifisches Verhalten |
+| Profil-Steuerung | KRITIS/Standard/Startup-spezifisches Verhalten. Eigene Sektion in acht Modulen; `01-specify.md` behandelt die Profilwahl als Ablaufschritt, `02-clarify.md` unter „Wann Pflicht vs. Optional (profilabhängig)“ |
 | Ablauf (deterministisch) | Nummerierte Phasen mit konkreten Schritten |
 | Output-Template | Markdown-Template für erzeugte Artefakte |
-| Stringenz-Regeln (Enforcement) | Tabellarische Regeln mit Schweregraden |
-| Erweiterbarkeit | Custom-Extension-Punkte mit Pfaden |
-| Fehlerbehandlung | Tabellarische Edge-Case-Behandlung (≥5 Fälle) |
-| GP-Mapping | Zuordnung relevanter Golden Principles |
+| Stringenz-Regeln (Enforcement) | Tabellarische Regeln mit Schweregraden. Fehlt in `04-analyze.md` und `05-checklist.md` |
+| Erweiterbarkeit | Custom-Extension-Punkte mit Pfaden. Fehlt in `04-analyze.md` und `05-checklist.md` |
+| Fehlerbehandlung | Tabellarische Edge-Case-Behandlung, vier bis neun Fälle je nach Modul |
+| GP-Mapping | Zuordnung relevanter Golden Principles. Fehlt in `01-specify.md`, `02-clarify.md` und `07-review.md` |
 | Erzeugte Artefakte | Artefakt-Tabelle mit Pfaden |
 
 ### Orchestrator-Features (SKILL.md)
