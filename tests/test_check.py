@@ -407,13 +407,19 @@ class NfrLueckeTest(unittest.TestCase):
 
     def test_paar_unterscheidet_sich_nur_in_der_perspektive(self):
         """Ein Beleg mit zwei Variablen belegt nichts."""
-        def read(case):
-            path = os.path.join(ROOT, "evals", "golden", case, "spec.md")
+        def read(case, name):
+            path = os.path.join(ROOT, "evals", "golden", case, name)
             with open(path, encoding="utf-8") as handle:
                 return handle.read()
 
-        self.assertEqual(read("03-dora-regulated-ohne-irm01"),
-                         read("06-dora-falsche-f-stufe"))
+        self.assertEqual(read("03-dora-regulated-ohne-irm01", "spec.md"),
+                         read("06-dora-falsche-f-stufe", "spec.md"))
+
+        eins = json.loads(read("03-dora-regulated-ohne-irm01",
+                               "specforge.json"))
+        zwei = json.loads(read("06-dora-falsche-f-stufe", "specforge.json"))
+        self.assertNotEqual(eins.pop("perspective"), zwei.pop("perspective"))
+        self.assertEqual(eins, zwei)
 
     def test_nicht_markierte_luecke_bleibt_unbemerkt(self):
         """Grenze des Linters, festgehalten statt behauptet."""
