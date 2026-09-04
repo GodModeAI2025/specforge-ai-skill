@@ -422,3 +422,5 @@ Issues und Pull Requests willkommen. Insbesondere:
 | MaRisk | Finanzsektor (DE) | Offen | — |
 | PCI-DSS 4.0 | Zahlungsverkehr | Offen | — |
 | EnWG / IT-Sicherheitskatalog | Energiesektor | Offen | — |
+
+<!-- Wegwerf-Zeile fuer den Schutz-Nachweis -->
