@@ -238,7 +238,7 @@ Referenzdateien sind in zwei Kategorien eingeteilt:
 
 **Nicht gelistete Pfade:** Ein `references/`-Pfad außerhalb von `references/custom/`, der in keiner der beiden Listen steht (etwa die Modul-Dateien der Dispatch-Tabelle), gilt als Core. Fehlt er, wird das für den Modus, der ihn lädt, wie KRITISCH behandelt.
 
-**Ausnahme innerhalb von `references/custom/`:** Dateien, die eine vorhandene `manifest.md` unter `Enthaltene Checklisten` auflistet, gehören fest zum Extension-Paket. Sie dürfen nicht fehlen; ihr Fehlen ist ein Paketfehler, kein offener Erweiterungspunkt.
+**Ausnahme innerhalb von `references/custom/`:** Ein `@paket/`, das mitgeliefert wird, ist kein offener Erweiterungspunkt. Jeder Pfad, der in ein vorhandenes Paket zeigt, muss dort existieren, ebenso jede Datei, die dessen `manifest.md` unter `Enthaltene Checklisten` auflistet. Fehlt eine davon, ist das ein Paketfehler. Verweise auf Pakete, die nicht mitgeliefert werden, bleiben Erweiterungspunkte.
 
 **Fehlerfall-Verhalten:**
 - KRITISCHE Referenz fehlt → Gate FAIL mit Fehlermeldung: `"[Datei] nicht gefunden — Prüfung nicht möglich. Bitte references/-Ordner prüfen."`
