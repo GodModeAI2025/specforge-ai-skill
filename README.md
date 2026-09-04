@@ -325,7 +325,7 @@ Die 10 Fachmodule folgen weitgehend derselben Struktur. Wo eine Sektion fehlt od
 | Erweiterbarkeit | Custom-Extension-Punkte mit Pfaden. Fehlt in `04-analyze.md` und `05-checklist.md` |
 | Fehlerbehandlung | Tabellarische Edge-Case-Behandlung, vier bis neun Fälle je nach Modul |
 | GP-Mapping | Zuordnung relevanter Golden Principles. Fehlt in `01-specify.md`, `02-clarify.md` und `07-review.md` |
-| Erzeugte Artefakte | Artefakt-Tabelle mit Pfaden |
+| Erzeugte Artefakte | Artefakt-Tabelle mit Pfaden. In `02-clarify.md` heißt die Sektion „Erzeugte/aktualisierte Artefakte“ |
 
 ### Orchestrator-Features (SKILL.md)
 
