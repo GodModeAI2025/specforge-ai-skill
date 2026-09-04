@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  konsistenz:
+    name: Konsistenzpruefung
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Python bereitstellen
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Referenzpfade pruefen
+        run: python scripts/check-references.py
+
+      - name: SKILL.md-Frontmatter pruefen
+        run: python scripts/check-frontmatter.py
+
+      - name: Checklisten und Manifeste pruefen
+        run: python scripts/check-checklists.py
+
+      - name: Zahlenangaben in README und Landingpage pruefen
+        run: python scripts/check-docs-numbers.py

@@ -1,5 +1,7 @@
 # SpecForge — Specs schmieden, nicht schreiben
 
+[![CI](https://github.com/GodModeAI2025/specforge-ai-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/GodModeAI2025/specforge-ai-skill/actions/workflows/ci.yml)
+
 **Spec-Driven Requirements Engineering als KI-Skill für Claude.**
 
 SpecForge kombiniert [GitHub Spec Kit](https://github.com/github/spec-kit), Harness-Patterns (Golden Principles, Spec-First Chain, STRIDE, Folder Convention) mit EARS-Syntax, Gherkin Acceptance Criteria und automatischen KRITIS/NIS2-NFRs zu einem modularen, selbsttragenden Skill-System.
@@ -300,7 +302,7 @@ specforge/
         └── @bait/                    manifest.md + 8 Prüfpunkte, Stub
 ```
 
-**Skill-Payload: 24 Dateien.** Orchestrator + 10 Fachmodule + 13 Support-Dateien.
+**Skill-Payload: 24 Dateien.** Orchestrator + 10 Fachmodule + 13 Support-Dateien. Die Angaben prüft die CI gegen den Verzeichnisbaum, siehe `scripts/check-docs-numbers.py`.
 
 ### Warum Multi-File?
 
@@ -344,6 +346,7 @@ Jedes der 10 Fachmodule (M01–M10) folgt einer einheitlichen Struktur:
 
 SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Version wegräumt:
 
+- **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten und Zahlenangaben konsistent. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
 - **Enforcement wirkt nur in der Session.** Phase Gates, F-Stufen und Anti-Pattern-Erkennung greifen, solange Claude den Skill geladen hat. Es gibt keinen Linter, der eine fertige `spec.md` außerhalb der Session prüft, und keinen Exit-Code für eine Pipeline.
 - **Zwei Schweregrad-Dialekte nebeneinander.** `enforcement-engine.md` und Modus 10 arbeiten mit F-Stufen, mehrere ältere Module noch mit BLOCKER/MAJOR/MINOR. Das Mapping am Ende von `references/checklists/kritis-nfr.md` deckt drei der sechs Stufen ab. Solange das so ist, hängt die gemeldete Stufe davon ab, welches Modul antwortet.
 - **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.

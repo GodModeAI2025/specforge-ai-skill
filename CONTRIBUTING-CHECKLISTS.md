@@ -118,7 +118,12 @@ Die Spalte `_default` ist Pflicht und wird verwendet, wenn keine Perspektive ges
 
 ## 3. Validierung
 
-Bevor eine Extension als fertig gilt, muss sie diese 4-Schritte-Prüfung bestehen:
+Bevor eine Extension als fertig gilt, muss sie diese 4-Schritte-Prüfung bestehen.
+Die maschinell prüfbaren Punkte aus Schritt 1 bis 3 übernimmt `scripts/check-checklists.py`:
+eindeutige IDs, lückenlose Nummerierung, gültige F-Stufen, Pflicht-Abschnitte im Manifest,
+`_default`-Spalte und Übereinstimmung von Manifest-Angabe und Checkliste. Das Skript läuft in
+der CI bei jedem Push und Pull Request auf `main`, lokal mit `python3 scripts/check-checklists.py`.
+Schritt 4 bleibt Handarbeit in der Session.
 
 ### Schritt 1: Schema-Prüfung
 

@@ -50,8 +50,7 @@ Vor der ersten Prüfung muss die **Perspektive** abgefragt werden:
 
 ## Enthaltene Checklisten
 
-- `checklisten/bait-nfr.md` — 8 Prüfpunkte in 4 Kategorien (Stub)
-  (ITS, IRM, ISM, BBM)
+- `checklisten/bait-nfr.md` — 8 Prüfpunkte in 4 Kategorien (ITS, IRM, ISM, BBM) — Stub
 
 ## Überschneidungen mit anderen Regulierungen
 
