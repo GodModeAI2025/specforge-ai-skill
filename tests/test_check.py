@@ -178,6 +178,34 @@ class RuleTest(unittest.TestCase):
         self.assertEqual(findings[0].level, "F3")
 
 
+class OhneStoryTest(unittest.TestCase):
+    """Eine Spec ohne erkannte Story darf kein bestandener Lauf sein."""
+
+    def test_leere_datei_ist_f4(self):
+        code, output = run_cli([fixture("05-leer")])
+        self.assertEqual(code, 1)
+        self.assertIn("[F4] Keine pruefbare Story", output)
+        self.assertIn("Datei ist leer", output)
+        self.assertNotIn("Alle Pruefpunkte erfuellt", output)
+
+    def test_fremdes_story_format_ist_f4(self):
+        code, output = run_cli([fixture("06-formatfremd")])
+        self.assertEqual(code, 1)
+        self.assertIn("kein Story-Kopf", output)
+        self.assertNotIn("Alle Pruefpunkte erfuellt", output)
+
+    def test_checks_config_kann_die_stufe_nicht_senken(self):
+        """Die Stufe steht im Code, nicht in der Konfiguration."""
+        configuration = config_mod.Config({
+            "severity_model": {},
+            "checks_config": {"G1": {"no_stories": {"severity": "F1"}}},
+        })
+        document = spec_mod.parse_spec(fixture("05-leer", "spec.md"))
+        findings = rules.run(document, None, configuration)
+        self.assertEqual([(f.check, f.level) for f in findings],
+                         [("no_stories", "F4")])
+
+
 class ExitCodeTest(unittest.TestCase):
     def test_valide_spec_exit_0(self):
         code, output = run_cli([fixture("01-valide")])

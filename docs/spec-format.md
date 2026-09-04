@@ -77,6 +77,18 @@ prüft das nur mit `--nach-clarify`, weil eine Spec vor Clarify beide legitim tr
 Ein Task beginnt mit einer Zeile, die eine Task-ID im Format `T-NNN` enthält. Ein Task ohne
 Story-ID ist ein Orphan Task (AP-07), eine Story ohne Task ein Orphan Spec.
 
+## Wenn nichts erkannt wird
+
+Findet der Checker in einer `spec.md` keinen Story-Kopf im Format oben, meldet er das als eigenen
+Befund `no_stories` in F4, und der Lauf endet mit Exit 1. Das gilt für die leere Datei ebenso wie
+für eine gefüllte, deren Überschriften vom Format abweichen. Der Grund steht im nächsten Abschnitt:
+was der Checker nicht sicher erkennt, meldet er nicht als bestanden. Ein Lauf über null Stories mit
+dem Ergebnis PASS wäre genau diese Aussage, und ein abgeschnittenes Artefakt oder ein Pfad auf das
+falsche Verzeichnis käme damit durch jedes Gate.
+
+Die F-Stufe dieses Befunds ist nicht über `checks_config` konfigurierbar. Sie steht im Code, weil
+eine herunterkonfigurierbare Stufe die Lücke wieder öffnet.
+
 ## Was der Checker nicht liest
 
 Alles, was Bedeutung statt Struktur ist. Ob die EARS-Formulierung inhaltlich zum genannten Pattern

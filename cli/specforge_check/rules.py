@@ -16,6 +16,9 @@ im Payload:
   orphan_story      F3  AP-07, references/08-management.md
   nfr_severity      F3  falsch eingestufte NFR-Luecke, Gate G1 NFR-Scan
 
+Die Regel no_stories hat ebenfalls keine konfigurierbare Stufe. Sie steht
+fest auf F4, siehe NO_STORIES_LEVEL.
+
 Die Regel nfr_gap hat keine Default-Stufe. Ihre F-Stufe steht im Marker
 selbst ([NFR-Lücke F4: IRM-01 — ...]), so wie enforcement-engine.md das
 NFR-Luecken-Format festlegt.
@@ -23,6 +26,7 @@ NFR-Luecken-Format festlegt.
 Wer einen anderen Wert braucht, setzt ihn in checks_config, nicht hier.
 """
 
+import os
 import re
 
 # AP-04, Blocklist aus SKILL.md, globale Regel 4. Die Endungen decken die
@@ -72,6 +76,14 @@ NFR_ID_RE = re.compile(r"^([A-Z]{2,5})-(\d{2})\b")
 
 GHERKIN_MINIMUM = 2
 
+# Eine spec.md ohne erkannte Story ist der Fall, in dem der Linter am
+# meisten schadet: er hat nichts geprueft und meldet trotzdem ein Ergebnis.
+# Ein abgeschnittenes Artefakt, ein Pfad auf das falsche Verzeichnis, ein
+# Story-Kopf in eigener Schreibweise sehen dann alle aus wie eine saubere
+# Spec. Die Stufe steht deshalb hier und nicht in checks_config: wer sie
+# herunterkonfigurieren koennte, haette das Loch wieder.
+NO_STORIES_LEVEL = "F4"
+
 
 class Finding(object):
     def __init__(self, check, level, subject, message, line=None,
@@ -95,6 +107,27 @@ def _compiled(mapping):
 VAGUE_RE = _compiled(VAGUE_TERMS)
 SOPHIST_RE = [(label, re.compile(pattern, re.I))
               for label, pattern in sorted(SOPHIST_TERMS.items())]
+
+
+def check_no_stories(spec, config):
+    """Kein Story-Kopf erkannt: der Lauf hat nichts geprueft.
+
+    Leere Datei und Datei mit fremdem Story-Format sind zwei verschiedene
+    Ursachen und bekommen zwei verschiedene Meldungen. Beide sind ein
+    Befund, kein Ergebnis.
+    """
+    if spec.stories:
+        return []
+    if any(line.strip() for line in spec.lines):
+        message = ("kein Story-Kopf im Format '### [SF-XXX-NNN] Titel' "
+                   "gefunden")
+        remedy = ("Story-Koepfe nach docs/spec-format.md schreiben; die "
+                  "Datei hat Inhalt, aber keinen erkennbaren Abschnitt")
+    else:
+        message = "Datei ist leer"
+        remedy = "Pfad pruefen: hier liegt keine ausgefuellte Spezifikation"
+    return [Finding("no_stories", NO_STORIES_LEVEL,
+                    os.path.basename(spec.path), message, None, remedy)]
 
 
 def level_for(config, check):
@@ -282,6 +315,7 @@ def check_nfr_gaps(spec, config, packages):
 
 def run(spec, tasks, config, after_clarify=False, packages=None):
     findings = []
+    findings.extend(check_no_stories(spec, config))
     findings.extend(check_ids(spec, config))
     findings.extend(check_ears(spec, config))
     findings.extend(check_gherkin(spec, config))

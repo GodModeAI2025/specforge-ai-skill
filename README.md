@@ -407,6 +407,7 @@ die Default-F-Stufen, perspektivenabhängig wie in der Session.
 
 | Prüfpunkt | F-Stufe | Herkunft |
 |-----------|---------|----------|
+| Keine Story im erkannten Format (leere oder formatfremde Datei) | F4 | [docs/spec-format.md](docs/spec-format.md) |
 | EARS-Pattern fehlt oder ist unbekannt | F4 | Gate G1 |
 | Weniger als 2 Gherkin-Szenarien je Story | F4 | Gate G1 |
 | Begriff aus der AP-04-Blocklist | F4 | Anti-Pattern AP-04 |
@@ -427,7 +428,7 @@ nächsten Release über ein Tag erreichbar; im aktuellen Release `v3.2.0` gibt e
 
 ### Golden Specs
 
-Unter `evals/golden/` liegen sechs vollständige Spezifikationen mit ihrem erwarteten Ergebnis.
+Unter `evals/golden/` liegen sieben vollständige Spezifikationen mit ihrem erwarteten Ergebnis.
 Sie sind zugleich die ersten echten Specs im Repo, denn bis dahin gab es nur Templates, und der
 Regressionstest für den Linter:
 

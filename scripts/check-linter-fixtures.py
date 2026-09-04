@@ -42,6 +42,12 @@ ERWARTUNG = {
     "04-orphan-task": (2, [], [
         ("orphan_task", "F3"),
     ]),
+    "05-leer": (1, [], [
+        ("no_stories", "F4"),
+    ]),
+    "06-formatfremd": (1, [], [
+        ("no_stories", "F4"),
+    ]),
 }
 
 

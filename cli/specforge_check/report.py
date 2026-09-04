@@ -12,6 +12,7 @@ import json
 from . import severity
 
 LABELS = {
+    "no_stories": "Keine pruefbare Story",
     "ears_coverage": "EARS-Formulierung",
     "gherkin_minimum": "Gherkin-Szenarien",
     "vague_terms": "Vage Begriffe (AP-04)",
@@ -27,8 +28,9 @@ LABELS = {
 
 GATES = (
     ("G1", "Specify → Clarify",
-     ("id_schema", "id_unique", "ears_coverage", "gherkin_minimum",
-      "vague_terms", "sophist", "open_marker", "nfr_gap", "nfr_severity")),
+     ("no_stories", "id_schema", "id_unique", "ears_coverage",
+      "gherkin_minimum", "vague_terms", "sophist", "open_marker",
+      "nfr_gap", "nfr_severity")),
     ("G4", "Analyze → Implement", ("orphan_task", "orphan_story")),
 )
 
@@ -78,9 +80,20 @@ def render(spec, findings, tasks, accepted):
                 if finding.remedy:
                     out.append("   └─ %s" % finding.remedy)
         if not printed:
-            scope = ("%d/%d Stories" % (len(spec.stories), len(spec.stories))
-                     if gate == "G1" else "%d Tasks" % len(tasks or []))
-            out.append("✅ [F0] Alle Pruefpunkte erfuellt: %s" % scope)
+            if gate == "G1":
+                scope = "%d/%d Stories" % (len(spec.stories),
+                                           len(spec.stories))
+                empty = not spec.stories
+            else:
+                scope = "%d Tasks" % len(tasks or [])
+                empty = not tasks
+            if empty:
+                # "Alle Pruefpunkte erfuellt" bei null Pruefgegenstaenden
+                # ist eine Aussage ueber nichts. Sie wird hier nicht
+                # gemacht.
+                out.append("⏭️ [F5] Nichts Pruefbares gefunden: %s" % scope)
+            else:
+                out.append("✅ [F0] Alle Pruefpunkte erfuellt: %s" % scope)
         levels = [f.level for f in findings
                   if f.check in checks and f not in accepted]
         result = gate_result(levels)

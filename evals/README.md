@@ -1,6 +1,6 @@
 # Eval-Suite
 
-Sechs Golden Specs und ihre erwarteten Befunde. Sie sind zugleich die ersten echten
+Sieben Golden Specs und ihre erwarteten Befunde. Sie sind zugleich die ersten echten
 Spezifikationen im Repo: bis hierher lagen nur Templates und Eingabe-Prompts, an denen sich kein
 Ergebnis messen ließ.
 
@@ -37,6 +37,7 @@ Exit 0, wenn alle Fälle bestehen. Die CI fährt das Skript bei jedem Lauf.
 | 04-dora-advisory-ohne-irm01 | advisory | 0 | Dieselbe Lücke, F2 statt F4, Gate passierbar |
 | 05-orphan-task | keine | 2 | AP-07 ist F3: passierbar mit Risiko-Akzeptanz |
 | 06-dora-falsche-f-stufe | advisory | 1 | Eine zu hart eingestufte Lücke ist selbst ein Befund |
+| 07-spec-ohne-story | keine | 1 | Ein Lauf ohne erkannte Story ist kein bestandener Lauf |
 
 Die Fälle 03 und 04 sind das Paar, an dem die Schweregrad-Vereinheitlichung hängt. Das frühere,
 dreistufige Vokabular konnte den Unterschied nicht abbilden: seine mittlere Stufe übersetzt sich
