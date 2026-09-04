@@ -162,7 +162,7 @@ Neu in v3: Brownfield-vs-Greenfield-Erkennung, Explore-Phase mit parallelen Arch
 "Prüfe die Konsistenz meiner Artefakte."
 ```
 
-5-Dimensionen-Check: Spec↔Plan, Plan↔Tasks, Spec↔Tasks, GP-Compliance, Security/Compliance. Re-Analyze-Loop (max. 5 Iterationen) bis keine Blocker mehr offen sind.
+5-Dimensionen-Check: Spec↔Plan, Plan↔Tasks, Spec↔Tasks, GP-Compliance, Security/Compliance. Re-Analyze-Loop (max. 5 Iterationen) bis kein F4-Befund mehr offen ist.
 
 ### Modus 5: Checklist — Quality Gates
 

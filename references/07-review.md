@@ -11,7 +11,7 @@
 
 - **KRITIS:** Alle 3 Ebenen Pflicht; STRIDE vollständig (alle 6 Kategorien); GP-Score ≥ 9/10; Keine offenen F4- oder F3-Befunde erlaubt
 - **Standard:** Ebene 1 + 2 Pflicht; Ebene 3 für SEC-Stories; GP-Score ≥ 8/10; F4 muss gelöst sein, F3 braucht dokumentierte Risiko-Akzeptanz
-- **Startup:** Ebene 1 Pflicht; Ebene 2 + 3 empfohlen; GP-Score ≥ 6/10; Soft-Empfehlungen statt Blocker
+- **Startup:** Ebene 1 Pflicht; Ebene 2 + 3 empfohlen; GP-Score ≥ 6/10; Soft-Empfehlungen statt F4
 
 ## Ablauf (deterministisch)
 

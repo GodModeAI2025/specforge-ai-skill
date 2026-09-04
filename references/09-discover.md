@@ -12,7 +12,7 @@
 
 - **KRITIS:** Beide QS-Schleifen Pflicht (keine Ausnahme); STRIDE + KRITIS-NFRs in generierter Spec; Keine offenen F4- oder F3-Befunde nach QS-2
 - **Standard:** Beide QS-Schleifen Pflicht; STRIDE für SEC-relevante Stories; F3 darf mit dokumentierter Risiko-Akzeptanz mitgenommen werden
-- **Startup:** QS-Schleife 1 (Vollständigkeit) Pflicht; QS-Schleife 2 (Stringenz) empfohlen; Soft-Findings statt Blocker
+- **Startup:** QS-Schleife 1 (Vollständigkeit) Pflicht; QS-Schleife 2 (Stringenz) empfohlen; Soft-Findings statt F4
 
 ## Ablauf (deterministisch)
 

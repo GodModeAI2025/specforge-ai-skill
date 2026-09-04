@@ -97,7 +97,7 @@ Maschinenlesbare Projektkonfiguration. Wird bei Projekt-Setup (Modus 1) erzeugt.
 | Research | Pflicht bei Tech-Entscheidungen | Empfohlen | Optional |
 | GP-Scope | GP-01–10 alle aktiv | GP-01–08 (konfigurierbar) | GP-02 + GP-07 Minimum |
 | Phase Gates | Strikt, kein Skip ohne Protokoll | Skip mit Einzeiler-Begründung | Soft Gates, Empfehlungen |
-| Analyze | Pflicht, Loop bis Blocker-frei | Empfohlen nach Tasks | Optional |
+| Analyze | Pflicht, Loop bis kein F4 mehr offen ist | Empfohlen nach Tasks | Optional |
 
 **Kein Profil angegeben?** → Resolution-Cascade anwenden (siehe unten). Falls keine Quelle greift → Standard. Explizit nachfragen, wenn regulatorischer Kontext erkennbar ist.
 

@@ -5,7 +5,7 @@
 
 ## Profil-Steuerung
 
-- **KRITIS:** Analyze Pflicht; Loop bis Blocker-frei UND GP-Score ≥ 9/10; Alle 5+1 Dimensionen; Custom Checks falls konfiguriert
+- **KRITIS:** Analyze Pflicht; Loop bis kein F4-Befund mehr offen ist UND GP-Score ≥ 9/10; Alle 5+1 Dimensionen; Custom Checks falls konfiguriert
 - **Standard:** Analyze empfohlen; Loop bis GP-Score ≥ 8/10; Dimensionen 1–5; Custom optional
 - **Startup:** Analyze optional; GP-Score ≥ 6/10; Dimensionen 1–3 Pflicht, 4–5 empfohlen
 
@@ -57,12 +57,12 @@ Alle Checker arbeiten unabhängig. Jeder Checker erzeugt einen eigenständigen B
 **Scope:** Dimensionen [1–6] / [1–5] / [1–3]
 
 ### Checker-Ergebnisse
-| Checker | Status | Befunde (B/M/m) | Blocker |
-|---------|--------|-----------------|---------|
-| Consistency | ✅/⚠️/❌ | X/Y/Z | [Anzahl] |
-| GP Auditor | [Score]/10 | X/Y/Z | [Anzahl] |
-| Security | ✅/⚠️/❌ | X/Y/Z | [Anzahl] |
-| Custom | ✅/n.a. | X/Y/Z | — |
+| Checker | Status | Befunde (F4/F3/F2/F1) |
+|---------|--------|----------------------|
+| Consistency | ✅/⚠️/❌ | W/X/Y/Z |
+| GP Auditor | [Score]/10 | W/X/Y/Z |
+| Security | ✅/⚠️/❌ | W/X/Y/Z |
+| Custom | ✅/n.a. | W/X/Y/Z |
 
 ### Detailbefunde
 | # | Checker | Schweregrad | Befund | Betroffene Artefakte | Empfohlene Aktion |

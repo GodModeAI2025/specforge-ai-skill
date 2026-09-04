@@ -10,15 +10,22 @@ Legacy-Weg nicht erreichbar. Wer die alten Werte in einer neuen Regel
 verwendet, erzeugt damit ein Gate, das strenger blockiert als das Regelwerk
 verlangt.
 
-Das Skript prueft zwei Dinge:
+Das Skript prueft drei Dinge:
 
 1. BLOCKER, MAJOR und MINOR kommen nur noch an einer einzigen Stelle vor:
    im Abschnitt "Abwaertskompatibilitaet (Legacy-Mapping)" der
    enforcement-engine.md. Dort sind sie der Eingangs-Uebersetzer fuer alte
    specforge.json-Dateien ohne severity_model und nichts sonst. Die
    Versionsnotation MAJOR.MINOR.PATCH ist keine Schweregrad-Angabe und wird
-   vorher aus dem Text genommen.
-2. Jede F-Stufen-Angabe im Payload liegt zwischen F0 und F5. Ein F6 waere
+   vorher aus dem Text genommen. Gesucht wird ohne Ruecksicht auf Gross- und
+   Kleinschreibung, denn "Ein Blocker im Gate" ist die naheliegende deutsche
+   Schreibweise und war bis dahin unsichtbar. Ausgenommen sind die
+   Meldekategorien "Major Incident" und "Klassifikation als Major" aus DORA
+   Art. 19: dort ist Major ein Vorfalltyp und keine Schwere.
+2. Die Kurzform der alten Skala, die Spalte "(B/M/m)", kommt nirgends mehr
+   vor. Sie ist derselbe zweite Dialekt in drei Buchstaben und wurde von der
+   Suche nach den ausgeschriebenen Werten nie gesehen.
+3. Jede F-Stufen-Angabe im Payload liegt zwischen F0 und F5. Ein F6 waere
    ein Tippfehler, den sonst niemand bemerkt, weil er wie eine gueltige
    Stufe aussieht.
 
@@ -28,7 +35,7 @@ die Entscheidungsdokumentation der Umstellung muss die alten Werte nennen
 duerfen, sonst laesst sich nicht nachlesen, welcher Pruefpunkt vorher welchen
 Wert hatte.
 
-Die zweite Pruefung laeuft nur ueber den Payload, also SKILL.md und
+Die dritte Pruefung laeuft nur ueber den Payload, also SKILL.md und
 references/. In README und Landingpage ist ein F gefolgt von einer Ziffer
 nicht zwingend eine F-Stufe.
 
@@ -39,10 +46,23 @@ import os
 import re
 import sys
 
-LEGACY_RE = re.compile(r"\b(BLOCKER|MAJOR|MINOR)\b")
+# Ohne IGNORECASE blieb "Ein Blocker im Gate" unsichtbar, also gerade die
+# Schreibweise, die im deutschen Fliesstext naheliegt. Die Endungen decken
+# die Beugung ab ("Blockern", "Blockers").
+LEGACY_RE = re.compile(r"\b(BLOCKER|MAJOR|MINOR)(?:N|S)?\b", re.I)
+# Die Kurzform derselben Skala. Sie stand als Spaltenkopf "Befunde (B/M/m)"
+# im ausgelieferten Report-Template, neben einer Gesamtbewertung mit vier
+# F-Stufen, und wurde von der Suche oben nie erfasst.
+SHORT_SCALE_RE = re.compile(r"\(\s*B\s*/\s*M\s*/\s*m\s*\)")
 # MAJOR.MINOR und v{MAJOR}.{MINOR}.{PATCH} sind Versionsangaben, keine
 # Schweregrade. Sie werden vor der Suche entfernt, nicht als Treffer gewertet.
-SEMVER_RE = re.compile(r"\{?MAJOR\}?\.\{?MINOR\}?(?:\.\{?PATCH\}?)?")
+SEMVER_RE = re.compile(r"\{?MAJOR\}?\.\{?MINOR\}?(?:\.\{?PATCH\}?)?", re.I)
+# Fachbegriffe der Regulierung. DORA Art. 19 fuehrt den "Major Incident" als
+# Meldekategorie; das Wort bezeichnet dort einen Vorfalltyp und nicht die
+# Schwere eines Befunds. Diese Liste ist so kurz wie moeglich zu halten:
+# jeder weitere Eintrag ist eine Stelle, an der der zweite Dialekt
+# zurueckkommen kann.
+FACHBEGRIFF_RE = re.compile(r"Major[- ]Incidents?|als Major\b", re.I)
 F_LEVEL_RE = re.compile(r"\bF\s?(\d+)\b")
 
 SKIP_DIRS = (".git", "dist", "node_modules", "__pycache__")
@@ -134,7 +154,11 @@ def main():
                               % (rel, ALLOWED_HEADING))
 
         for number, line in enumerate(lines, 1):
-            text = SEMVER_RE.sub("", line)
+            text = FACHBEGRIFF_RE.sub("", SEMVER_RE.sub("", line))
+            if SHORT_SCALE_RE.search(line):
+                errors.append("%s:%d: Kurzform (B/M/m) der alten Skala "
+                              "statt F-Stufen: %s"
+                              % (rel, number, line.strip()[:70]))
             for match in LEGACY_RE.finditer(text):
                 if window is not None and window[0] <= number <= window[1]:
                     legacy_allowed += 1

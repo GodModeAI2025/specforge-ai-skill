@@ -35,8 +35,8 @@ Das System ist KRITIS-relevant. Profil: KRITIS.
 ## Modus 2: Clarify
 
 ```
-Kläre die offenen Fragen in meiner Spec. Fokussiere auf Blocker, die die
-Planung verhindern würden.
+Kläre die offenen Fragen in meiner Spec. Fokussiere auf die Punkte, die
+die Planung verhindern würden.
 ```
 
 ---
