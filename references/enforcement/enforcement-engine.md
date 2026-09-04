@@ -150,6 +150,7 @@ Die F-Stufe eines Prüfpunkts kann je nach Perspektive variieren. In `checks_con
 ```
 ── Gate G5 ─────────────────────────────────
 [ ] Artefakt-Vollständigkeits-Check (siehe I.6)  [F4]
+[ ] Plan Fidelity Check (Diff vs plan.md)        [F3]
 [ ] Alle Tasks aus tasks.md abgeschlossen        [F4]
 [ ] Spec-First Chain Compliance geprüft          [F4]
 [ ] ARCHITECTURE.md aktuell                      [F3]

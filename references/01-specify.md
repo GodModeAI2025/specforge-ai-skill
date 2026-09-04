@@ -2,6 +2,11 @@
 
 **Trigger:** Feature, Problem, Idee oder Prozess wird beschrieben.
 
+**Prompt Diet & Execution Rules (RPI Framework):**
+- Führe diesen Modus NIEMALS als einen einzigen großen Schritt aus.
+- Gehe strikt sequenziell vor: Lade Phase 0/1a, stoppe und frage den Nutzer. Erst nach Freigabe gehst du zu Phase 1b über (Back-and-Forth).
+- Max. 40 aktive Instruktionen pro Interaktion!
+
 ---
 
 ## Phase 0: Komplexitätseinschätzung (optional, empfohlen bei neuen Produkten)

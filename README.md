@@ -24,6 +24,11 @@ SpecForge ist ein Claude-Skill (Cowork Plugin / Project Knowledge), der Requirem
 
 ### Was SpecForge prüft
 
+- **Anti-Vibe-Coding (RPI Framework)** — Striktes Enforcement des Research -> Plan -> Implement Workflows nach Dexter Horthy (HumanLayer):
+  - *Isolated Research:* Ist-Analyse ohne Feature-Ticket-Bias (verhindert Halluzinationen)
+  - *Outline-Alignment:* Zwingende High-Level Outline vor der Detaillierungsphase
+  - *Plan Fidelity Check (Anti-Drift):* Code-Änderungen werden strikt gegen die `plan.md` geprüft. Ungeplante Änderungen erzeugen einen F3-Befund.
+  - *Prompt Diet:* Phasen werden strikt sequenziell orchestriert (Context Overflow Prävention)
 - **10 Golden Principles** (GP-01 bis GP-10) — enforceable, nicht optional
 - **STRIDE-Analyse** — alle 6 Kategorien für security-relevante Stories
 - **NFR-Scan mit F-Stufen** — automatischer Scan gegen 41 KRITIS/NIS2-Prüfpunkte + erweiterbar über Extensions (z.B. DORA mit 58 Prüfpunkten). 6-stufiges Schweregrad-System (F0–F5) mit CONDITIONAL-Gate
