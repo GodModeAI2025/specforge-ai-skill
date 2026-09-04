@@ -115,7 +115,7 @@ Folgende Regeln werden **automatisch** bei jeder Simulation durchgesetzt:
 | Erweiterungspunkt | Wie | Wo |
 |-------------------|-----|-----|
 | Neue Rollen | `references/custom/@team-review-rollen/rollen/*.md` mit Rolle, Fokus, Methodik, Pflicht-Frage | Custom Extension |
-| Neue Anti-Patterns | `references/custom/anti-patterns-custom.md` (AP-08+) | Custom Extension |
+| Neue Anti-Patterns | `references/custom/anti-patterns-custom.md` (AP-09+) | Custom Extension |
 | Branchenspezifische Prüfaspekte | `references/custom/@branche-compliance/checklisten/*.md` — werden als Zusatz-Prüfpunkte jeder Rolle mitgegeben | Custom Extension |
 | Profil-spezifische Rollen-Defaults | Konfigurierbar über `specforge.json → extensions` | specforge.json |
 

@@ -176,7 +176,7 @@ Schwellwerte:
 | Neue Ebene-1-Prüfpunkte | RQ-09+ in `references/custom/review-quality-custom.md` | Custom Extension |
 | Neue GP-Checks | GP-11+ in `references/custom/golden-principles-custom.md` | Custom Extension |
 | Branchenspezifische Security-Checks | SC-06+ in `references/custom/@branche-compliance/security-checks.md` | Custom Extension |
-| Neue Anti-Patterns | AP-08+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
+| Neue Anti-Patterns | AP-09+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
 | Custom Review-Rollen (→ Modus 6 Integration) | `references/custom/@team-review-rollen/rollen/*.md` | Custom Extension |
 
 ## Fehlerbehandlung

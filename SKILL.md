@@ -210,9 +210,9 @@ SpecForge ist an folgenden Stellen erweiterbar — ohne Änderung an Core-Dateie
 |-----|--------------|----------------|
 | **EARS-Patterns** | Neue Patterns in `references/custom/ears-patterns-custom.md` definieren; Dispatcher prüft Core + Custom | ears-syntax.md (Core), Custom-Datei (Ergänzung) |
 | **Profile** | Neues Profil in specforge.json als `profile_custom`-Objekt mit `base` (KRITIS/Standard/Startup) + `overrides` | specforge.json |
-| **Anti-Patterns** | AP-08+ in `references/custom/anti-patterns-custom.md`; Format identisch zu AP-01–AP-08 | enforcement-engine.md (Core), Custom-Datei (Ergänzung) |
+| **Anti-Patterns** | AP-09+ in `references/custom/anti-patterns-custom.md`; Format identisch zu AP-01–AP-08 | enforcement-engine.md (Core), Custom-Datei (Ergänzung) |
 | **Golden Principles** | GP-11+ in `references/custom/golden-principles-custom.md`; `active_gps` in specforge.json erweitern | golden-principles.md (Core), Custom-Datei (Ergänzung) |
-| **Modi** | Neue Modi als `references/custom/mode-NN-name.md`; Dispatch-Tabelle in specforge.json um Einträge erweiterbar | SKILL.md Dispatch-Tabelle (Core 1–9), Custom (10+) |
+| **Modi** | Neue Modi als `references/custom/mode-NN-name.md`; Dispatch-Tabelle in specforge.json um Einträge erweiterbar | SKILL.md Dispatch-Tabelle (Core 1–10), Custom (11+) |
 | **Review-Rollen** | Neue Rollen in `references/custom/@team-review-rollen/` | 06-stakeholder-sim.md |
 | **NFR-Kategorien** | Neue Kategorien in `references/custom/nfr-custom.md` | kritis-nfr.md (Core), Custom-Datei (Ergänzung) |
 | **Checklisten** | `references/custom/*.md` oder `@scope/`-Pakete | 05-checklist.md |

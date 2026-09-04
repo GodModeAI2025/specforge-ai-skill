@@ -157,7 +157,7 @@ Folgende Regeln werden bei jeder Management-Funktion **automatisch** durchgesetz
 | Neue Traceability-Prüfpunkte | TM-08+ in `references/custom/traceability-custom.md` | Custom Extension |
 | Neue SFC-Schritte | Schritt 9+ in `references/custom/spec-first-chain-custom.md` | Custom Extension |
 | Branchenspezifische Freshness-Regeln | `references/custom/@branche-compliance/freshness-rules.md` | Custom Extension |
-| Neue Anti-Patterns für Spec-Diff | `references/custom/anti-patterns-custom.md` (AP-08+) | Custom Extension |
+| Neue Anti-Patterns für Spec-Diff | `references/custom/anti-patterns-custom.md` (AP-09+) | Custom Extension |
 | Custom Tech-Debt-Kategorien | Erweiterbar über zusätzliche Spalten in tech-debt-tracker.md | Projekt-spezifisch |
 | Neue Management-Funktionen | 8.8+ als `references/custom/management-custom.md` | Custom Extension |
 

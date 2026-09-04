@@ -129,7 +129,7 @@ Clarify ist abgeschlossen wenn:
 |-------------------|-----|-----|
 | Neue Clarify-Techniken | `references/custom/clarify-techniques-custom.md` | Custom Extension |
 | Branchenspezifische Fragen-Templates | `references/custom/@branche-compliance/clarify-templates.md` | Custom Extension |
-| Neue Anti-Patterns | AP-08+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
+| Neue Anti-Patterns | AP-09+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
 | Custom Fragen-Kataloge | `references/custom/clarify-katalog.md` | Custom Extension |
 
 ## Fehlerbehandlung
