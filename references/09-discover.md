@@ -170,7 +170,7 @@ Nach G4-RE: Übergang in Forward-Path ab G2 (Clarify) oder G3 (Plan).
 | Neue Anti-Patterns | AP-08+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
 | Branchenspezifische Discovery-Checklisten | `references/custom/@branche-compliance/discovery-checks.md` | Custom Extension |
 | Neue 5W-Dimensionen | 6W+ in `references/custom/5w-custom.md` (z.B. WIEVIEL für Skalierung) | Custom Extension |
-| Neue EARS-Patterns | `references/checklists/ears-patterns-custom.md` | Custom Extension |
+| Neue EARS-Patterns | `references/custom/ears-patterns-custom.md` | Custom Extension |
 | Custom NFR-Kategorien | `references/custom/nfr-custom.md` | Custom Extension |
 
 ## Fehlerbehandlung

@@ -208,7 +208,7 @@ SpecForge ist an folgenden Stellen erweiterbar — ohne Änderung an Core-Dateie
 
 | Was | Wie erweitern | Wo dokumentiert |
 |-----|--------------|----------------|
-| **EARS-Patterns** | Neue Patterns in `references/checklists/ears-patterns-custom.md` definieren; Dispatcher prüft Core + Custom | ears-syntax.md (Core), Custom-Datei (Ergänzung) |
+| **EARS-Patterns** | Neue Patterns in `references/custom/ears-patterns-custom.md` definieren; Dispatcher prüft Core + Custom | ears-syntax.md (Core), Custom-Datei (Ergänzung) |
 | **Profile** | Neues Profil in specforge.json als `profile_custom`-Objekt mit `base` (KRITIS/Standard/Startup) + `overrides` | specforge.json |
 | **Anti-Patterns** | AP-08+ in `references/custom/anti-patterns-custom.md`; Format identisch zu AP-01–AP-08 | enforcement-engine.md (Core), Custom-Datei (Ergänzung) |
 | **Golden Principles** | GP-11+ in `references/custom/golden-principles-custom.md`; `active_gps` in specforge.json erweitern | golden-principles.md (Core), Custom-Datei (Ergänzung) |
@@ -216,6 +216,8 @@ SpecForge ist an folgenden Stellen erweiterbar — ohne Änderung an Core-Dateie
 | **Review-Rollen** | Neue Rollen in `references/custom/@team-review-rollen/` | 06-stakeholder-sim.md |
 | **NFR-Kategorien** | Neue Kategorien in `references/custom/nfr-custom.md` | kritis-nfr.md (Core), Custom-Datei (Ergänzung) |
 | **Checklisten** | `references/custom/*.md` oder `@scope/`-Pakete | 05-checklist.md |
+
+**Ablageregel:** Jeder Erweiterungspunkt liegt unterhalb `references/custom/`. Alle übrigen `references/`-Pfade sind Core und müssen im Repo vorhanden sein; wie ein Modus zur Laufzeit auf ein Fehlen reagiert, regelt der Abschnitt „Fehlerbehandlung bei fehlenden Referenzen“. Nur so bleiben Erweiterungen bei Core-Updates erhalten und nur so lässt sich ein fehlender Core-Pfad maschinell von einem noch nicht angelegten Erweiterungspunkt unterscheiden.
 
 ### Fehlerbehandlung bei fehlenden Referenzen
 
@@ -230,8 +232,13 @@ Referenzdateien sind in zwei Kategorien eingeteilt:
 **OPTIONAL (Fehlen = Skip mit Warnung):**
 - `references/checklists/stride-guide.md` — STRIDE übersprungen (außer KRITIS: dort KRITISCH)
 - `references/checklists/kritis-nfr.md` — KRITIS-NFRs übersprungen (außer KRITIS-Profil: dort KRITISCH)
-- `references/custom/*.md` — Custom-Checks übersprungen
+- `references/custom/*.md` und `references/custom/@*/**/*.md` — Custom-Checks übersprungen
 - `references/conventions/folder-convention.md` — Folder-Check übersprungen
+- Jeder weitere Pfad unterhalb `references/custom/` — noch nicht angelegter Erweiterungspunkt, Skip mit Warnung
+
+**Nicht gelistete Pfade:** Ein `references/`-Pfad außerhalb von `references/custom/`, der in keiner der beiden Listen steht (etwa die Modul-Dateien der Dispatch-Tabelle), gilt als Core. Fehlt er, wird das für den Modus, der ihn lädt, wie KRITISCH behandelt.
+
+**Ausnahme innerhalb von `references/custom/`:** Ein `@paket/`, das mitgeliefert wird, ist kein offener Erweiterungspunkt. Jeder Pfad, der in ein vorhandenes Paket zeigt, muss dort existieren, ebenso jede Datei, die dessen `manifest.md` unter `Enthaltene Checklisten` auflistet. Fehlt eine davon, ist das ein Paketfehler. Verweise auf Pakete, die nicht mitgeliefert werden, bleiben Erweiterungspunkte.
 
 **Fehlerfall-Verhalten:**
 - KRITISCHE Referenz fehlt → Gate FAIL mit Fehlermeldung: `"[Datei] nicht gefunden — Prüfung nicht möglich. Bitte references/-Ordner prüfen."`
