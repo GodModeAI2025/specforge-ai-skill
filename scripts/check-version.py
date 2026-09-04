@@ -27,7 +27,10 @@ Geprueft wird:
    hiesse anders, und der Download bliebe 404.
 6. Die Workflows bauen und pruefen genau diesen Dateinamen, und der
    Release-Workflow haengt an Tags v*.
-7. Mit --tag: der uebergebene Tag ist der aus der Versionsquelle. Der
+7. docs/ci-example.yml pinnt die Composite Action auf denselben Tag. Ein
+   veralteter Pin dort schickt fremde Pipelines auf eine Referenz, die es
+   nicht gibt, und faellt in diesem Repo sonst nie auf.
+8. Mit --tag: der uebergebene Tag ist der aus der Versionsquelle. Der
    Release-Workflow ruft das so auf, damit ein vertipptes Tag kein Release
    erzeugt.
 
@@ -71,6 +74,10 @@ WORKFLOWS = (
     os.path.join(".github", "workflows", "ci.yml"),
     os.path.join(".github", "workflows", "release.yml"),
 )
+
+# Beispiel fuer fremde Repositories. Der Tag darin pinnt die Composite
+# Action und muss mitwandern.
+EXAMPLE_WORKFLOW = os.path.join("docs", "ci-example.yml")
 
 
 def read(path):
@@ -152,9 +159,14 @@ def main(argv):
     readme = read(os.path.join(root, "README.md"))
     html = read(os.path.join(root, "index.html"))
 
+    tag_sources = [("README.md", readme), ("index.html", html)]
+    example = os.path.join(root, EXAMPLE_WORKFLOW)
+    if os.path.isfile(example):
+        tag_sources.append((EXAMPLE_WORKFLOW, read(example)))
+
     checked += check_all("README.md", readme, CURRENT_RE, skill,
                          "die Skill-Version", errors)
-    for label, text in (("README.md", readme), ("index.html", html)):
+    for label, text in tag_sources:
         for hit in FULL_TAG_RE.findall(text):
             checked += 1
             if hit != tag:
@@ -203,7 +215,7 @@ def main(argv):
     if tag_argument is not None:
         print("Uebergebener Tag:        %s" % tag_argument)
     print("Gepruefte Angaben:       %d in CHANGELOG.md, README.md, "
-          "index.html und den Workflows" % checked)
+          "index.html, den Workflows und %s" % (checked, EXAMPLE_WORKFLOW))
 
     if errors:
         print("")
