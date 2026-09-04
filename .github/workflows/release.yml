@@ -1,0 +1,39 @@
+name: Release
+
+# Ein Tag v* baut das Artefakt und haengt es an das Release. Die
+# Packaging-Logik steht bewusst nicht hier, sondern in scripts/, damit sie
+# ohne Tag und ohne GitHub laeuft und die CI sie bei jedem Lauf mitprueft.
+# Dieser Workflow ruft nur auf.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  artefakt:
+    name: Artefakt bauen und anhaengen
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Python bereitstellen
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Artefakt bauen
+        run: python scripts/package-skill.py dist/specforge-skill.zip
+
+      - name: Artefakt pruefen
+        run: python scripts/check-package.py dist/specforge-skill.zip
+
+      - name: Release anlegen und Artefakt anhaengen
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/specforge-skill.zip
+          fail_on_unmatched_files: true
