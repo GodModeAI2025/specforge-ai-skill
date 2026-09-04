@@ -146,7 +146,7 @@ Neu in v3: Brownfield-vs-Greenfield-Erkennung, Explore-Phase mit parallelen Arch
 "Erstelle eine DSGVO-Compliance-Checklist."
 ```
 
-4 Checklist-Typen: Spec-Readiness (Typ A), Compliance (Typ B), Security (Typ C), Domain-spezifisch (Typ D). Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
+4 Checklist-Typen: Spec-Readiness (Typ A), Plan-Readiness (Typ B), Custom (Typ C), Domain (Typ D). Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 
 ### Modus 6: Stakeholder-Simulation
 
