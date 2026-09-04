@@ -1,0 +1,35 @@
+name: SpecForge Check
+description: Prueft eine spec.md gegen die strukturellen Regeln des SpecForge-Skills.
+
+inputs:
+  pfad:
+    description: spec.md oder Verzeichnis mit spec.md und optionaler tasks.md
+    required: true
+  nach-clarify:
+    description: Offene [Annahme:]- und [Offen:]-Marker beanstanden (true/false)
+    required: false
+    default: 'false'
+  risiko-akzeptanz:
+    description: Datei mit CONDITIONAL-Akzeptanz-Protokollen
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Python bereitstellen
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: specforge check ausfuehren
+      shell: bash
+      env:
+        PFAD: ${{ inputs.pfad }}
+        NACH_CLARIFY: ${{ inputs.nach-clarify }}
+        AKZEPTANZ: ${{ inputs.risiko-akzeptanz }}
+      run: |
+        args=("$PFAD")
+        if [ "$NACH_CLARIFY" = "true" ]; then args+=("--nach-clarify"); fi
+        if [ -n "$AKZEPTANZ" ]; then args+=("--risiko-akzeptanz" "$AKZEPTANZ"); fi
+        python "${{ github.action_path }}/../../../cli/specforge" check "${args[@]}"

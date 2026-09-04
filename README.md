@@ -372,7 +372,7 @@ Die 10 Fachmodule folgen weitgehend derselben Struktur. Wo eine Sektion fehlt od
 SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Version wegräumt:
 
 - **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten, Zahlen- und Versionsangaben konsistent und baut das Release-Paket bei jedem Lauf, damit ein kaputtes Paket vor dem Tag auffällt. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
-- **Enforcement wirkt nur in der Session.** Phase Gates, F-Stufen und Anti-Pattern-Erkennung greifen, solange Claude den Skill geladen hat. Es gibt keinen Linter, der eine fertige `spec.md` außerhalb der Session prüft, und keinen Exit-Code für eine Pipeline.
+- **Der Linter prüft Struktur, nicht Bedeutung.** `specforge check` erkennt fehlende EARS-Pattern, zu wenige Gherkin-Szenarien, Begriffe aus der Blocklist und Traceability-Lücken. Ob die EARS-Formulierung inhaltlich zum Pattern passt, ob ein NFR-Zielwert realistisch ist und ob die STRIDE-Bewertung zu Ende gedacht wurde, entscheidet weiterhin die Session oder ein Mensch. Der Linter meldet solche Punkte nicht als bestanden, sondern gar nicht.
 - **F-Stufen sind Konvention, nicht Typprüfung.** Seit Version 3.2 sprechen alle Module, Checklisten und Templates F0 bis F5; `scripts/check-severity-dialect.py` hält das in der CI fest. Ob Claude im Einzelfall die richtige Stufe vergibt, prüft das Skript nicht — es prüft nur, dass keine zweite Skala danebensteht.
 - **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.
 - **Das Paket ist ein Archiv aus Markdown.** Es installiert nichts und aktualisiert sich nicht. Ein kopierter Ordner erfährt nicht, dass es ein neueres Release gibt; der Abgleich läuft über die `VERSION` im Paket gegen die Releases im Repository.
@@ -391,12 +391,49 @@ Offen, in dieser Reihenfolge:
 
 ---
 
+## `specforge check` — Enforcement außerhalb der Session
+
+Die Phase Gates greifen, solange Claude den Skill geladen hat. Für alles danach — Pull Request,
+Pipeline, Pre-Commit-Hook — liegt derselbe Regelsatz als Linter im Repo. Er braucht Python 3.8
+oder neuer und sonst nichts: keine Installation, keine Abhängigkeit.
+
+```bash
+python3 cli/specforge check specs/mein-feature/spec.md
+```
+
+Liegt eine `tasks.md` neben der Spec, prüft der Linter zusätzlich die Traceability. Eine
+`specforge.json` wird ab der Spec aufwärts gesucht und ausgewertet; `checks_config` überschreibt
+die Default-F-Stufen, perspektivenabhängig wie in der Session.
+
+| Prüfpunkt | F-Stufe | Herkunft |
+|-----------|---------|----------|
+| EARS-Pattern fehlt oder ist unbekannt | F4 | Gate G1 |
+| Weniger als 2 Gherkin-Szenarien je Story | F4 | Gate G1 |
+| Begriff aus der AP-04-Blocklist | F4 | Anti-Pattern AP-04 |
+| SOPHIST-Trigger (`ggf.`, `zeitnah`, `etc.`) | F3 | Anti-Pattern AP-08 |
+| Offene `[Annahme:]`- oder `[Offen:]`-Marker (nur mit `--nach-clarify`) | F3 | SKILL.md, globale Regel 11 |
+| Task ohne Story-Referenz, Story ohne Task | F3 | Anti-Pattern AP-07 |
+| ID folgt nicht `SF-{Präfix}-{NNN}` | F1 | Modus 1 und 7 |
+| Doppelt vergebene Story-ID | F4 | Nachverfolgbarkeit |
+
+Exit-Codes: `0` sauber, `1` mindestens ein F4-Befund, `2` ein F3-Befund ohne dokumentierte
+Risiko-Akzeptanz, `3` Aufrufproblem. Eine Akzeptanz nach dem CONDITIONAL-Protokoll wird mit
+`--risiko-akzeptanz datei.md` übergeben und hebt Exit 2 auf.
+
+Das gelesene Format ist in [docs/spec-format.md](docs/spec-format.md) beschrieben. Für fremde
+Repositories liegt eine Composite Action unter `.github/actions/specforge-check/`, ein
+Beispiel-Workflow in [docs/ci-example.yml](docs/ci-example.yml).
+
+---
+
 ## Weiterführende Dokumente
 
 | Dokument | Inhalt |
 |----------|--------|
 | [docs/skill-als-blaupause.md](docs/skill-als-blaupause.md) | SpecForge als Muster für eigene Claude-Skills: Frontmatter, Modi, Output-Templates, Qualitätsregeln |
 | [docs/quellen-und-einfluesse.md](docs/quellen-und-einfluesse.md) | Herkunft der Methoden: Spec Kit, EARS, Gherkin, STRIDE, Cynefin und die übrigen |
+| [docs/spec-format.md](docs/spec-format.md) | Das maschinenlesbare Format der `spec.md`: Story-Kopf, Pattern-Feld, Scenario-Blöcke, Marker |
+| [docs/f-stufen-entscheidung.md](docs/f-stufen-entscheidung.md) | Warum F0 bis F5 der einzige Schweregrad-Dialekt ist und welcher Prüfpunkt sich dabei verschoben hat |
 | [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md) | Schema, Validierung und Kandidatenliste für eigene Regulierungs-Checklisten |
 
 ---
