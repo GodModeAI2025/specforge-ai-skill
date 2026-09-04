@@ -7,7 +7,7 @@ eine Spalte, dazu die Pflicht-Spalte _default. Genau das ist die Tabelle, die
 in der Session entscheidet, welche F-Stufe eine fehlende Anforderung bekommt.
 
 Der Checker liest sie, statt sie zu wiederholen. Eine Zelle kann mehrere
-Stufen nennen ("F4 (TLPT) / F3", "F4 (PII) / F3") — die Bedingung dahinter
+Stufen nennen ("F4 (TLPT) / F3", "F4 (PII) / F3"), und die Bedingung dahinter
 ist fachlich, nicht strukturell entscheidbar. Zulaessig sind dann beide
 Stufen; falsch ist nur eine Stufe, die in der Zelle gar nicht vorkommt.
 """

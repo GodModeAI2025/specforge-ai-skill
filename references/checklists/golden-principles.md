@@ -44,14 +44,14 @@ Die F-Stufen unten sind die Default-Werte. Wo ein Gate aus `references/enforceme
 **Datum:** [YYYY-MM-DD]
 ## Kontext — ## Entscheidung — ## Konsequenzen — ## Alternativen
 ```
-**F-Stufe:** F3 (KRITIS: F4) — Gate G3 führt ADRs profilabhängig
+**F-Stufe:** F3 (KRITIS: F4), weil Gate G3 ADRs profilabhängig führt
 
 ## GP-04: ExecPlan-Pflicht
 **Regel:** Tasks mit 5+ Dateiänderungen brauchen EP-*.md in `plans/active/`.
 **Enforcement:** Tasks-Phase Gate — Dateizählung pro Task.
 **Verstoß-Beispiel:** Task ändert 12 Dateien über 3 Module ohne ExecPlan.
 **ExecPlan-Format:** Änderungsreihenfolge, Abhängigkeiten, Rollback-Strategie, Checkpoint.
-**F-Stufe:** F2 — Gate G3
+**F-Stufe:** F2 (Gate G3)
 
 ## GP-05: Invariant-Traceability
 **Regel:** Tests referenzieren Invariant-IDs aus `ARCHITECTURE.md`.
@@ -63,12 +63,12 @@ Die F-Stufen unten sind die Default-Werte. Wo ein Gate aus `references/enforceme
 **Regel:** TODO/TBD/FIXME brauchen Datum + Owner. Max. 14 Tage.
 **Korrektes Format:** `// TODO(2025-10-01, @owner): Beschreibung — Ticket: PROJ-123`
 **Verstoß-Beispiel:** `// TODO: Caching implementieren` seit 3 Monaten.
-**F-Stufe:** F2 (Gate G5) — F3, sobald die 14-Tage-Frist überschritten ist
+**F-Stufe:** F2 (Gate G5), ab Überschreitung der 14-Tage-Frist F3
 
 ## GP-07: Dokument-Platzierung
 **Regel:** Alle Artefakte in Convention-Verzeichnissen (→ folder-convention.md).
 **Verstoß-Beispiel:** ADR in `docs/decisions/` statt `specs/decisions/`.
-**F-Stufe:** F2 — Gate G0 führt den Folder-Convention-Check
+**F-Stufe:** F2, weil Gate G0 den Folder-Convention-Check führt
 
 ## GP-08: Prinzip-Unverletzlichkeit
 **Regel:** Verstöße gegen Golden Principles blockieren bis zur Auflösung.
@@ -84,7 +84,7 @@ Die F-Stufen unten sind die Default-Werte. Wo ein Gate aus `references/enforceme
 ## GP-10: Schulden-Tracking
 **Regel:** Jede Tech-Debt in `tech-debt-tracker.md` mit ID + Owner.
 **Format:** `| TD-NNN | Beschreibung | Owner | Priorität | Auswirkung | Erstellt | Ziel-Sprint |`
-**F-Stufe:** F1 — F2, sobald die Schuld auf ein NFR wirkt (Performance, Security, Availability)
+**F-Stufe:** F1, bei Wirkung auf ein NFR (Performance, Security, Availability) F2
 
 ---
 

@@ -129,7 +129,7 @@ def main():
         if rel == ALLOWED_FILE:
             window = allowed_range(lines)
             if window is None:
-                errors.append("%s: Abschnitt '%s' fehlt — ohne ihn hat das "
+                errors.append("%s: Abschnitt '%s' fehlt, damit hat das "
                               "Legacy-Mapping keinen definierten Ort"
                               % (rel, ALLOWED_HEADING))
 

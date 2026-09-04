@@ -373,7 +373,7 @@ SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Versi
 
 - **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten, Zahlen- und Versionsangaben konsistent und baut das Release-Paket bei jedem Lauf, damit ein kaputtes Paket vor dem Tag auffällt. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
 - **Der Linter prüft Struktur, nicht Bedeutung.** `specforge check` erkennt fehlende EARS-Pattern, zu wenige Gherkin-Szenarien, Begriffe aus der Blocklist und Traceability-Lücken. Ob die EARS-Formulierung inhaltlich zum Pattern passt, ob ein NFR-Zielwert realistisch ist und ob die STRIDE-Bewertung zu Ende gedacht wurde, entscheidet weiterhin die Session oder ein Mensch. Der Linter meldet solche Punkte nicht als bestanden, sondern gar nicht.
-- **F-Stufen sind Konvention, nicht Typprüfung.** Seit Version 3.2 sprechen alle Module, Checklisten und Templates F0 bis F5; `scripts/check-severity-dialect.py` hält das in der CI fest. Ob Claude im Einzelfall die richtige Stufe vergibt, prüft das Skript nicht — es prüft nur, dass keine zweite Skala danebensteht.
+- **F-Stufen sind Konvention, nicht Typprüfung.** Alle Module, Checklisten und Templates sprechen F0 bis F5; `scripts/check-severity-dialect.py` hält das in der CI fest. Ob Claude im Einzelfall die richtige Stufe vergibt, prüft das Skript nicht. Es prüft nur, dass keine zweite Skala danebensteht.
 - **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.
 - **Das Paket ist ein Archiv aus Markdown.** Es installiert nichts und aktualisiert sich nicht. Ein kopierter Ordner erfährt nicht, dass es ein neueres Release gibt; der Abgleich läuft über die `VERSION` im Paket gegen die Releases im Repository.
 - **Deutsch als Arbeitssprache.** Der Skill antwortet englisch auf englische Eingaben, die Referenzdateien und Checklisten bleiben deutsch.
@@ -386,16 +386,16 @@ Offen, in dieser Reihenfolge:
 
 1. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
 2. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
-3. **Erstes Release veröffentlichen:** Packaging-Skript, Paketprüfung und Release-Workflow liegen im Repo, der Tag `v3.2.0` ist noch nicht gesetzt. Bis dahin läuft `releases/latest/download/` ins Leere.
+3. **Composite Action ausliefern:** `.github/actions/specforge-check/` liegt im Repo, ist aber erst über ein Tag ab dem nächsten Release als `uses:` erreichbar. Bis dahin ruft ein fremdes Repository den Linter über einen eigenen Checkout auf.
 4. **Englische Fassung** des Payloads.
 
 ---
 
-## `specforge check` — Enforcement außerhalb der Session
+## `specforge check`: Enforcement außerhalb der Session
 
-Die Phase Gates greifen, solange Claude den Skill geladen hat. Für alles danach — Pull Request,
-Pipeline, Pre-Commit-Hook — liegt derselbe Regelsatz als Linter im Repo. Er braucht Python 3.8
-oder neuer und sonst nichts: keine Installation, keine Abhängigkeit.
+Die Phase Gates greifen, solange Claude den Skill geladen hat. Für alles danach, also Pull
+Request, Pipeline und Pre-Commit-Hook, liegt derselbe Regelsatz als Linter im Repo. Er braucht
+Python 3.8 oder neuer und sonst nichts: keine Installation, keine Abhängigkeit.
 
 ```bash
 python3 cli/specforge check specs/mein-feature/spec.md
@@ -422,12 +422,13 @@ Risiko-Akzeptanz, `3` Aufrufproblem. Eine Akzeptanz nach dem CONDITIONAL-Protoko
 
 Das gelesene Format ist in [docs/spec-format.md](docs/spec-format.md) beschrieben. Für fremde
 Repositories liegt eine Composite Action unter `.github/actions/specforge-check/`, ein
-Beispiel-Workflow in [docs/ci-example.yml](docs/ci-example.yml).
+Beispiel-Workflow in [docs/ci-example.yml](docs/ci-example.yml). Die Action ist erst ab dem
+nächsten Release über ein Tag erreichbar; im aktuellen Release `v3.2.0` gibt es sie noch nicht.
 
 ### Golden Specs
 
 Unter `evals/golden/` liegen sechs vollständige Spezifikationen mit ihrem erwarteten Ergebnis.
-Sie sind die ersten echten Specs im Repo — bis dahin gab es nur Templates — und zugleich der
+Sie sind zugleich die ersten echten Specs im Repo, denn bis dahin gab es nur Templates, und der
 Regressionstest für den Linter:
 
 ```bash

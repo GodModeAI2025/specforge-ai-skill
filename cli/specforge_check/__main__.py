@@ -10,7 +10,7 @@ tasks.md daneben, wird sie mitgeprueft.
 Exit-Codes:
 
     0  kein F4, kein offener F3
-    1  mindestens ein F4-Befund — Gate blockiert
+    1  mindestens ein F4-Befund, Gate blockiert
     2  mindestens ein F3-Befund ohne dokumentierte Risiko-Akzeptanz
     3  Aufrufproblem (Datei fehlt, Datei unlesbar)
 
@@ -134,7 +134,7 @@ def main(argv=None):
         print("Extensions: %s"
               % (", ".join(sorted(packages)) if packages else "keine"))
         if configuration.legacy:
-            print("Hinweis: specforge.json ohne severity_model — "
+            print("Hinweis: specforge.json ohne severity_model, "
                   "Legacy-Werte werden beim Einlesen einmal uebersetzt.")
         print("")
         for line in report.render(document, findings, tasks, accepted):

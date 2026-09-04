@@ -62,8 +62,8 @@ gemeint war.
 | MAJOR | F3 |
 | MINOR | F1 |
 
-`scripts/check-severity-dialect.py` setzt diese Regel maschinell durch: außerhalb dieses
-Abschnitts darf im Payload kein BLOCKER, MAJOR oder MINOR mehr stehen.
+Das Repository setzt diese Regel in seiner CI maschinell durch: außerhalb dieses Abschnitts
+darf im Payload keiner der drei Werte mehr stehen.
 
 ### Perspektivenabhängige F-Stufen
 

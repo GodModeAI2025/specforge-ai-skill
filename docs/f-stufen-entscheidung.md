@@ -11,7 +11,7 @@ Das Repo hatte die Frage an drei Stellen selbst beantwortet, ohne die Folge zu z
 `kritis-nfr.md` führte die alten Werte unter "Legacy-Kompatibilität", `enforcement-engine.md` unter
 "Abwärtskompatibilität", und die SKILL.md nannte das Verhalten ohne `severity_model` ausdrücklich
 Legacy. Dazu kommt der sachliche Grund: die F-Stufen decken sechs Zustände ab, die alten Werte
-drei. F0, F2 und F5 sind über das Mapping nicht erreichbar, werden aber gebraucht — F2 als
+drei. F0, F2 und F5 sind über das Mapping nicht erreichbar, werden aber gebraucht: F2 als
 Pflicht-Task vor Go-Live, F5 als dokumentierter Skip, F0 als Positivbefund im Gate-Ergebnis.
 
 ## Warum das kein Suchen-und-Ersetzen war
@@ -60,7 +60,8 @@ Sache trifft.
 Gate G1 führte "Gherkin-Szenarien ≥2 pro Story" als F4, AP-06 ("Missing Negative") als F3, und die
 Module beriefen sich mal auf das eine, mal auf das andere. Aufgelöst ist das jetzt über eine
 Trennung: die Mindestanzahl von zwei Szenarien ist der Gate-Prüfpunkt und damit F4. AP-06 greift
-eine Stufe darüber — Szenarien sind vorhanden, decken aber nur den Happy Path ab — und bleibt F3.
+eine Stufe darüber, nämlich wenn Szenarien vorhanden sind, aber nur den Happy Path abdecken, und
+bleibt F3.
 
 ## Was bleibt
 

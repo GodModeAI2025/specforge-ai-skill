@@ -2,7 +2,7 @@
 
 `references/templates/spec-template.md` beschreibt, was in einer Spezifikation stehen muss. Was es
 bisher nicht beschrieb: woran ein Programm die Teile wiedererkennt. Dieses Dokument schließt die
-Lücke. Es ist die Grundlage für `specforge check` und ändert das Template nicht — es liest es
+Lücke. Es ist die Grundlage für `specforge check` und ändert das Template nicht, es liest es
 genauer.
 
 Das Format ist bewusst dasselbe Markdown, das Claude ohnehin erzeugt. Kein Frontmatter-Zwang, kein

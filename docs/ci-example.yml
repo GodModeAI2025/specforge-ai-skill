@@ -4,6 +4,16 @@
 # Der Tag hinter dem @ pinnt die Action auf ein Release dieses Repos. Ohne
 # Pin laeuft die Pruefung gegen den jeweiligen Stand von main, und ein
 # Regelwechsel dort bricht fremde Pipelines ohne Vorwarnung.
+#
+# Achtung: die Composite Action gibt es erst ab dem naechsten Release. Der
+# Tag unten ist der aktuelle Stand der Versionsquelle und wandert mit ihr,
+# das Verzeichnis .github/actions/specforge-check/ liegt in v3.2.0 noch
+# nicht. Bis dahin ruft ein fremdes Repository den Linter ueber einen
+# eigenen Checkout dieses Repos auf:
+#
+#   - uses: actions/checkout@v4
+#     with: { repository: GodModeAI2025/specforge-ai-skill, path: .specforge }
+#   - run: python3 .specforge/cli/specforge check specs/mein-feature
 
 name: Spec-Check
 

@@ -3,7 +3,7 @@
 """Faehrt specforge check ueber die Golden Specs und vergleicht mit expected.json.
 
 Ebene 1 der Eval-Suite: deterministisch, ohne Netz, ohne Modell, ohne
-Schluessel. Was hier gruen ist, bleibt gruen — eine Abweichung ist eine
+Schluessel. Was hier gruen ist, bleibt gruen; eine Abweichung ist eine
 Regression und keine Schwankung.
 
 Ebene 2, also das Nachfahren derselben Faelle durch die Claude-API, ist

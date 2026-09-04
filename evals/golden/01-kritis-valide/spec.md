@@ -92,7 +92,7 @@ Scenario: Fünf Fehlversuche hintereinander
 - **Verification Command**: `pytest tests/test_totp.py -k SF_SEC_001`
 
 #### KRITIS-NFRs & Governance
-**ITIL/CMDB Impact:** High — betroffen sind Auth-Service und Leitsystem-Gateway
+**ITIL/CMDB Impact:** High (betroffen: Auth-Service und Leitsystem-Gateway)
 - SEC-01 Authentisierung: TOTP nach RFC 6238, Geheimnis im HSM
 - AUD-01 Protokollierung: Konto, Zeitpunkt, Quell-IP, Ergebnis je Versuch
 
@@ -148,12 +148,12 @@ Scenario: Sitzung endet nach 15 Minuten ohne Auth-Service
 - **Verification Command**: `pytest tests/test_session.py -k SF_AVA_001`
 
 #### KRITIS-NFRs & Governance
-**ITIL/CMDB Impact:** Medium — betroffen ist das Leitsystem-Gateway
+**ITIL/CMDB Impact:** Medium (betroffen: Leitsystem-Gateway)
 - AVA-02 Wiederanlauf: RTO 15 Minuten für den Auth-Pfad
 
 #### STRIDE-Bewertung
-[Nicht security-kritisch im Sinne der Zugangsentscheidung — die Sitzung wurde bereits mit zweitem
-Faktor erzeugt. Elevation of Privilege ausgeschlossen, da im Zustand "degraded" keine neuen
+[Nicht security-kritisch im Sinne der Zugangsentscheidung, da die Sitzung bereits mit zweitem
+Faktor erzeugt wurde. Elevation of Privilege ausgeschlossen, da im Zustand "degraded" keine neuen
 Berechtigungen vergeben werden.]
 
 #### Abhängigkeiten

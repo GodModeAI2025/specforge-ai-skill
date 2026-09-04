@@ -11,7 +11,7 @@ import re
 
 STORY_RE = re.compile(r"^###\s+\[([A-Za-z0-9_-]+)\]\s*(.*)$")
 SECTION_RE = re.compile(r"^##\s+")
-# **Pattern:** Wert und **Pattern**: Wert — beide Formen stehen im Template.
+# **Pattern:** Wert und **Pattern**: Wert, beide Formen stehen im Template.
 FIELD_RE = re.compile(r"^\*\*([^*:]+?)\*\*\s*:\s*(.*)$|^\*\*([^*:]+?):\*\*\s*(.*)$")
 SCENARIO_RE = re.compile(r"^\s*Scenario:\s*(.*)$")
 GHERKIN_STEP_RE = re.compile(r"^\s*(Given|When|Then|And|But)\b", re.I)

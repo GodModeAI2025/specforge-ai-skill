@@ -31,11 +31,11 @@ Exit 0, wenn alle Fälle bestehen. Die CI fährt das Skript bei jedem Lauf.
 
 | Fall | Perspektive | Exit | Belegt |
 |------|-------------|------|--------|
-| 01-kritis-valide | — | 0 | Der Forward-Path läuft ohne Befund durch |
-| 02-gherkin-fehlt | — | 1 | Gherkin-Minimum ist F4, nicht F3 |
+| 01-kritis-valide | keine | 0 | Der Forward-Path läuft ohne Befund durch |
+| 02-gherkin-fehlt | keine | 1 | Gherkin-Minimum ist F4, nicht F3 |
 | 03-dora-regulated-ohne-irm01 | regulated_entity | 1 | Fehlender IRM-01-NFR blockiert das Gate |
 | 04-dora-advisory-ohne-irm01 | advisory | 0 | Dieselbe Lücke, F2 statt F4, Gate passierbar |
-| 05-orphan-task | — | 2 | AP-07 ist F3: passierbar mit Risiko-Akzeptanz |
+| 05-orphan-task | keine | 2 | AP-07 ist F3: passierbar mit Risiko-Akzeptanz |
 | 06-dora-falsche-f-stufe | advisory | 1 | Eine zu hart eingestufte Lücke ist selbst ein Befund |
 
 Die Fälle 03 und 04 sind das Paar, an dem die Schweregrad-Vereinheitlichung hängt. Das frühere,

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""specforge check — Linter fuer SpecForge-Artefakte.
+"""specforge check: Linter fuer SpecForge-Artefakte.
 
 Der Skill setzt seine Regeln bisher nur in der Claude-Session durch. Dieses
 Paket prueft den strukturell entscheidbaren Teil davon ausserhalb: in einer

@@ -6,8 +6,8 @@ F-Stufen": Perspektive aus specforge.json lesen, im severity-Objekt
 nachschlagen, bei Fehltreffer _default, ohne _default F3 als Fallback.
 
 Fehlt severity_model, ist das Projekt eine Altkonfiguration. Dann greift der
-Legacy-Uebersetzer aus severity.py — einmal beim Einlesen. Danach rechnet der
-Checker ausschliesslich mit F-Stufen.
+Legacy-Uebersetzer aus severity.py, und zwar genau einmal beim Einlesen.
+Danach rechnet der Checker ausschliesslich mit F-Stufen.
 """
 
 import json
