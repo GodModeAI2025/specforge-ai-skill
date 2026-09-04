@@ -44,7 +44,7 @@ TAG_RE = re.compile(r"<[^>]*>", re.S)
 
 FILES_RE = re.compile(r"(\d+)\s+Dateien\b")
 SUPPORT_RE = re.compile(r"(\d+)\s+Support-Dateien\b")
-MODULE_RE = re.compile(r"(\d+)\s+(?:Fach)?Modul(?:e|en)\b")
+MODULE_RE = re.compile(r"(\d+)\s+(?:[Ff]ach)?[Mm]odul(?:e|en)\b")
 CHECKPOINT_CLAIM_RE = re.compile(r"(\d+)\s+(?:\S*-)?Prüfpunkte\w*")
 LINES_RE = re.compile(r"([\d.]+)\s+Zeilen\b")
 

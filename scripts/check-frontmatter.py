@@ -18,7 +18,8 @@ Geprueft wird:
    Der Block-Skalar (description: >) wird dabei zusammengefaltet gezaehlt,
    also so, wie der Wert nach dem Parsen aussieht.
 4. Nur bekannte Schluessel. Ein Tippfehler wie "descripton" wuerde sonst
-   dazu fuehren, dass der Skill ohne Beschreibung ausgeliefert wird.
+   dazu fuehren, dass der Skill ohne Beschreibung ausgeliefert wird. Kommt
+   ein neuer Schluessel legitim dazu, gehoert er in KNOWN_KEYS.
 5. Keine Tabulatoren im Frontmatter. YAML verbietet sie zur Einrueckung.
 
 Exit 0 wenn alles stimmt, sonst 1. Nur Standardbibliothek.
@@ -33,7 +34,8 @@ KEY_RE = re.compile(r"^([A-Za-z0-9_-]+):(.*)$")
 
 NAME_MAX = 64
 DESCRIPTION_MAX = 1024
-KNOWN_KEYS = ("name", "description", "license", "allowed-tools")
+KNOWN_KEYS = ("name", "description", "license", "allowed-tools",
+              "metadata", "version", "compatibility")
 REQUIRED_KEYS = ("name", "description")
 
 

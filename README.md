@@ -359,11 +359,11 @@ SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Versi
 
 Offen, in dieser Reihenfolge:
 
-1. **Schweregrade vereinheitlichen** — BLOCKER/MAJOR/MINOR in den Modulen auf F-Stufen umstellen, damit derselbe Mangel in jedem Modus dieselbe Stufe bekommt.
-2. **Beispiel-Spezifikationen ins Repo** — hier liegen nur Templates und Eingabe-Prompts, keine fertige Spec, an der sich ein Ergebnis messen ließe.
-3. **`@bait` vervollständigen** — vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
-4. **Weitere Regulierungen** — MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
-5. **Release mit Tag** — damit eine Version zitierbar wird und die Landingpage auf etwas Festes zeigen kann.
+1. **Schweregrade vereinheitlichen:** BLOCKER/MAJOR/MINOR in den Modulen auf F-Stufen umstellen, damit derselbe Mangel in jedem Modus dieselbe Stufe bekommt.
+2. **Beispiel-Spezifikationen ins Repo:** hier liegen nur Templates und Eingabe-Prompts, keine fertige Spec, an der sich ein Ergebnis messen ließe.
+3. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
+4. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
+5. **Release mit Tag:** damit eine Version zitierbar wird und die Landingpage auf etwas Festes zeigen kann.
 6. **Englische Fassung** des Payloads.
 
 ---

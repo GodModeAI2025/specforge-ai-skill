@@ -5,7 +5,7 @@ Pflichtstruktur für jede `constitution.md`. Verwende bei Projekt-Setup (Modus 1
 ```markdown
 # Project Constitution: [Projektname]
 
-**Version:** [YYYY.MM.DD.N — kalenderbasiert, siehe SKILL.md, Abschnitt Versionierung]
+**Version:** [YYYY.MM.DD.N, siehe SKILL.md, Abschnitt Versionierung]
 **Gültig ab:** [Datum]
 **Verantwortlich:** [Rolle/Name]
 **Letzte Prüfung:** [Datum]
