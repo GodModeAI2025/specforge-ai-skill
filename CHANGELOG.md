@@ -8,6 +8,29 @@ Abschnitt Versionierung.
 
 ---
 
+## Aktuelles Release
+
+Diese Tabelle ist die Versionsquelle des Repos. Gelesen wird die erste
+Datenzeile, ein neues Release kommt darüber. Niemand pflegt die Version ein
+zweites Mal: das Packaging-Skript schreibt sie ins Archiv, der
+Release-Workflow vergleicht den Tag damit, und `scripts/check-version.py`
+prüft README und Landingpage dagegen.
+
+| Tag | Skill-Version | Artefakt |
+|-----|---------------|----------|
+| `v3.2.0` | 3.2 | `specforge-skill.zip` |
+
+Der Tag hat eine Stelle mehr als die Skill-Version: `v{MAJOR}.{MINOR}.{PATCH}`.
+Die Patch-Stelle zählt Korrekturen, die den Funktionsumfang nicht verändern.
+`v3.2.0` paketiert den Stand der Skill-Version 3.2 und ist das erste Release
+dieses Repos. Der Artefaktname bleibt über Releases hinweg gleich, damit
+`releases/latest/download/specforge-skill.zip` dauerhaft auf das jeweils
+aktuelle Paket zeigt.
+
+## Versionsgeschichte
+
+Älteste Version zuerst.
+
 | Version | Datum | Änderung |
 |---------|-------|---------|
 | 1.0 | 2025-10 | Initial: Specify, Plan, Tasks, Review, Stakeholder-Sim, Management |
