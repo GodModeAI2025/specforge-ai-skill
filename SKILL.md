@@ -217,7 +217,7 @@ SpecForge ist an folgenden Stellen erweiterbar — ohne Änderung an Core-Dateie
 | **NFR-Kategorien** | Neue Kategorien in `references/custom/nfr-custom.md` | kritis-nfr.md (Core), Custom-Datei (Ergänzung) |
 | **Checklisten** | `references/custom/*.md` oder `@scope/`-Pakete | 05-checklist.md |
 
-**Ablageregel:** Jeder Erweiterungspunkt liegt unterhalb `references/custom/`. Alle übrigen `references/`-Pfade sind Core und müssen vorhanden sein. Nur so bleiben Erweiterungen bei Core-Updates erhalten und nur so lässt sich ein fehlender Core-Pfad maschinell von einem noch nicht angelegten Erweiterungspunkt unterscheiden.
+**Ablageregel:** Jeder Erweiterungspunkt liegt unterhalb `references/custom/`. Alle übrigen `references/`-Pfade sind Core und müssen im Repo vorhanden sein; wie ein Modus zur Laufzeit auf ein Fehlen reagiert, regelt der Abschnitt „Fehlerbehandlung bei fehlenden Referenzen“. Nur so bleiben Erweiterungen bei Core-Updates erhalten und nur so lässt sich ein fehlender Core-Pfad maschinell von einem noch nicht angelegten Erweiterungspunkt unterscheiden.
 
 ### Fehlerbehandlung bei fehlenden Referenzen
 
