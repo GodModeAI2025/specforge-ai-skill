@@ -42,11 +42,9 @@ MODULE_FILE_RE = re.compile(r"^\d{2}-[a-z0-9-]+\.md$")
 CHECKPOINT_RE = re.compile(r"^\|\s*[A-Z]{2,5}-\d{2}\s*\|", re.M)
 TAG_RE = re.compile(r"<[^>]*>", re.S)
 
-FILES_RE = re.compile(r"(\d+)\s+Dateien\b")
 SUPPORT_RE = re.compile(r"(\d+)\s+Support-Dateien\b")
 MODULE_RE = re.compile(r"(\d+)\s+(?:[Ff]ach)?[Mm]odul(?:e|en)\b")
 CHECKPOINT_CLAIM_RE = re.compile(r"(\d+)\s+(?:\S*-)?Prüfpunkte\w*")
-LINES_RE = re.compile(r"([\d.]+)\s+Zeilen\b")
 
 # Stichwort im Umfeld einer Pruefpunkt-Zahl -> zustaendige Checkliste.
 CHECKLIST_KEYWORDS = (
@@ -151,9 +149,7 @@ def check_segment(label, text, line_of, expected, counts, errors):
     """Prueft einen Textabschnitt. line_of(position) liefert die Zeilennummer."""
     hits = 0
     for regex, name, value in (
-            (SUPPORT_RE, "Support-Dateien", expected["support"]),
-            (FILES_RE, "Dateien", expected["files"]),
-            (MODULE_RE, "Fachmodule", expected["modules"])):
+            (MODULE_RE, "Fachmodule", expected["modules"]),):
         for match in regex.finditer(text):
             hits += 1
             claimed = int(match.group(1))
@@ -182,10 +178,10 @@ def check_segment(label, text, line_of, expected, counts, errors):
                           % (label, line_of(match.start()), claimed, path,
                              value))
 
-    for match in LINES_RE.finditer(text):
-        errors.append("%s:%d: Zeilenzahl '%s' wird behauptet. Zeilenzahlen "
-                      "aendern sich mit jeder Inhaltsaenderung und werden "
-                      "hier nicht gefuehrt."
+    for match in SUPPORT_RE.finditer(text):
+        errors.append("%s:%d: '%s' wird behauptet. Diese Zahl verschiebt sich "
+                      "mit jeder Datei, die jemand unter references/ ergaenzt, "
+                      "und wird in der Doku nicht mehr gefuehrt."
                       % (label, line_of(match.start()), match.group(0).strip()))
     return hits
 
