@@ -2,6 +2,8 @@
 
 Jede constitution.md enthält diese Prinzipien als enforceable Regeln. SpecForge prüft jede Spezifikation dagegen.
 
+Die F-Stufen unten sind die Default-Werte. Wo ein Gate aus `references/enforcement/enforcement-engine.md` denselben Prüfpunkt führt, gilt der Gate-Wert; die Quelle steht jeweils daneben. Projektspezifische Abweichungen gehören in `checks_config` der specforge.json, nicht in dieses Dokument.
+
 | ID | Prinzip | Regel | Enforcement |
 |----|---------|-------|-------------|
 | GP-01 | Schema-Hygiene | Matching Fixtures + Testabdeckung für alle API-Contracts | Spec-First Chain Schritt 2+3+6 |
@@ -22,14 +24,14 @@ Jede constitution.md enthält diese Prinzipien als enforceable Regeln. SpecForge
 **Enforcement:** Spec-First Chain Schritte 2+3+6.
 **Verstoß-Beispiel:** API liefert Feld `created_at` zurück, das im Schema nicht definiert ist.
 **Prüfung:** Schema vorhanden? Fixture vorhanden? Contract Tests validieren Schema + Fixture?
-**Schweregrad:** MAJOR
+**F-Stufe:** F3
 
 ## GP-02: Spec-before-Code
 **Regel:** Keine Implementierung ohne Spec-Eintrag in `specs/`.
 **Enforcement:** Spec-Phase Gate.
 **Verstoß-Beispiel:** Neuer Endpoint implementiert, der in keiner spec.md beschrieben ist.
 **Prüfung:** Korrespondierende Story? Story vor Implementierung geschrieben? ACs vor Tests?
-**Schweregrad:** BLOCKER
+**F-Stufe:** F4
 
 ## GP-03: ADR-Disziplin
 **Regel:** Modulübergreifende Entscheidungen brauchen ADR in `specs/decisions/`.
@@ -42,47 +44,47 @@ Jede constitution.md enthält diese Prinzipien als enforceable Regeln. SpecForge
 **Datum:** [YYYY-MM-DD]
 ## Kontext — ## Entscheidung — ## Konsequenzen — ## Alternativen
 ```
-**Schweregrad:** BLOCKER
+**F-Stufe:** F3 (KRITIS: F4) — Gate G3 führt ADRs profilabhängig
 
 ## GP-04: ExecPlan-Pflicht
 **Regel:** Tasks mit 5+ Dateiänderungen brauchen EP-*.md in `plans/active/`.
 **Enforcement:** Tasks-Phase Gate — Dateizählung pro Task.
 **Verstoß-Beispiel:** Task ändert 12 Dateien über 3 Module ohne ExecPlan.
 **ExecPlan-Format:** Änderungsreihenfolge, Abhängigkeiten, Rollback-Strategie, Checkpoint.
-**Schweregrad:** MAJOR
+**F-Stufe:** F2 — Gate G3
 
 ## GP-05: Invariant-Traceability
 **Regel:** Tests referenzieren Invariant-IDs aus `ARCHITECTURE.md`.
 **Enforcement:** Traceability Matrix.
 **Verstoß-Beispiel:** Invariante "max. 3 aktive Sessions" ohne Test-Referenz.
-**Schweregrad:** MAJOR
+**F-Stufe:** F2
 
 ## GP-06: Keine stale Marker
 **Regel:** TODO/TBD/FIXME brauchen Datum + Owner. Max. 14 Tage.
 **Korrektes Format:** `// TODO(2025-10-01, @owner): Beschreibung — Ticket: PROJ-123`
 **Verstoß-Beispiel:** `// TODO: Caching implementieren` seit 3 Monaten.
-**Schweregrad:** MINOR (wird MAJOR nach 30 Tagen)
+**F-Stufe:** F2 (Gate G5) — F3, sobald die 14-Tage-Frist überschritten ist
 
 ## GP-07: Dokument-Platzierung
 **Regel:** Alle Artefakte in Convention-Verzeichnissen (→ folder-convention.md).
 **Verstoß-Beispiel:** ADR in `docs/decisions/` statt `specs/decisions/`.
-**Schweregrad:** MINOR
+**F-Stufe:** F2 — Gate G0 führt den Folder-Convention-Check
 
 ## GP-08: Prinzip-Unverletzlichkeit
 **Regel:** Verstöße gegen Golden Principles blockieren bis zur Auflösung.
 **Meta-Prinzip:** Sichert alle anderen GPs ab.
-**Verstoß-Beispiel:** BLOCKER-Verstoß gegen GP-02 wird ignoriert.
-**Schweregrad:** Meta — sichert alle anderen GPs ab.
+**Verstoß-Beispiel:** F4-Verstoß gegen GP-02 wird ignoriert.
+**F-Stufe:** Meta — sichert alle anderen GPs ab.
 
 ## GP-09: Abhängigkeitsrichtung
 **Regel:** Consumer kennt Provider-Interface, nicht Provider-Interna.
 **Verstoß-Beispiel:** Frontend importiert Backend-DB-Entity direkt statt über API-Contract.
-**Schweregrad:** MAJOR
+**F-Stufe:** F3
 
 ## GP-10: Schulden-Tracking
 **Regel:** Jede Tech-Debt in `tech-debt-tracker.md` mit ID + Owner.
 **Format:** `| TD-NNN | Beschreibung | Owner | Priorität | Auswirkung | Erstellt | Ziel-Sprint |`
-**Schweregrad:** MINOR (wird MAJOR wenn Debt auf NFRs wirkt)
+**F-Stufe:** F1 — F2, sobald die Schuld auf ein NFR wirkt (Performance, Security, Availability)
 
 ---
 

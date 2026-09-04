@@ -85,7 +85,7 @@ Maschinenlesbare Projektkonfiguration. Wird bei Projekt-Setup (Modus 1) erzeugt.
 }
 ```
 
-**Feld-Erläuterungen:** `active_gps` = GP-01 bis GP-10, profilabhängig aktiv. `perspective` = Rolle in der Wertschöpfungskette (freier String, von Extensions definiert; `null` = keine Perspektive). `conventions` = steuert Sprachverhalten und Commit-Konvention. `severity_model` = 6-stufiges Schweregrad-System (F0–F5) mit Gate-Mapping; fehlt dieses Feld, gilt Legacy-Verhalten (`required: true` → F4, `required: false` → F1). `checks_config` = Beispiel für G1 — `severity` kann ein String (gilt für alle Perspektiven) oder ein Objekt mit `_default` + perspektivenspezifischen Werten sein. `artifacts_expected` = pro Gate erwartete Artefakte; `["*"]` bei G5 bedeutet: alle Artefakte aller vorherigen Gates müssen vorhanden sein (Vollständigkeitscheck). `audit` = Audit Trail aktivieren (bei KRITIS immer true).
+**Feld-Erläuterungen:** `active_gps` = GP-01 bis GP-10, profilabhängig aktiv. `perspective` = Rolle in der Wertschöpfungskette (freier String, von Extensions definiert; `null` = keine Perspektive). `conventions` = steuert Sprachverhalten und Commit-Konvention. `severity_model` = 6-stufiges Schweregrad-System (F0–F5) mit Gate-Mapping; fehlt dieses Feld, wird die Konfiguration beim Einlesen einmalig über das Legacy-Mapping übersetzt (`required: true` → F4, `required: false` → F1, siehe enforcement-engine.md). Danach gilt auch dort ausschließlich das F-Stufen-Vokabular — F-Stufen sind der einzige Dialekt in Modulprosa, Checklisten, Templates und Gate-Ausgaben. `checks_config` = Beispiel für G1 — `severity` kann ein String (gilt für alle Perspektiven) oder ein Objekt mit `_default` + perspektivenspezifischen Werten sein. `artifacts_expected` = pro Gate erwartete Artefakte; `["*"]` bei G5 bedeutet: alle Artefakte aller vorherigen Gates müssen vorhanden sein (Vollständigkeitscheck). `audit` = Audit Trail aktivieren (bei KRITIS immer true).
 
 ### Drei Profile — Governance skaliert mit Risiko
 
@@ -393,7 +393,7 @@ Die Reports werden zu einem konsolidierten Analyze-Report zusammengeführt. Bei 
 
 1. **SSOT** — spec.md ist Single Source of Truth (GP-02)
 2. **EARS** — Jede Story hat ein explizit benanntes EARS-Pattern
-3. **Gherkin** — Jede Story hat ≥2 Szenarien (Happy Path + Fehlerfall)
+3. **Gherkin** — Jede Story hat ≥2 Szenarien (Happy Path + Fehlerfall). Unterschreitung ist F4 und blockiert Gate G1.
 4. **Quantifizierung** — Keine vagen Begriffe. Blocklist: "schnell" → "≤200ms p95", "viele" → "≥10.000 concurrent", "skalierbar" → "≥Y req/s", "sicher" → konkretes Verfahren + Standard, "zuverlässig" → "≥99.9% Uptime", "einfach" → "≤N Klicks/Schritte"
 5. **Golden Principles** — Aktive GPs laut Profil bei jedem Output prüfen
 6. **STRIDE** — Scope laut Profil (KRITIS: immer, Standard: SEC-Stories, Startup: optional)
@@ -406,7 +406,7 @@ Die Reports werden zu einem konsolidierten Analyze-Report zusammengeführt. Bei 
     - **AP-03 Implizite Annahmen** (F3): Fehlende `[Annahme: ...]`-Marker
     - **AP-04 Vage Quantifizierung** (F4): Nicht messbare Anforderungen → siehe Blocklist oben
     - **AP-05 Scope Creep** (F4): Tasks ohne Spec-Referenz (GP-02)
-    - **AP-06 Missing Negative** (F3): Nur Happy Path, <2 Gherkin, kein Unwanted-Pattern
+    - **AP-06 Missing Negative** (F3): Nur Happy Path trotz ≥2 Szenarien, kein Unwanted-Pattern — weniger als 2 Szenarien ist der Gate-Prüfpunkt Gherkin-Minimum (F4)
     - **AP-07 Orphan Artifact** (F3): Task ohne Story, Story ohne Spec
     - **AP-08 SOPHIST-Verletzung** (F3): Passiv ohne Akteur, Negation statt Positivaussage, optionale Formulierung ohne Bedingung ("ggf.", "evtl."), generische Begriffe ("das System", "der Nutzer"), unvollständige Aufzählung ("etc.", "usw."), implizite Zeitangabe ("zeitnah", "umgehend")
 11. **Offene Punkte** — Wenn bei Story-Erzeugung nicht alle Informationen vorliegen: Story trotzdem erstellen und offene Punkte als `[Offen: ...]`-Marker anhängen. Marker werden bei Clarify aufgelöst. Verbleibende `[Offen: ...]` nach Clarify → F3 im Gate.

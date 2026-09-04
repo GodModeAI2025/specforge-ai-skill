@@ -48,16 +48,16 @@ Für jede Lücke gezielte Fragen nach Hierarchie:
 - Max. 5 Fragen pro Runde (priorisiert nach Schweregrad)
 - Jede Frage referenziert die betroffene Story-ID oder Spec-Abschnitt
 - Fragen bieten konkrete Optionen — keine offenen "was meinen Sie"-Fragen
-- Schweregrad pro Frage: `[BLOCKER]` | `[MAJOR]` | `[MINOR]`
+- F-Stufe pro Frage: `[F4]` | `[F3]` | `[F2]` | `[F1]`
 
-### Bei BLOCKER: Five Whys anwenden
+### Bei F4: Five Whys anwenden
 
 Max. 5 Iterationen. Stopp bei handlungsfähiger Grundursache. Fokus auf Prozess-/Architekturlücken, nicht Schuldzuweisung.
 
 ### Frageformat
 
 ```markdown
-**[BLOCKER] SF-SEC-001 — Authentifizierung**
+**[F4] SF-SEC-001 — Authentifizierung**
 Sokratische Ebene: Annahme hinterfragen
 Die Spec definiert "sichere Authentifizierung" ohne konkretes Verfahren.
 Implizite Annahme: "Sicher" ist selbsterklärend.
@@ -96,9 +96,11 @@ Nach Klärung betroffene Requirements aktualisieren:
 ## Abschlusskriterium
 
 Clarify ist abgeschlossen wenn:
-- Keine `[BLOCKER]`-Fragen mehr offen
-- `[MAJOR]`-Fragen dürfen mit dokumentierter Begründung in Plan-Phase mitgenommen werden
-- `[MINOR]`-Fragen als bekannte Lücken dokumentiert
+- Keine `[F4]`-Fragen mehr offen
+- `[F3]`-Fragen dürfen mit dokumentierter Risiko-Akzeptanz in die Plan-Phase mitgenommen werden
+- `[F2]`-Fragen erzeugen je einen Pflicht-Task vor Go-Live
+- `[F1]`-Fragen als bekannte Lücken dokumentiert
+- `[F5]`-Fragen mit Begründung im Audit Trail übersprungen
 
 ---
 
@@ -106,9 +108,9 @@ Clarify ist abgeschlossen wenn:
 
 ```
 ── Gate G2: Clarify → Plan ────────────────
-[ ] Keine offenen [BLOCKER]-Fragen
+[ ] Keine offenen [F4]-Fragen
 [ ] Clarifications-Abschnitt in spec.md vorhanden
-[ ] [MAJOR]-Fragen mit Begründung dokumentiert oder gelöst
+[ ] [F3]-Fragen mit Risiko-Akzeptanz dokumentiert oder gelöst
 [ ] Vage Begriffe durch quantifizierte Werte ersetzt
 [ ] [Annahme: ...]-Marker bestätigt oder verworfen
 ── Ergebnis: PASS | FAIL (Befunde) ─────────
@@ -120,12 +122,12 @@ Clarify ist abgeschlossen wenn:
 
 | Regel | Enforcement | Schweregrad |
 |-------|-----------|------------|
-| Vage Begriffe aus Blocklist | Jede Clarification gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
+| Vage Begriffe aus Blocklist | Jede Clarification gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | F4 |
 | Fragen-Budget | Max. 5 Fragen pro Runde (Clarify-spezifisch, sonst 3) | n.a. |
-| BLOCKER-Fragen vor Plan lösen | Offene BLOCKER-Fragen blockieren Gate G2 | BLOCKER |
+| F4-Fragen vor Plan lösen | Offene F4-Fragen blockieren Gate G2 | F4 |
 | Anti-Pattern-Prüfung | AP-01–AP-08 bei jeder Reformulierung | Schweregrad laut AP-Tabelle |
-| Artefakt-Aktualisierung als Datei | Clarifications in spec.md als Datei, nicht inline | MAJOR |
-| Schweregrad-Zuweisung | Deterministisch: Fragen mit Architektur-Impact = BLOCKER, Fragen zu Details = MAJOR, Verständnisfragen = MINOR | n.a. |
+| Artefakt-Aktualisierung als Datei | Clarifications in spec.md als Datei, nicht inline | F2 |
+| F-Stufen-Zuweisung | Deterministisch: Architektur- oder Schnittstellen-Impact = F4, Detailentscheidung mit Risikowirkung = F3, Detailfrage ohne Risikowirkung = F2, Verständnisfrage = F1, für dieses Projekt nicht anwendbar = F5 | n.a. |
 
 ## Erweiterbarkeit
 

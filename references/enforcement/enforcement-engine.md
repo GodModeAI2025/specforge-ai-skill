@@ -41,7 +41,17 @@ Das F-Stufen-System ersetzt das bisherige binäre `required: true/false`. Die Kl
 
 ### Abwärtskompatibilität (Legacy-Mapping)
 
-Projekte ohne `severity_model` in specforge.json nutzen weiterhin Boolean-Logik. Die interne Zuordnung:
+Dieser Abschnitt ist die einzige Stelle im Payload, an der die Werte BLOCKER, MAJOR und MINOR
+noch eine Bedeutung haben. Er hat genau einen Zweck: eine `specforge.json` einzulesen, die noch
+kein `severity_model` führt oder in `checks_config` Legacy-Werte trägt. Beim Einlesen werden sie
+einmal übersetzt; ab da rechnet die Engine ausschließlich mit F-Stufen.
+
+Nicht zulässig ist die Verwendung dieser Werte in Modulprosa, in Checklisten, in Templates, in
+Gate-Ausgaben oder in Befundtexten. Wer eine Regel neu schreibt, vergibt eine F-Stufe. Das Mapping
+ist verlustbehaftet: F0, F2 und F5 sind über den Legacy-Weg nicht erreichbar, obwohl der Payload
+sie braucht. Ein Prüfpunkt, der pauschal über MAJOR übersetzt wird, landet auf F3 und verlangt
+damit eine Risiko-Akzeptanz durch das Leitungsorgan, wo oft ein Pflicht-Task vor Go-Live (F2)
+gemeint war.
 
 | Legacy-Wert | F-Stufen-Äquivalent |
 |-------------|---------------------|
@@ -51,6 +61,9 @@ Projekte ohne `severity_model` in specforge.json nutzen weiterhin Boolean-Logik.
 | BLOCKER (Anti-Pattern/Schweregrad) | F4 |
 | MAJOR | F3 |
 | MINOR | F1 |
+
+`scripts/check-severity-dialect.py` setzt diese Regel maschinell durch: außerhalb dieses
+Abschnitts darf im Payload kein BLOCKER, MAJOR oder MINOR mehr stehen.
 
 ### Perspektivenabhängige F-Stufen
 
@@ -228,7 +241,7 @@ Bei jeder Story-Erzeugung und jedem Review automatisch prüfen:
 | AP-03 | Implizite Annahmen | Unausgesprochene Voraussetzungen | Fehlende `[Annahme: ...]`-Marker | F3 |
 | AP-04 | Vage Quantifizierung | Nicht messbare Anforderungen | "schnell", "viele", "einfach" etc. | F4 |
 | AP-05 | Scope Creep | Schleichende Erweiterung ohne Spec-Update | Tasks ohne Spec-Referenz (GP-02) | F4 |
-| AP-06 | Missing Negative | Nur Happy Path, keine Fehlerfälle | <2 Gherkin-Szenarien, kein Unwanted-Pattern | F3 |
+| AP-06 | Missing Negative | Nur Happy Path, keine Fehlerfälle | Szenarien vorhanden, aber kein Fehlerfall und kein Unwanted-Pattern | F3 |
 | AP-07 | Orphan Artifact | Artefakt ohne Bezug zum Workflow | Task ohne Story, Story ohne Spec | F3 |
 | AP-08 | SOPHIST-Verletzung | Sprachliche Mehrdeutigkeit oder Unvollständigkeit | Passiv ohne Akteur, Negation statt Positivaussage, optionale Formulierung ohne Bedingung, generische Begriffe ("das System", "der Nutzer") | F3 |
 
@@ -247,7 +260,10 @@ AP-08 erkennt sprachliche Anti-Patterns, die über vage Quantifizierung (AP-04) 
 
 **Abgrenzung AP-04 vs. AP-08:** AP-04 erkennt nicht messbare Quantifizierungen ("schnell", "viele"). AP-08 erkennt sprachliche Strukturprobleme (Passiv, Negation, Generik). Beide können gleichzeitig zutreffen — ein und dasselbe Requirement kann sowohl AP-04 als auch AP-08 verletzen.
 
-**Legacy-Mapping:** BLOCKER → F4, MAJOR → F3, MINOR → F1
+**Abgrenzung AP-06 vs. Gherkin-Minimum:** Die Mindestanzahl von zwei Szenarien je Story ist ein
+eigener Gate-Prüfpunkt (G1, F4) und blockiert das Gate. AP-06 greift eine Stufe darüber: Szenarien
+sind vorhanden, decken aber nur den Happy Path ab. Weniger als zwei Szenarien sind also F4, nicht
+F3.
 
 ---
 

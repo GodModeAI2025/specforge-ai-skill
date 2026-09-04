@@ -99,10 +99,10 @@ Eine Spezifikation gilt als "Done", wenn:
 - [ ] Jede Story hat ≥2 Gherkin-Szenarien mit konkreten Testdaten
 - [ ] NFR-Kategorien vollständig gegen KRITIS-Checkliste geprüft
 - [ ] STRIDE für alle security-relevanten Stories durchgeführt
-- [ ] Clarifications-Abschnitt abgeschlossen (keine offenen BLOCKER)
+- [ ] Clarifications-Abschnitt abgeschlossen (keine offenen F4-Fragen)
 - [ ] GP-Compliance pro Story dokumentiert
 - [ ] Review & Acceptance Checklist vollständig ausgefüllt
-- [ ] Analyze-Report ohne BLOCKER-Befunde
+- [ ] Analyze-Report ohne F4-Befunde
 
 ### Definition of Done (Implementierungs-Ebene)
 

@@ -24,11 +24,11 @@
 
 ## Regeln (Enforcement)
 
-1. **Rollenanzahl:** Min. 3, max. 5 Rollen pro Simulation — Unterschreitung = BLOCKER
-2. **Pflicht-Rollen nach Profil:** Siehe Profil-Steuerung oben — fehlende Pflicht-Rolle = BLOCKER
+1. **Rollenanzahl:** Min. 3, max. 5 Rollen pro Simulation — Unterschreitung = F4
+2. **Pflicht-Rollen nach Profil:** Siehe Profil-Steuerung oben — fehlende Pflicht-Rolle = F4
 3. **Steelmanning-Pflicht:** Jede Rolle muss mindestens eine Annahme explizit in Frage stellen und die stärkste Version der Gegenposition formulieren (kein Strohmann)
 4. **Findings-Pflicht:** Jede Rolle muss mindestens ein Finding mit Schweregrad liefern
-5. **Schweregrad-Zuweisung:** Jedes Finding wird klassifiziert: BLOCKER / MAJOR / MINOR — Zuordnung ist deterministisch nach denselben Regeln wie enforcement-engine.md
+5. **F-Stufen-Zuweisung:** Jedes Finding wird nach F0 bis F5 klassifiziert — Zuordnung ist deterministisch nach denselben Regeln wie enforcement-engine.md
 6. **Anti-Pattern-Prüfung:** AP-01–AP-08 werden von jeder Rolle mitgeprüft; Findings bei Erkennung sind Pflicht
 7. **GP-Referenz:** Jedes Finding referenziert den betroffenen GP (z.B. "Verstoß gegen GP-03: ADR fehlt")
 
@@ -58,10 +58,10 @@ Jede Rolle durchläuft denselben 4-Schritt-Prozess:
 
 ### Phase 6c: Konsolidierung
 1. Alle Findings zusammenführen, Duplikate mit höherem Schweregrad gewinnt
-2. Sortierung: BLOCKER → MAJOR → MINOR
+2. Sortierung: F4 → F3 → F2 → F1
 3. Konsolidiertes Protokoll erzeugen als Datei `stakeholder-sim-protocol.md`
 
-**Gate-Integration:** Stakeholder-Sim-Findings fließen in Gate G4 (Analyze → Implement) ein. BLOCKER-Findings aus der Simulation blockieren den Gate-Übergang, bis sie gelöst sind.
+**Gate-Integration:** Stakeholder-Sim-Findings fließen in Gate G4 (Analyze → Implement) ein. F4-Findings aus der Simulation blockieren den Gate-Übergang, bis sie gelöst sind. F3-Findings machen das Gate CONDITIONAL.
 
 ### Phase 6d: Integration (optional)
 - Nutzer entscheidet: Findings direkt in spec.md einarbeiten oder als Backlog-Items dokumentieren
@@ -80,7 +80,7 @@ Jede Rolle durchläuft denselben 4-Schritt-Prozess:
 #### [Rolle 1: Name]
 | # | Finding | Schweregrad | Betroffener GP | Annahme hinterfragt | Empfehlung |
 |---|---------|------------|---------------|---------------------|------------|
-| F-01 | [Befund] | BLOCKER/MAJOR/MINOR | GP-XX | [Annahme] | [Aktion] |
+| F-01 | [Befund] | F4/F3/F2/F1 | GP-XX | [Annahme] | [Aktion] |
 
 #### [Rolle 2: Name]
 ...
@@ -88,10 +88,10 @@ Jede Rolle durchläuft denselben 4-Schritt-Prozess:
 ### Konsolidierte Findings
 | # | Finding | Schweregrad | Quelle (Rolle) | GP | Status |
 |---|---------|------------|----------------|-------|--------|
-| CF-01 | [Befund] | BLOCKER | Security Reviewer | GP-03 | Offen |
+| CF-01 | [Befund] | F4 | Security Reviewer | GP-03 | Offen |
 
 ### Zusammenfassung
-**BLOCKER:** [Anzahl] | **MAJOR:** [Anzahl] | **MINOR:** [Anzahl]
+**F4:** [Anzahl] | **F3:** [Anzahl] | **F2:** [Anzahl] | **F1:** [Anzahl]
 **Empfehlung:** [Freigabefähig / Überarbeitung empfohlen / Nicht freigabefähig]
 ```
 
@@ -101,14 +101,14 @@ Folgende Regeln werden **automatisch** bei jeder Simulation durchgesetzt:
 
 | Regel | Enforcement | Schweregrad bei Verstoß |
 |-------|-----------|------------------------|
-| Min. 3 Rollen aktiviert | Automatischer Check vor Simulation | BLOCKER |
-| Pflicht-Rollen laut Profil anwesend | Automatischer Check nach Rollenauswahl | BLOCKER |
-| Jede Rolle liefert ≥1 Finding mit Schweregrad | Automatischer Check nach Simulation | MAJOR |
-| Jede Rolle hinterfragt ≥1 Annahme | Automatischer Check nach Simulation | MAJOR |
-| Vage Begriffe aus Blocklist erkannt | Jedes Finding gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
+| Min. 3 Rollen aktiviert | Automatischer Check vor Simulation | F4 |
+| Pflicht-Rollen laut Profil anwesend | Automatischer Check nach Rollenauswahl | F4 |
+| Jede Rolle liefert ≥1 Finding mit F-Stufe | Automatischer Check nach Simulation | F2 |
+| Jede Rolle hinterfragt ≥1 Annahme | Automatischer Check nach Simulation | F2 |
+| Vage Begriffe aus Blocklist erkannt | Jedes Finding gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | F4 |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer; Stakeholder-Fragen intern unbegrenzt | n.a. (Budget-Überschreitung = Skip) |
 | Anti-Pattern-Prüfung | AP-01–AP-08 + custom APs aus `references/custom/anti-patterns-custom.md` | Schweregrad laut AP-Tabelle |
-| Spec-Artefakt als Datei | Output als stakeholder-sim-protocol.md, nicht inline | MAJOR |
+| Spec-Artefakt als Datei | Output als stakeholder-sim-protocol.md, nicht inline | F2 |
 
 ## Erweiterbarkeit
 
@@ -143,7 +143,7 @@ Folgende Regeln werden **automatisch** bei jeder Simulation durchgesetzt:
 | GP-05 | System Architect: Invariant-Traceability |
 | GP-06 | Harness Auditor: Stale Marker |
 | GP-07 | Harness Auditor: Folder Convention |
-| GP-08 | Alle: GP-Verstöße als BLOCKER |
+| GP-08 | Alle: GP-Verstöße als F4 |
 | GP-09 | Contract Guardian: Abhängigkeitsrichtung |
 | GP-10 | Harness Auditor: Tech-Debt dokumentiert |
 

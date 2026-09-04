@@ -29,6 +29,9 @@ jobs:
       - name: Checklisten und Manifeste pruefen
         run: python scripts/check-checklists.py
 
+      - name: Schweregrad-Dialekt pruefen
+        run: python scripts/check-severity-dialect.py
+
       - name: Zahlenangaben in README und Landingpage pruefen
         run: python scripts/check-docs-numbers.py
 

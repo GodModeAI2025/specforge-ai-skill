@@ -139,7 +139,7 @@ SpecForge wird:
 "Kläre die offenen Fragen in meiner Spec."
 ```
 
-SpecForge scannt die spec.md nach Lücken, vagen Begriffen und unbestätigten Annahmen. Fragen werden mit Schweregrad (BLOCKER / MAJOR / MINOR) priorisiert.
+SpecForge scannt die spec.md nach Lücken, vagen Begriffen und unbestätigten Annahmen. Fragen werden mit F-Stufe (F4 bis F1) priorisiert.
 
 ### Modus 3: Plan & Tasks — Von Spec zum Backlog
 
@@ -373,7 +373,7 @@ SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Versi
 
 - **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten, Zahlen- und Versionsangaben konsistent und baut das Release-Paket bei jedem Lauf, damit ein kaputtes Paket vor dem Tag auffällt. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
 - **Enforcement wirkt nur in der Session.** Phase Gates, F-Stufen und Anti-Pattern-Erkennung greifen, solange Claude den Skill geladen hat. Es gibt keinen Linter, der eine fertige `spec.md` außerhalb der Session prüft, und keinen Exit-Code für eine Pipeline.
-- **Zwei Schweregrad-Dialekte nebeneinander.** `enforcement-engine.md` und Modus 10 arbeiten mit F-Stufen, mehrere ältere Module noch mit BLOCKER/MAJOR/MINOR. Das Mapping am Ende von `references/checklists/kritis-nfr.md` deckt drei der sechs Stufen ab. Solange das so ist, hängt die gemeldete Stufe davon ab, welches Modul antwortet.
+- **F-Stufen sind Konvention, nicht Typprüfung.** Seit Version 3.2 sprechen alle Module, Checklisten und Templates F0 bis F5; `scripts/check-severity-dialect.py` hält das in der CI fest. Ob Claude im Einzelfall die richtige Stufe vergibt, prüft das Skript nicht — es prüft nur, dass keine zweite Skala danebensteht.
 - **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.
 - **Das Paket ist ein Archiv aus Markdown.** Es installiert nichts und aktualisiert sich nicht. Ein kopierter Ordner erfährt nicht, dass es ein neueres Release gibt; der Abgleich läuft über die `VERSION` im Paket gegen die Releases im Repository.
 - **Deutsch als Arbeitssprache.** Der Skill antwortet englisch auf englische Eingaben, die Referenzdateien und Checklisten bleiben deutsch.
@@ -384,12 +384,10 @@ SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Versi
 
 Offen, in dieser Reihenfolge:
 
-1. **Schweregrade vereinheitlichen:** BLOCKER/MAJOR/MINOR in den Modulen auf F-Stufen umstellen, damit derselbe Mangel in jedem Modus dieselbe Stufe bekommt.
-2. **Beispiel-Spezifikationen ins Repo:** hier liegen nur Templates und Eingabe-Prompts, keine fertige Spec, an der sich ein Ergebnis messen ließe.
-3. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
-4. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
-5. **Erstes Release veröffentlichen:** Packaging-Skript, Paketprüfung und Release-Workflow liegen im Repo, der Tag `v3.2.0` ist noch nicht gesetzt. Bis dahin läuft `releases/latest/download/` ins Leere.
-6. **Englische Fassung** des Payloads.
+1. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
+2. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
+3. **Erstes Release veröffentlichen:** Packaging-Skript, Paketprüfung und Release-Workflow liegen im Repo, der Tag `v3.2.0` ist noch nicht gesetzt. Bis dahin läuft `releases/latest/download/` ins Leere.
+4. **Englische Fassung** des Payloads.
 
 ---
 
