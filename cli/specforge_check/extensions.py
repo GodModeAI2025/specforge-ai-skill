@@ -6,7 +6,14 @@ einen Abschnitt "F-Stufen-Zuordnung": je Kategorie eine Zeile, je Perspektive
 eine Spalte, dazu die Pflicht-Spalte _default. Genau das ist die Tabelle, die
 in der Session entscheidet, welche F-Stufe eine fehlende Anforderung bekommt.
 
-Der Checker liest sie, statt sie zu wiederholen. Eine Zelle kann mehrere
+Welche Pakete gelten, sagt das Feld extensions in der specforge.json. Es ist
+fehlertolerant nach der falschen Seite gewesen: "@DORA" statt "@dora" ergab
+"Extensions: keine" und liess die F-Stufen-Pruefung kommentarlos entfallen,
+eine leere Liste galt als "nicht gesetzt" und lud alles. Jetzt werden die
+Namen normalisiert, ein unbekannter Name ist ein Aufrufproblem, und die
+leere Liste heisst ausdruecklich "keine Extension".
+
+Der Checker liest die Tabelle, statt sie zu wiederholen. Eine Zelle kann mehrere
 Stufen nennen ("F4 (TLPT) / F3", "F4 (PII) / F3"), und die Bedingung dahinter
 ist fachlich, nicht strukturell entscheidbar. Zulaessig sind dann beide
 Stufen; falsch ist nur eine Stufe, die in der Zelle gar nicht vorkommt.
@@ -22,6 +29,10 @@ HEADING_RE = re.compile(r"^#+\s*(.*)$")
 
 SECTION = "F-Stufen-Zuordnung"
 DEFAULT_COLUMN = "_default"
+
+
+class ExtensionFehler(ValueError):
+    """Die Angabe extensions in der specforge.json ist nicht benutzbar."""
 
 
 def split_row(line):
@@ -70,26 +81,81 @@ def parse_manifest(path):
     return table
 
 
-def load(root, names=None):
-    """Laedt alle Extension-Pakete unter references/custom/.
+def normalise_name(value):
+    """'@DORA', 'DORA', ' dora ' und '@dora' sind derselbe Name."""
+    return str(value).strip().casefold().lstrip("@")
 
-    names schraenkt auf die in specforge.json aktivierten Pakete ein.
+
+def available(base):
+    return sorted(entry for entry in os.listdir(base)
+                  if entry.startswith("@")
+                  and os.path.isdir(os.path.join(base, entry)))
+
+
+def load(root, names=None):
+    """Laedt die Extension-Pakete unter references/custom/.
+
+    names ist die Angabe aus specforge.json:
+
+        None  Feld nicht gesetzt, alle vorhandenen Pakete gelten
+        []    ausdruecklich keine Extension
+        [...] genau diese, unabhaengig von Schreibweise und fuehrendem @
+
+    Ein Name, zu dem es kein Paket gibt, ist ein Aufrufproblem und keine
+    Kleinigkeit: die Datei wollte eine Regulatorik aktivieren, und ein
+    stilles Ignorieren nimmt genau die Pruefung heraus, um derentwillen sie
+    dasteht.
     """
     base = os.path.join(root, "references", "custom")
     if not os.path.isdir(base):
+        if names:
+            raise ExtensionFehler(
+                "kein Verzeichnis references/custom/ unter %s, aber "
+                "extensions verlangt %s" % (root, ", ".join(map(str, names))))
         return {}
+
+    entries = available(base)
+    known = dict((normalise_name(entry), entry) for entry in entries)
+
+    wanted = None
+    if names is not None:
+        if not isinstance(names, (list, tuple)):
+            raise ExtensionFehler(
+                "extensions muss eine Liste von Namen sein, gefunden %r"
+                % (names,))
+        wanted = {}
+        for name in names:
+            if not isinstance(name, str) or not name.strip():
+                raise ExtensionFehler(
+                    "extensions enthaelt einen leeren oder nicht "
+                    "textwertigen Eintrag: %r" % (name,))
+            wanted[normalise_name(name)] = name
+        unknown = [wanted[key] for key in sorted(wanted) if key not in known]
+        if unknown:
+            raise ExtensionFehler(
+                "unbekannte Extension %s. Vorhanden unter references/custom/: "
+                "%s" % (", ".join("'%s'" % item for item in unknown),
+                        ", ".join(entries) or "keine"))
+
     packages = {}
-    for entry in sorted(os.listdir(base)):
-        if not entry.startswith("@"):
-            continue
-        if names and entry not in names and entry.lstrip("@") not in names:
+    for entry in entries:
+        requested = wanted is not None
+        if requested and normalise_name(entry) not in wanted:
             continue
         manifest = os.path.join(base, entry, "manifest.md")
         if not os.path.isfile(manifest):
+            if requested:
+                raise ExtensionFehler(
+                    "Extension '%s' hat keine manifest.md" % entry)
             continue
         table = parse_manifest(manifest)
-        if table:
-            packages[entry] = table
+        if not table:
+            if requested:
+                raise ExtensionFehler(
+                    "Extension '%s' fuehrt keinen Abschnitt '%s'"
+                    % (entry, SECTION))
+            continue
+        packages[entry] = table
     return packages
 
 

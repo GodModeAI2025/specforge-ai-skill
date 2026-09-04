@@ -12,7 +12,7 @@ Exit-Codes:
     0  kein F4, kein offener F3
     1  mindestens ein F4-Befund, Gate blockiert
     2  mindestens ein F3-Befund ohne dokumentierte Risiko-Akzeptanz
-    3  Aufrufproblem (Datei fehlt, Datei unlesbar)
+    3  Aufrufproblem (Datei fehlt, Datei unlesbar, unbekannte Extension)
 
 Nur Standardbibliothek.
 """
@@ -97,7 +97,13 @@ def main(argv=None):
 
     root = args.extensions or os.path.dirname(os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))))
-    packages = extensions.load(root, configuration.data.get("extensions"))
+    try:
+        packages = extensions.load(root, configuration.extensions)
+    except extensions.ExtensionFehler as error:
+        sys.stderr.write("FEHLER: %s\n" % error)
+        if config_path:
+            sys.stderr.write("        Angabe steht in %s\n" % config_path)
+        return 3
 
     findings = rules.run(document, tasks, configuration, args.after_clarify,
                          packages)
@@ -113,8 +119,13 @@ def main(argv=None):
               % (configuration.profile or "nicht gesetzt",
                  configuration.perspective or "nicht gesetzt",
                  config_path or "keine"))
-        print("Extensions: %s"
-              % (", ".join(sorted(packages)) if packages else "keine"))
+        if packages:
+            geladen = ", ".join(sorted(packages))
+        elif configuration.extensions == []:
+            geladen = "keine (in specforge.json abgewaehlt)"
+        else:
+            geladen = "keine"
+        print("Extensions: %s" % geladen)
         if configuration.legacy:
             print("Hinweis: specforge.json ohne severity_model, "
                   "Legacy-Werte werden beim Einlesen einmal uebersetzt.")

@@ -34,6 +34,11 @@ class Config(object):
         return value if isinstance(value, str) else None
 
     @property
+    def extensions(self):
+        """Angabe aus specforge.json: None = nicht gesetzt, [] = keine."""
+        return self.data.get("extensions")
+
+    @property
     def legacy(self):
         """True, wenn die Datei noch kein severity_model fuehrt."""
         return bool(self.data) and "severity_model" not in self.data

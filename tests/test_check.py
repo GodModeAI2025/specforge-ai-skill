@@ -236,6 +236,12 @@ class ExitCodeTest(unittest.TestCase):
                            fixture("04-orphan-task", "gibt-es-nicht.md")])
         self.assertEqual(code, 3)
 
+    def test_unbekannte_extension_exit_3(self):
+        """Ein Tippfehler im Extension-Namen nahm bisher still die
+        F-Stufen-Pruefung heraus."""
+        code, _ = run_cli([fixture("07-unbekannte-extension")])
+        self.assertEqual(code, 3)
+
     def test_fehlender_pfad_exit_3(self):
         code, _ = run_cli([os.path.join(FIXTURES, "gibt-es-nicht")])
         self.assertEqual(code, 3)
@@ -352,6 +358,27 @@ class ExtensionTest(unittest.TestCase):
     def test_default_spalte_greift_ohne_perspektive(self):
         self.assertEqual(
             extensions.allowed_levels(self.packages, "GOV", None), {"F3"})
+
+    def test_schreibweise_des_namens_ist_egal(self):
+        """'@DORA' hat vorher stillschweigend gar nichts geladen."""
+        for name in ("@dora", "@DORA", "dora", " Dora "):
+            self.assertEqual(sorted(extensions.load(ROOT, [name])), ["@dora"])
+
+    def test_leere_liste_laedt_nichts(self):
+        """[] heisst 'keine Extension', nicht 'nicht gesetzt'."""
+        self.assertEqual(extensions.load(ROOT, []), {})
+        self.assertEqual(sorted(extensions.load(ROOT, None)),
+                         ["@bait", "@dora"])
+
+    def test_unbekannter_name_ist_ein_aufrufproblem(self):
+        with self.assertRaises(extensions.ExtensionFehler) as fehler:
+            extensions.load(ROOT, ["@dorra"])
+        self.assertIn("@dorra", str(fehler.exception))
+        self.assertIn("@dora", str(fehler.exception))
+
+    def test_extensions_muss_eine_liste_sein(self):
+        with self.assertRaises(extensions.ExtensionFehler):
+            extensions.load(ROOT, "@dora")
 
 
 class NfrLueckeTest(unittest.TestCase):

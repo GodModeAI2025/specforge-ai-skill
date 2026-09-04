@@ -405,6 +405,11 @@ Liegt eine `tasks.md` neben der Spec, prüft der Linter zusätzlich die Traceabi
 `specforge.json` wird ab der Spec aufwärts gesucht und ausgewertet; `checks_config` überschreibt
 die Default-F-Stufen, perspektivenabhängig wie in der Session.
 
+Das Feld `extensions` nennt die Pakete unter `references/custom/`, die gelten sollen. Die
+Schreibweise des Namens spielt keine Rolle (`@dora`, `@DORA`, `dora`), ein unbekannter Name ist ein
+Aufrufproblem mit Exit 3 statt einer stillschweigend übergangenen Prüfung. Fehlt das Feld, gelten
+alle vorhandenen Pakete; `[]` heißt ausdrücklich: keine Extension.
+
 | Prüfpunkt | F-Stufe | Herkunft |
 |-----------|---------|----------|
 | Keine Story im erkannten Format (leere oder formatfremde Datei) | F4 | [docs/spec-format.md](docs/spec-format.md) |

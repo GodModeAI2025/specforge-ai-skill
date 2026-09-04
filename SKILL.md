@@ -80,12 +80,12 @@ Maschinenlesbare Projektkonfiguration. Wird bei Projekt-Setup (Modus 1) erzeugt.
       }
     }
   },
-  "extensions": ["@custom/*"],
+  "extensions": ["@dora"],
   "audit": true
 }
 ```
 
-**Feld-Erläuterungen:** `active_gps` = GP-01 bis GP-10, profilabhängig aktiv. `perspective` = Rolle in der Wertschöpfungskette (freier String, von Extensions definiert; `null` = keine Perspektive). `conventions` = steuert Sprachverhalten und Commit-Konvention. `severity_model` = 6-stufiges Schweregrad-System (F0–F5) mit Gate-Mapping; fehlt dieses Feld, wird die Konfiguration beim Einlesen einmalig über das Legacy-Mapping übersetzt (`required: true` → F4, `required: false` → F1, siehe enforcement-engine.md). Danach gilt auch dort ausschließlich das F-Stufen-Vokabular. F-Stufen sind der einzige Dialekt in Modulprosa, Checklisten, Templates und Gate-Ausgaben. `checks_config` = Beispiel für G1 — `severity` kann ein String (gilt für alle Perspektiven) oder ein Objekt mit `_default` + perspektivenspezifischen Werten sein. `artifacts_expected` = pro Gate erwartete Artefakte; `["*"]` bei G5 bedeutet: alle Artefakte aller vorherigen Gates müssen vorhanden sein (Vollständigkeitscheck). `audit` = Audit Trail aktivieren (bei KRITIS immer true).
+**Feld-Erläuterungen:** `active_gps` = GP-01 bis GP-10, profilabhängig aktiv. `perspective` = Rolle in der Wertschöpfungskette (freier String, von Extensions definiert; `null` = keine Perspektive). `conventions` = steuert Sprachverhalten und Commit-Konvention. `severity_model` = 6-stufiges Schweregrad-System (F0–F5) mit Gate-Mapping; fehlt dieses Feld, wird die Konfiguration beim Einlesen einmalig über das Legacy-Mapping übersetzt (`required: true` → F4, `required: false` → F1, siehe enforcement-engine.md). Danach gilt auch dort ausschließlich das F-Stufen-Vokabular. F-Stufen sind der einzige Dialekt in Modulprosa, Checklisten, Templates und Gate-Ausgaben. `checks_config` = Beispiel für G1 — `severity` kann ein String (gilt für alle Perspektiven) oder ein Objekt mit `_default` + perspektivenspezifischen Werten sein. `artifacts_expected` = pro Gate erwartete Artefakte; `["*"]` bei G5 bedeutet: alle Artefakte aller vorherigen Gates müssen vorhanden sein (Vollständigkeitscheck). `extensions` = Liste der aktiven Pakete unter `references/custom/`, jeweils der Verzeichnisname wie `@dora`. Groß- und Kleinschreibung und ein fehlendes `@` sind egal, ein unbekannter Name ist ein Fehler und wird nicht stillschweigend übergangen. Fehlt das Feld, gelten alle vorhandenen Pakete; eine leere Liste `[]` heißt ausdrücklich: keine Extension. `audit` = Audit Trail aktivieren (bei KRITIS immer true).
 
 ### Drei Profile — Governance skaliert mit Risiko
 
