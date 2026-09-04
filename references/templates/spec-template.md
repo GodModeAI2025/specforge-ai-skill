@@ -6,7 +6,7 @@ Pflichtstruktur für jede `spec.md`. Verwende bei Spec-Erzeugung (Modus 1, Phase
 # Feature-Spezifikation: [Feature-Name]
 
 **ID:** [Feature-Kürzel, z.B. SF-AUTH]
-**Version:** [Semver oder Datum]
+**Version:** [YYYY.MM.DD.N — kalenderbasiert, siehe SKILL.md, Abschnitt Versionierung]
 **Status:** Draft | In Review | Approved | Superseded
 **Autor:** [Name/Rolle]
 **Erstellt:** [Datum]

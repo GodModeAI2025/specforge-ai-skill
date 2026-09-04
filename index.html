@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SpecForge — Specs schmieden, nicht schreiben</title>
-  <meta name="description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 10 Modi, 15 Methoden, 28 Dateien, ~4.900 Zeilen. F-Stufen (F0–F5), Story-Quality-Score, DORA/BAIT-Extensions, Testfall-Ableitung. Von der Idee zum implementierungsreifen Backlog — oder vom Bestandssystem zurück zur Spec. Open Source.">
+  <meta name="description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 10 Modi, 15 Methoden, 24 Dateien. F-Stufen (F0–F5), Story-Quality-Score, DORA/BAIT-Extensions, Testfall-Ableitung. Von der Idee zum implementierungsreifen Backlog — oder vom Bestandssystem zurück zur Spec. Open Source.">
   <meta name="keywords" content="SpecForge, Requirements Engineering, Claude Skill, EARS, Gherkin, STRIDE, KRITIS, NIS2, Spec-Driven Development, AI Skill, Reverse Spec, Bestandsdokumentation, Golden Principles, MECE, Cynefin, MoSCoW, ADR, DDD, Multi-File Skill, Enforcement Engine">
   <meta name="author" content="GodModeAI2025">
   <meta name="robots" content="index, follow">
@@ -12,14 +12,14 @@
   <!-- Open Graph (Facebook, LinkedIn, Perplexity, Slack) -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="SpecForge — Spec-Driven Requirements Engineering als KI-Skill">
-  <meta property="og:description" content="10 Modi, 15 Methoden, 28 Dateien. F-Stufen (F0–F5), DORA/BAIT-Extensions, Story-Quality-Score, Testfall-Ableitung. EARS, Gherkin, STRIDE, KRITIS/NIS2. Enforcement Engine mit Phase Gates. Open Source Claude Skill.">
+  <meta property="og:description" content="10 Modi, 15 Methoden, 24 Dateien. F-Stufen (F0–F5), DORA/BAIT-Extensions, Story-Quality-Score, Testfall-Ableitung. EARS, Gherkin, STRIDE, KRITIS/NIS2. Enforcement Engine mit Phase Gates. Open Source Claude Skill.">
   <meta property="og:url" content="https://godmodeai2025.github.io/specforge-ai-skill/">
   <meta property="og:site_name" content="SpecForge">
   <meta property="og:locale" content="de_DE">
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SpecForge — Specs schmieden, nicht schreiben">
-  <meta name="twitter:description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 10 Modi, 28 Dateien. F-Stufen, DORA-Extensions, Story-Quality-Score, Testfall-Ableitung. Open Source.">
+  <meta name="twitter:description" content="Spec-Driven Requirements Engineering als KI-Skill für Claude. 10 Modi, 24 Dateien. F-Stufen, DORA-Extensions, Story-Quality-Score, Testfall-Ableitung. Open Source.">
   <!-- JSON-LD Structured Data (Google, Perplexity, AI Crawlers) -->
   <script type="application/ld+json">
   {
@@ -28,7 +28,7 @@
     "name": "SpecForge",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
-    "description": "Spec-Driven Requirements Engineering als KI-Skill für Claude. Multi-File-Architektur: Orchestrator (SKILL.md, 494 Zeilen) + 10 Fachmodule + 17 Support-Dateien = 28 Dateien, ~4.900 Zeilen. 10 Modi, 15 etablierte Methoden, F-Stufen (F0–F5), Story-Quality-Score, DORA/BAIT-Extensions, 8 Anti-Patterns, Testfall-Ableitung. Enforcement Engine mit State Machine und Phase Gates. Unterstützt auch Reverse Spec für Bestandsdokumentation.",
+    "description": "Spec-Driven Requirements Engineering als KI-Skill für Claude. Multi-File-Architektur: Orchestrator (SKILL.md) + 10 Fachmodule + 13 Support-Dateien = 24 Dateien. 10 Modi, 15 etablierte Methoden, F-Stufen (F0–F5), Story-Quality-Score, DORA/BAIT-Extensions, 8 Anti-Patterns, Testfall-Ableitung. Enforcement Engine mit State Machine und Phase Gates. Unterstützt auch Reverse Spec für Bestandsdokumentation.",
     "url": "https://godmodeai2025.github.io/specforge-ai-skill/",
     "downloadUrl": "https://github.com/GodModeAI2025/specforge-ai-skill",
     "softwareVersion": "3.2",
@@ -46,8 +46,8 @@
       "Management — 7 Funktionen inkl. Traceability, SFC-Audit, Freshness-Check",
       "Discover — Bestandsdokumentation mit QS-Loops und 5W-Analyse",
       "Derive — Testfall-Ableitung aus Gherkin mit 6 Testfall-Typen und Testabdeckungsmatrix",
-      "Multi-File-Architektur — Orchestrator + 10 Module + 17 Support-Dateien",
-      "Enforcement Engine — Phase Gates G0-G8, F-Stufen (F0–F5), 8 Anti-Patterns",
+      "Multi-File-Architektur — Orchestrator + 10 Fachmodule + 13 Support-Dateien",
+      "Enforcement Engine — Phase Gates G0-G5 und G0-RE bis G4-RE, F-Stufen (F0–F5), 8 Anti-Patterns",
       "Story-Quality-Score (SQS) — Numerische Formulierungsqualität 0–5",
       "DORA/BAIT-Extensions — Regulatorische Compliance-Erweiterungen",
       "Profil-Resolution Cascade — KRITIS / Standard / Startup"
@@ -331,7 +331,7 @@
       <div class="badges">
         <span class="badge badge-blue">Skill für Claude</span>
         <span class="badge badge-green">v3.2</span>
-        <span class="badge badge-purple">28 Dateien</span>
+        <span class="badge badge-purple">24 Dateien</span>
         <span class="badge badge-orange">10 Modi</span>
       </div>
       <div class="cta-group">
@@ -445,35 +445,35 @@
     <div class="container" style="max-width:780px;">
       <h2 style="font-size:1.5rem;">Multi-File-Architektur</h2>
       <p style="text-align:center; color:var(--text-muted); margin-bottom:24px; font-size:1.05rem;">
-        v3.2 wechselt von Single-File (~120 KB) zu einer modularen Architektur.
-        <strong style="color:var(--text);">Orchestrator + 10 Fachmodule + 17 Support-Dateien.</strong>
+        Seit v3.0 liegt SpecForge modular vor statt in einer einzelnen Datei.
+        <strong style="color:var(--text);">Orchestrator + 10 Fachmodule + 13 Support-Dateien.</strong>
       </p>
       <div class="stats">
         <div class="stat">
-          <div class="number">19</div>
+          <div class="number">24</div>
           <div class="label">Dateien</div>
         </div>
         <div class="stat">
-          <div class="number">~4.900</div>
-          <div class="label">Zeilen</div>
-        </div>
-        <div class="stat">
-          <div class="number">494</div>
-          <div class="label">Orchestrator</div>
-        </div>
-        <div class="stat">
           <div class="number">10</div>
-          <div class="label">Module</div>
+          <div class="label">Fachmodule</div>
+        </div>
+        <div class="stat">
+          <div class="number">13</div>
+          <div class="label">Support-Dateien</div>
+        </div>
+        <div class="stat">
+          <div class="number">41</div>
+          <div class="label">KRITIS-Prüfpunkte</div>
         </div>
       </div>
-      <div class="arch-tree"><span class="highlight">SKILL.md</span> <span class="dim">(494 — Orchestrator)</span>
+      <div class="arch-tree"><span class="highlight">SKILL.md</span> <span class="dim">(Orchestrator)</span>
 <span class="highlight">references/</span>
-  <span class="highlight">01-specify.md</span>      <span class="dim">(187)</span>    <span class="highlight">07-review.md</span>       <span class="dim">(207)</span>
-  <span class="highlight">02-clarify.md</span>       <span class="dim">(159)</span>    <span class="highlight">08-management.md</span>   <span class="dim">(199)</span>
-  <span class="highlight">03-plan.md</span>          <span class="dim">(242)</span>    <span class="highlight">09-discover.md</span>     <span class="dim">(215)</span>
-  <span class="highlight">04-analyze.md</span>       <span class="dim">(144)</span>    <span class="highlight">10-derive.md</span>       <span class="dim">(172)</span>
-  <span class="highlight">05-checklist.md</span>     <span class="dim">(132)</span>    checklists/  templates/
-  <span class="highlight">06-stakeholder-sim.md</span> <span class="dim">(155)</span>  conventions/ enforcement/ custom/</div>
+  <span class="highlight">01-specify.md</span>          <span class="highlight">06-stakeholder-sim.md</span>
+  <span class="highlight">02-clarify.md</span>           <span class="highlight">07-review.md</span>
+  <span class="highlight">03-plan.md</span>              <span class="highlight">08-management.md</span>
+  <span class="highlight">04-analyze.md</span>           <span class="highlight">09-discover.md</span>
+  <span class="highlight">05-checklist.md</span>         <span class="highlight">10-derive.md</span>
+  checklists/  templates/  conventions/  enforcement/  custom/</div>
       <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-top:24px;">
         Jedes Modul folgt einer einheitlichen Struktur:
       </p>
@@ -728,7 +728,7 @@ Gherkin-Szenarien ─── Testfall-Ableitung ─── Testabdeckungsmatrix �
   <noscript>
     <section>
       <h2>SpecForge — Zusammenfassung</h2>
-      <p>SpecForge ist ein Open-Source Claude-Skill (v3.2) für Spec-Driven Requirements Engineering mit Governance-Enforcement. Multi-File-Architektur: Orchestrator (SKILL.md, 494 Zeilen) + 10 Fachmodule + 17 Support-Dateien = 28 Dateien, ~4.900 Zeilen. 10 Modi: Specify, Clarify, Plan, Analyze, Checklist, Stakeholder-Simulation, Review, Management, Discover, Derive. 15 etablierte Methoden (Cynefin, Socratic Method, MECE, STRIDE, EARS, Gherkin, DDD, MoSCoW, ADR nach Nygard, Five Whys, Devil's Advocate, Morphological Box, Pugh Matrix, BLUF/Pyramid Principle, Impact Mapping). 10 Golden Principles. F-Stufen-Schweregrade (F0–F5) nach PrüfbV §27. Story-Quality-Score (SQS 0–5). DORA/BAIT-Extensions. 8 Anti-Patterns (inkl. SOPHIST-Verletzung). Testfall-Ableitung (Modus 10 Derive) mit 6 Testfall-Typen und Testabdeckungsmatrix. Enforcement Engine mit State Machine, Phase Gates G0-G8, Skip-Protokoll und Anti-Pattern-Erkennung. Jedes Modul mit standardisierten Sektionen: Profil-Steuerung, Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping. 3 Profile: KRITIS, Standard, Startup. MIT-Lizenz. GitHub: github.com/GodModeAI2025/specforge-ai-skill</p>
+      <p>SpecForge ist ein Open-Source Claude-Skill (v3.2) für Spec-Driven Requirements Engineering mit Governance-Enforcement. Multi-File-Architektur: Orchestrator (SKILL.md) + 10 Fachmodule + 13 Support-Dateien = 24 Dateien. 10 Modi: Specify, Clarify, Plan, Analyze, Checklist, Stakeholder-Simulation, Review, Management, Discover, Derive. 15 etablierte Methoden (Cynefin, Socratic Method, MECE, STRIDE, EARS, Gherkin, DDD, MoSCoW, ADR nach Nygard, Five Whys, Devil's Advocate, Morphological Box, Pugh Matrix, BLUF/Pyramid Principle, Impact Mapping). 10 Golden Principles. F-Stufen-Schweregrade (F0–F5) nach PrüfbV §27. Story-Quality-Score (SQS 0–5). DORA/BAIT-Extensions. 8 Anti-Patterns (inkl. SOPHIST-Verletzung). Testfall-Ableitung (Modus 10 Derive) mit 6 Testfall-Typen und Testabdeckungsmatrix. Enforcement Engine mit State Machine, Phase Gates G0-G5 und G0-RE bis G4-RE, Skip-Protokoll und Anti-Pattern-Erkennung. Jedes Modul mit standardisierten Sektionen: Profil-Steuerung, Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping. 3 Profile: KRITIS, Standard, Startup. MIT-Lizenz. GitHub: github.com/GodModeAI2025/specforge-ai-skill</p>
     </section>
   </noscript>
 
