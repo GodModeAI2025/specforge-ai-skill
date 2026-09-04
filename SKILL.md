@@ -208,7 +208,7 @@ SpecForge ist an folgenden Stellen erweiterbar — ohne Änderung an Core-Dateie
 
 | Was | Wie erweitern | Wo dokumentiert |
 |-----|--------------|----------------|
-| **EARS-Patterns** | Neue Patterns in `references/checklists/ears-patterns-custom.md` definieren; Dispatcher prüft Core + Custom | ears-syntax.md (Core), Custom-Datei (Ergänzung) |
+| **EARS-Patterns** | Neue Patterns in `references/custom/ears-patterns-custom.md` definieren; Dispatcher prüft Core + Custom | ears-syntax.md (Core), Custom-Datei (Ergänzung) |
 | **Profile** | Neues Profil in specforge.json als `profile_custom`-Objekt mit `base` (KRITIS/Standard/Startup) + `overrides` | specforge.json |
 | **Anti-Patterns** | AP-08+ in `references/custom/anti-patterns-custom.md`; Format identisch zu AP-01–AP-08 | enforcement-engine.md (Core), Custom-Datei (Ergänzung) |
 | **Golden Principles** | GP-11+ in `references/custom/golden-principles-custom.md`; `active_gps` in specforge.json erweitern | golden-principles.md (Core), Custom-Datei (Ergänzung) |
@@ -216,6 +216,8 @@ SpecForge ist an folgenden Stellen erweiterbar — ohne Änderung an Core-Dateie
 | **Review-Rollen** | Neue Rollen in `references/custom/@team-review-rollen/` | 06-stakeholder-sim.md |
 | **NFR-Kategorien** | Neue Kategorien in `references/custom/nfr-custom.md` | kritis-nfr.md (Core), Custom-Datei (Ergänzung) |
 | **Checklisten** | `references/custom/*.md` oder `@scope/`-Pakete | 05-checklist.md |
+
+**Ablageregel:** Jeder Erweiterungspunkt liegt unterhalb `references/custom/`. Alle übrigen `references/`-Pfade sind Core und müssen vorhanden sein. Nur so bleiben Erweiterungen bei Core-Updates erhalten und nur so lässt sich ein fehlender Core-Pfad maschinell von einem noch nicht angelegten Erweiterungspunkt unterscheiden.
 
 ### Fehlerbehandlung bei fehlenden Referenzen
 
