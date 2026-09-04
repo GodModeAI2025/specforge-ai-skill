@@ -136,7 +136,7 @@ Jeder Testfall muss auf genau ein Gherkin-Szenario oder eine NFR zurückverfolgb
 | Erweiterungspunkt | Wie | Wo |
 |-------------------|-----|-----|
 | Neue Testfall-Typen | Zusätzliche Typen in `references/custom/test-types-custom.md` | Custom Extension |
-| Branchenspezifische Tests | z.B. DORA-Art.-26-TLPT-Tests in `references/custom/@dora/test-derive-rules.md` | Custom Extension |
+| Branchenspezifische Tests | z.B. DORA-Art.-26-TLPT-Tests in `references/custom/@{regulierung}/test-derive-rules.md` | Custom Extension |
 | Custom Testdaten-Generatoren | Domänenspezifische Testdaten-Templates | Custom Extension |
 
 ## Fehlerbehandlung
