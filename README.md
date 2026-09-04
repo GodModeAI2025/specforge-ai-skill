@@ -314,13 +314,13 @@ specforge/
 
 ### Was die Fachmodule enthalten (Standard-Sektionen)
 
-Die 10 Fachmodule folgen weitgehend derselben Struktur. In allen zehn stehen Fehlerbehandlung und Erzeugte Artefakte, bei den übrigen Sektionen nennt die Tabelle die Ausnahmen:
+Die 10 Fachmodule folgen weitgehend derselben Struktur. Wo eine Sektion fehlt oder anders heißt, sagt es die Tabelle:
 
 | Sektion | Beschreibung |
 |---------|-------------|
 | Profil-Steuerung | KRITIS/Standard/Startup-spezifisches Verhalten. Eigene Sektion in acht Modulen; `01-specify.md` behandelt die Profilwahl als Ablaufschritt, `02-clarify.md` unter „Wann Pflicht vs. Optional (profilabhängig)“ |
-| Ablauf (deterministisch) | Nummerierte Phasen mit konkreten Schritten |
-| Output-Template | Markdown-Template für erzeugte Artefakte |
+| Ablauf (deterministisch) | Nummerierte Phasen mit konkreten Schritten. Eigene Überschrift in fünf Modulen; `01-specify.md`, `02-clarify.md`, `03-plan.md` und `10-derive.md` gliedern direkt nach Phasen, `08-management.md` nach Funktionen |
+| Output-Template | Markdown-Template für erzeugte Artefakte, in allen zehn Modulen vorhanden. Eigene Sektion „Output: …“ nur in `04-analyze.md`, `05-checklist.md`, `06-stakeholder-sim.md` und `07-review.md` |
 | Stringenz-Regeln (Enforcement) | Tabellarische Regeln mit Schweregraden. Fehlt in `04-analyze.md` und `05-checklist.md` |
 | Erweiterbarkeit | Custom-Extension-Punkte mit Pfaden. Fehlt in `04-analyze.md` und `05-checklist.md` |
 | Fehlerbehandlung | Tabellarische Edge-Case-Behandlung, vier bis neun Fälle je nach Modul |
