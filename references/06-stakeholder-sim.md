@@ -108,7 +108,7 @@ Folgende Regeln werden **automatisch** bei jeder Simulation durchgesetzt:
 | Vage Begriffe aus Blocklist erkannt | Jedes Finding gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer; Stakeholder-Fragen intern unbegrenzt | n.a. (Budget-Überschreitung = Skip) |
 | Anti-Pattern-Prüfung | AP-01–AP-08 + custom APs aus `references/custom/anti-patterns-custom.md` | Schweregrad laut AP-Tabelle |
-| Spec-Artefakt als Datei | Output als stakeholder-sim-protocol.md, nicht inline | MAJOR (AP-09) |
+| Spec-Artefakt als Datei | Output als stakeholder-sim-protocol.md, nicht inline | MAJOR |
 
 ## Erweiterbarkeit
 
