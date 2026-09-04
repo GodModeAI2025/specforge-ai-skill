@@ -152,13 +152,26 @@ Schritt 4 bleibt Handarbeit in der Session.
 - [ ] Mindestens 1 NFR-Lücke korrekt erkannt und mit F-Stufe markiert?
 - [ ] Perspektive-Abfrage funktioniert (wenn Pflicht-Abfrage definiert)?
 - [ ] Extension wird bei Trigger-Begriff automatisch geladen?
-- [ ] Mindestens zwei Golden-Fälle unter `evals/golden/` abgelegt: derselbe fehlende Prüfpunkt
-      einmal aus der strengsten und einmal aus der mildesten Perspektive, je mit `expected.json`?
+- [ ] Mindestens zwei Golden-Fälle unter `evals/golden/` abgelegt, und zwar als Paar mit **einer**
+      Variablen: identische `spec.md` mit demselben `[NFR-Lücke F{n}: ...]`-Marker, zwei
+      `specforge.json`, die sich nur in der Perspektive unterscheiden, je mit `expected.json`?
+- [ ] Erzeugt genau eine der beiden Perspektiven den Befund `nfr_severity`, die andere nicht?
 - [ ] `python3 evals/run_static.py` läuft grün?
 
-Der zweite Punkt ist der eigentliche Beleg dafür, dass die F-Stufen-Zuordnung des Manifests
-funktioniert. Eine Extension, deren Perspektiven-Spalten nie unterschiedliche Ergebnisse
-erzeugen, braucht keine Perspektiven.
+Die beiden letzten Punkte sind der Beleg dafür, dass die F-Stufen-Zuordnung des Manifests wirkt.
+Ein Paar, das Perspektive und Marker-Wert zugleich variiert, belegt ihn nicht: die F-Stufe der
+Lücke stammt dann aus dem Marker, und der Unterschied wäre auch ohne Perspektiven-Tabelle da.
+Eine Extension, deren Perspektiven-Spalten nie unterschiedliche Ergebnisse erzeugen, braucht
+keine Perspektiven.
+
+Was der Linter dabei prüft, ist eng: er vergleicht die F-Stufe, die der Autor in den Marker
+geschrieben hat, mit der Tabelle des Manifests. Er leitet keine Stufe aus der Perspektive ab, und
+eine Anforderung, die in der Spec gar nicht als fehlend markiert ist, sieht er nicht. Der
+NFR-Scan gegen die Checkliste bleibt Sache der Session; die Golden-Fälle prüfen die
+Einstufung, nicht die Vollständigkeit. Das Referenzpaar sind
+[`evals/golden/03-dora-regulated-ohne-irm01`](evals/golden/03-dora-regulated-ohne-irm01) und
+[`06-dora-falsche-f-stufe`](evals/golden/06-dora-falsche-f-stufe), die Grenze hält
+[`08-dora-luecke-undokumentiert`](evals/golden/08-dora-luecke-undokumentiert) fest.
 
 ---
 

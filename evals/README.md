@@ -1,6 +1,6 @@
 # Eval-Suite
 
-Sieben Golden Specs und ihre erwarteten Befunde. Sie sind zugleich die ersten echten
+Acht Golden Specs und ihre erwarteten Befunde. Sie sind zugleich die ersten echten
 Spezifikationen im Repo: bis hierher lagen nur Templates und Eingabe-Prompts, an denen sich kein
 Ergebnis messen ließ.
 
@@ -33,17 +33,35 @@ Exit 0, wenn alle Fälle bestehen. Die CI fährt das Skript bei jedem Lauf.
 |------|-------------|------|--------|
 | 01-kritis-valide | keine | 0 | Der Forward-Path läuft ohne Befund durch |
 | 02-gherkin-fehlt | keine | 1 | Gherkin-Minimum ist F4, nicht F3 |
-| 03-dora-regulated-ohne-irm01 | regulated_entity | 1 | Fehlender IRM-01-NFR blockiert das Gate |
-| 04-dora-advisory-ohne-irm01 | advisory | 0 | Dieselbe Lücke, F2 statt F4, Gate passierbar |
+| 03-dora-regulated-ohne-irm01 | regulated_entity | 1 | F4 ist für diese Perspektive die richtige Stufe |
+| 04-dora-advisory-ohne-irm01 | advisory | 0 | F2 passt zur Perspektive: WARNING statt Risiko-Akzeptanz |
 | 05-orphan-task | keine | 2 | AP-07 ist F3: passierbar mit Risiko-Akzeptanz |
-| 06-dora-falsche-f-stufe | advisory | 1 | Eine zu hart eingestufte Lücke ist selbst ein Befund |
+| 06-dora-falsche-f-stufe | advisory | 1 | Dieselbe Spec wie 03, andere Perspektive, ein Befund mehr |
 | 07-spec-ohne-story | keine | 1 | Ein Lauf ohne erkannte Story ist kein bestandener Lauf |
+| 08-dora-luecke-undokumentiert | regulated_entity | 0 | Grenze: eine nicht markierte Lücke sieht der Linter nicht |
 
-Die Fälle 03 und 04 sind das Paar, an dem die Schweregrad-Vereinheitlichung hängt. Das frühere,
-dreistufige Vokabular konnte den Unterschied nicht abbilden: seine mittlere Stufe übersetzt sich
-in beiden Fällen zu F3 und hätte damit auch dem Beratungsprojekt eine Risiko-Akzeptanz durch das
-Leitungsorgan abverlangt. Hergeleitet ist das in
+## Das Perspektiven-Paar
+
+Die Fälle 03 und 06 sind das Paar, an dem die F-Stufen-Zuordnung der Extension hängt: die
+`spec.md` ist in beiden Byte für Byte dieselbe, die `specforge.json` unterscheidet sich in einem
+einzigen Feld, der Perspektive. Für `regulated_entity` ist die F4-Einstufung der Lücke richtig
+und es bleibt beim `nfr_gap` (Fall 03); für `advisory` sieht `@dora` F2 vor, und derselbe Marker
+erzeugt zusätzlich den Befund `nfr_severity` (Fall 06). Das ist der einzige Unterschied, den die
+Perspektive im Linter macht, und damit der Beleg dafür, dass die Perspektiven-Spalten des
+Manifests wirken.
+
+Fall 04 gehört nicht zu diesem Paar. Er zeigt die zur Perspektive passende, mildere
+Selbsteinstufung: F2 ergibt WARNING und einen Pflicht-Task vor Go-Live statt einer
+Risiko-Akzeptanz durch das Leitungsorgan. Genau diesen Unterschied konnte das frühere,
+dreistufige Vokabular nicht abbilden, dessen mittlere Stufe sich in beiden Fällen zu F3
+übersetzt. Hergeleitet ist das in
 [../docs/f-stufen-entscheidung.md](../docs/f-stufen-entscheidung.md).
+
+Was der Linter dabei tut und was nicht: Er liest die F-Stufe, die der Autor in den Marker
+`[NFR-Lücke F{n}: ...]` geschrieben hat, und vergleicht sie mit der F-Stufen-Zuordnung der
+aktiven Extension. Er leitet die Stufe nicht aus der Perspektive ab, und er bemerkt keine
+Anforderung, die niemand als fehlend markiert hat. Fall 08 hält das fest: dieselbe Spec ohne
+Marker läuft mit PASS durch. Der NFR-Scan gegen die Checkliste bleibt Sache der Session.
 
 ## Was hier nicht steht
 

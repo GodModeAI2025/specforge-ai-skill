@@ -437,7 +437,7 @@ nächsten Release über ein Tag erreichbar; im aktuellen Release `v3.2.0` gibt e
 
 ### Golden Specs
 
-Unter `evals/golden/` liegen sieben vollständige Spezifikationen mit ihrem erwarteten Ergebnis.
+Unter `evals/golden/` liegen acht vollständige Spezifikationen mit ihrem erwarteten Ergebnis.
 Sie sind zugleich die ersten echten Specs im Repo, denn bis dahin gab es nur Templates, und der
 Regressionstest für den Linter:
 
@@ -445,11 +445,19 @@ Regressionstest für den Linter:
 python3 evals/run_static.py
 ```
 
-Das Paar aus Fall 03 und 04 zeigt, wozu die F-Stufen da sind: dieselbe fehlende
-DORA-Anforderung ergibt für ein Finanzunternehmen F4 und blockiert, für ein Beratungsprojekt F2
-und erzeugt einen Pflicht-Task vor Go-Live. Das frühere, dreistufige Vokabular konnte diesen
-Unterschied nicht abbilden; die Umstellung ist in
-[docs/f-stufen-entscheidung.md](docs/f-stufen-entscheidung.md) begründet. Details in [evals/README.md](evals/README.md).
+Das Paar aus Fall 03 und 06 zeigt, was die Perspektive im Linter bewirkt: identische `spec.md`,
+zwei `specforge.json`, die sich nur in der Perspektive unterscheiden. Die als F4 markierte
+DORA-Lücke ist für ein Finanzunternehmen richtig eingestuft und bleibt ein einzelner Befund; für
+ein Beratungsprojekt sieht `@dora` F2 vor, und die zu harte Einstufung kommt als zweiter Befund
+`nfr_severity` dazu. Fall 04 zeigt die dazu passende mildere Einstufung, die das Gate mit einem
+Pflicht-Task vor Go-Live passiert. Das frühere, dreistufige Vokabular konnte diesen Unterschied
+nicht abbilden; die Umstellung ist in
+[docs/f-stufen-entscheidung.md](docs/f-stufen-entscheidung.md) begründet.
+
+Was der Linter dabei prüft, ist die Selbsteinstufung des Autors gegen das Manifest der Extension.
+Die F-Stufe einer Lücke liest er aus dem Marker `[NFR-Lücke F{n}: ...]`; eine Anforderung, die
+niemand als fehlend markiert hat, bemerkt er nicht. Fall 08 hält diese Grenze fest. Details in
+[evals/README.md](evals/README.md).
 
 ---
 

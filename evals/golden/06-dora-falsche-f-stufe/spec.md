@@ -1,4 +1,4 @@
-# Feature-Spezifikation: Beratungsprojekt Auslagerungsregister
+# Feature-Spezifikation: Auslagerungsregister für IKT-Dienstleistungsverträge
 
 **ID:** SF-OUTSOURCING
 **Version:** 2026.09.04.1

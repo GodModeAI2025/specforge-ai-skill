@@ -355,10 +355,15 @@ class ExtensionTest(unittest.TestCase):
 
 
 class NfrLueckeTest(unittest.TestCase):
-    """Der Fall, an dem das Legacy-Mapping scheiterte.
+    """Was die Perspektive im Linter bewirkt.
 
-    Dieselbe fehlende Anforderung bekommt je nach Perspektive F4 oder F2.
-    Ueber BLOCKER/MAJOR/MINOR waren beide Werte nicht darstellbar.
+    Die Stufe der Luecke selbst steht im Marker, den der Autor gesetzt hat.
+    Die Perspektive entscheidet, ob diese Einstufung zur F-Stufen-Tabelle
+    der Extension passt: dieselbe Spec ergibt fuer regulated_entity nur den
+    nfr_gap (Fall 03) und fuer advisory zusaetzlich nfr_severity (Fall 06).
+    Fall 04 zeigt die zur Perspektive passende mildere Einstufung, die als
+    F2 das Gate passiert; ueber BLOCKER/MAJOR/MINOR war dieser Wert nicht
+    darstellbar.
     """
 
     def _run(self, name):
@@ -372,6 +377,20 @@ class NfrLueckeTest(unittest.TestCase):
         findings = self._run("03-dora-regulated-ohne-irm01")
         self.assertEqual([(f.check, f.level, f.subject) for f in findings],
                          [("nfr_gap", "F4", "IRM-01")])
+
+    def test_paar_unterscheidet_sich_nur_in_der_perspektive(self):
+        """Ein Beleg mit zwei Variablen belegt nichts."""
+        def read(case):
+            path = os.path.join(ROOT, "evals", "golden", case, "spec.md")
+            with open(path, encoding="utf-8") as handle:
+                return handle.read()
+
+        self.assertEqual(read("03-dora-regulated-ohne-irm01"),
+                         read("06-dora-falsche-f-stufe"))
+
+    def test_nicht_markierte_luecke_bleibt_unbemerkt(self):
+        """Grenze des Linters, festgehalten statt behauptet."""
+        self.assertEqual(self._run("08-dora-luecke-undokumentiert"), [])
 
     def test_advisory_erzeugt_pflicht_task(self):
         findings = self._run("04-dora-advisory-ohne-irm01")

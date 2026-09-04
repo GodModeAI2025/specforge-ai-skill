@@ -1,6 +1,6 @@
 {
-  "beschreibung": "Finanzunternehmen ohne IKT-Risikomanagement-Framework. Perspektive regulated_entity.",
-  "belegt": "Dieselbe Luecke wie in Fall 04, andere Perspektive, andere Stufe. Fuer regulated_entity fuehrt die F-Stufen-Tabelle von @dora F4, das Gate blockiert.",
+  "beschreibung": "Finanzunternehmen ohne IKT-Risikomanagement-Framework, als F4 eingestuft. Perspektive regulated_entity.",
+  "belegt": "Die eine Haelfte des Perspektiven-Paars. Die spec.md ist mit der von Fall 06 Byte fuer Byte identisch, die specforge.json unterscheidet sich nur in der Perspektive. Fuer regulated_entity fuehrt die F-Stufen-Tabelle von @dora F4, die Einstufung des Autors passt, es bleibt beim nfr_gap.",
   "exit_code": 1,
   "ergebnis": "FAIL",
   "befunde": [

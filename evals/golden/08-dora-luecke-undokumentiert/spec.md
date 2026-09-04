@@ -34,4 +34,3 @@ Scenario: Vertrag ohne Kritikalitätseinstufung
   Then verweigert das Register den Abschluss und benennt das fehlende Feld
 
 #### DORA-NFRs
-[NFR-Lücke F4: IRM-01 — IKT-Risikomanagement-Framework nicht spezifiziert — Gate: FAIL]
