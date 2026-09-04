@@ -24,13 +24,13 @@ Constitution → GP → spec.md → Clarifications → Stories → ACs
 
 | Prüfpunkt | Was wird geprüft | Schweregrad bei Lücke |
 |-----------|-----------------|----------------------|
-| TM-01 | Jede Story hat Spec-Referenz (GP-02) | BLOCKER |
-| TM-02 | Jeder Task hat Story-Referenz | MAJOR (AP-07: Orphan Artifact) |
-| TM-03 | Jede Story hat ≥2 Gherkin-ACs | MAJOR (AP-06) |
-| TM-04 | Jede modulübergreifende Entscheidung hat ADR (GP-03) | MAJOR |
-| TM-05 | Tasks mit 5+ Dateien haben ExecPlan (GP-04) | MAJOR |
-| TM-06 | Constitution referenziert aktive GPs laut Profil | MINOR |
-| TM-07 | ARCHITECTURE.md enthält aktuelle Codemap | MINOR |
+| TM-01 | Jede Story hat Spec-Referenz (GP-02) | F4 |
+| TM-02 | Jeder Task hat Story-Referenz | F3 (AP-07: Orphan Artifact) |
+| TM-03 | Jede Story hat ≥2 Gherkin-ACs | F4 (Gate G1) |
+| TM-04 | Jede modulübergreifende Entscheidung hat ADR (GP-03) | F3 (KRITIS: F4) |
+| TM-05 | Tasks mit 5+ Dateien haben ExecPlan (GP-04) | F2 |
+| TM-06 | Constitution referenziert aktive GPs laut Profil | F4 (Gate G0) |
+| TM-07 | ARCHITECTURE.md enthält aktuelle Codemap | F3 (Gate G5) |
 
 **Output:**
 ```markdown
@@ -41,8 +41,8 @@ Constitution → GP → spec.md → Clarifications → Stories → ACs
 | Quelle | Ziel | Status | Lücke | Schweregrad |
 |--------|------|--------|-------|------------|
 | spec.md SF-FUNC-001 | Task T-001 | ✅ Verknüpft | — | — |
-| spec.md SF-SEC-003 | — | ❌ Kein Task | Orphan Spec | MAJOR |
-| Task T-005 | — | ❌ Keine Story | Orphan Task | MAJOR |
+| spec.md SF-SEC-003 | — | ❌ Kein Task | Orphan Spec | F3 |
+| Task T-005 | — | ❌ Keine Story | Orphan Task | F3 |
 
 **Abdeckung:** [X/Y] Spec-Einträge mit Task (Z%)
 **GP-02 Compliance:** [PASS / FAIL]
@@ -54,12 +54,12 @@ Prüft ob die 8-Schritt-Kette (→ `references/conventions/spec-first-chain.md`)
 
 | Prüfpunkt | Was wird geprüft | Schweregrad |
 |-----------|-----------------|------------|
-| SFC-01 | Spec-Update vor Code (Schritt 1, GP-02) | BLOCKER |
-| SFC-02 | Schema-Update bei API-Änderung (Schritt 2) | MAJOR |
-| SFC-03 | Fixture-Update bei Schema-Änderung (Schritt 3, GP-01) | MAJOR |
-| SFC-04 | Contract Tests ausgeführt (Schritt 6) | MAJOR |
-| SFC-05 | Breaking Changes dokumentiert (Schritt 7) | MAJOR |
-| SFC-06 | ARCHITECTURE.md aktuell (Schritt 8) | MINOR |
+| SFC-01 | Spec-Update vor Code (Schritt 1, GP-02) | F4 |
+| SFC-02 | Schema-Update bei API-Änderung (Schritt 2) | F3 |
+| SFC-03 | Fixture-Update bei Schema-Änderung (Schritt 3, GP-01) | F3 |
+| SFC-04 | Contract Tests ausgeführt (Schritt 6) | F3 |
+| SFC-05 | Breaking Changes dokumentiert (Schritt 7) | F3 |
+| SFC-06 | ARCHITECTURE.md aktuell (Schritt 8) | F3 (Gate G5) |
 
 **Output:**
 ```markdown
@@ -68,7 +68,7 @@ Prüft ob die 8-Schritt-Kette (→ `references/conventions/spec-first-chain.md`)
 | Task | Steps erwartet | Steps durchgeführt | Lücken | Status |
 |------|---------------|-------------------|--------|--------|
 | T-001 | 1,2,3,4,6,8 | 1,2,3,4,6,8 | — | ✅ |
-| T-002 | 1,4,5,6 | 1,4,6 | 5 (Consumer) | ⚠️ MAJOR |
+| T-002 | 1,4,5,6 | 1,4,6 | 5 (Consumer) | ⚠️ F3 |
 
 **Chain-Compliance:** [X/Y] Tasks vollständig ([Z%])
 ```
@@ -90,7 +90,7 @@ Verwaltung aller bekannten technischen Schulden in `tech-debt-tracker.md`.
 | TD-001 | [Beschreibung] | @owner | HOCH/MITTEL/NIEDRIG | [betroffene NFRs] | YYYY-MM-DD | Sprint X |
 ```
 
-**Schweregrad-Eskalation:** MINOR → MAJOR wenn Debt auf NFRs wirkt (Performance, Security, Availability).
+**F-Stufen-Eskalation:** F1 → F2, sobald die Schuld auf ein NFR wirkt (Performance, Security, Availability).
 
 ### Funktion 8.5: Spec-Diff
 
@@ -99,20 +99,20 @@ Vergleicht zwei Versionen eines Artefakts und bewertet die Änderungen:
 | Änderungstyp | Bewertung | Aktion |
 |-------------|----------|--------|
 | Neue Story hinzugefügt | Neutral | Prüfen: Hat Story ACs? EARS? |
-| Story entfernt | MAJOR | Prüfen: Begründung dokumentiert? Orphan-Check |
-| AC geändert | MINOR | Prüfen: Tests noch valide? |
-| NFR geändert | MAJOR | Prüfen: Architektur-Impact? ADR nötig? |
-| Breaking API Change | BLOCKER | Prüfen: Schritt 7 (Log Breaking Changes) |
+| Story entfernt | F3 | Prüfen: Begründung dokumentiert? Orphan-Check |
+| AC geändert | F1 | Prüfen: Tests noch valide? |
+| NFR geändert | F3 | Prüfen: Architektur-Impact? ADR nötig? |
+| Breaking API Change | F4 | Prüfen: Schritt 7 (Log Breaking Changes) |
 
 ### Funktion 8.6: Freshness Check (GP-06)
 
 | Prüfpunkt | Kriterium | Schweregrad |
 |-----------|----------|------------|
-| FR-01 | Stale Marker (TODO/TBD/FIXME) ohne Datum + Owner | MINOR |
-| FR-02 | Stale Marker älter als 14 Tage | MAJOR |
-| FR-03 | Verwaiste Schemas (Schema ohne Spec-Referenz) | MAJOR |
-| FR-04 | ARCHITECTURE.md älter als letzte strukturelle Änderung | MINOR |
-| FR-05 | spec.md Version älter als zugehörige Tasks | MAJOR |
+| FR-01 | Stale Marker (TODO/TBD/FIXME) ohne Datum + Owner | F2 (Gate G5) |
+| FR-02 | Stale Marker älter als 14 Tage | F3 |
+| FR-03 | Verwaiste Schemas (Schema ohne Spec-Referenz) | F3 (AP-07) |
+| FR-04 | ARCHITECTURE.md älter als letzte strukturelle Änderung | F3 (Gate G5) |
+| FR-05 | spec.md Version älter als zugehörige Tasks | F3 |
 
 **Freshness-Intervall nach Profil:**
 - KRITIS: Alle 14 Tage automatisch
@@ -126,10 +126,10 @@ Tracking aller bisherigen Analyze-Runs und deren Ergebnisse:
 ```markdown
 ## Analyze-Historie: [Feature-Name]
 
-| Run | Datum | GP-Score | BLOCKER | MAJOR | MINOR | Status |
-|-----|-------|---------|---------|-------|-------|--------|
-| #1 | YYYY-MM-DD | 6/10 | 2 | 5 | 3 | ❌ FAIL |
-| #2 | YYYY-MM-DD | 8/10 | 0 | 2 | 3 | ✅ PASS |
+| Run | Datum | GP-Score | F4 | F3 | F2 | F1 | Status |
+|-----|-------|---------|----|----|----|----|--------|
+| #1 | YYYY-MM-DD | 6/10 | 2 | 5 | 1 | 3 | ❌ FAIL |
+| #2 | YYYY-MM-DD | 8/10 | 0 | 2 | 1 | 3 | ⚠️ CONDITIONAL |
 
 **Trend:** GP-Score steigt / fällt / stabil
 **Fix-Zyklen bis PASS:** [Anzahl]
@@ -141,14 +141,14 @@ Folgende Regeln werden bei jeder Management-Funktion **automatisch** durchgesetz
 
 | Regel | Enforcement | Schweregrad bei Verstoß |
 |-------|-----------|------------------------|
-| Traceability-Lücken (Orphan Specs/Tasks) | Automatisch bei TM-01 bis TM-07 | BLOCKER (GP-02) / MAJOR (AP-07) |
-| Spec-First Chain Compliance | Automatisch bei SFC-01 bis SFC-06 | BLOCKER (SFC-01) / MAJOR |
-| Vage Begriffe in Spec-Diffs | Jede Änderung gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" | BLOCKER (AP-04) |
+| Traceability-Lücken (Orphan Specs/Tasks) | Automatisch bei TM-01 bis TM-07 | F4 (GP-02) / F3 (AP-07) |
+| Spec-First Chain Compliance | Automatisch bei SFC-01 bis SFC-06 | F4 (SFC-01) / F3 |
+| Vage Begriffe in Spec-Diffs | Jede Änderung gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" | F4 (AP-04) |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer | n.a. (Budget-Überschreitung = Skip) |
 | Anti-Pattern-Prüfung bei Spec-Diff | AP-01–AP-08 + custom APs aus `references/custom/anti-patterns-custom.md` bei jeder Spec-Änderung | Schweregrad laut AP-Tabelle |
-| Artefakt-Erzeugung als Datei | Alle Reports als separate .md-Dateien, nicht inline | MAJOR |
+| Artefakt-Erzeugung als Datei | Alle Reports als separate .md-Dateien, nicht inline | F2 |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md Tabelle | n.a. (systemweit) |
-| Freshness-Intervall | KRITIS: 14 Tage; Standard: bei Review; Startup: bei Bedarf | MAJOR (bei Überschreitung KRITIS) |
+| Freshness-Intervall | KRITIS: 14 Tage; Standard: bei Review; Startup: bei Bedarf | F3 (bei Überschreitung im KRITIS-Profil) |
 
 ## Erweiterbarkeit
 

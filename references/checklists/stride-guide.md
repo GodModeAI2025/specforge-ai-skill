@@ -105,7 +105,7 @@ Threat-Modeling-Framework für security-relevante Requirements. Bei jeder securi
 1. Bei jeder Story mit SEC-NFR oder expliziter Anfrage
 2. **Alle 6 Kategorien werden geprüft** — auch wenn nur einzelne offensichtlich relevant sind
 3. Output: Tabelle im spec.md mit Bewertung pro Kategorie
-4. Fehlende STRIDE-Analyse für security-relevante Stories = BLOCKER in Analyze
+4. Fehlende STRIDE-Analyse für security-relevante Stories = F3 in Analyze (`stride_complete`; regulated_entity F4, advisory F1 laut `checks_config`)
 5. STRIDE wird bei Spec-Updates wiederholt, nicht nur einmalig
 
 ## Output-Format

@@ -61,7 +61,8 @@ JUNK_SUFFIXES = (".swp", ".swo", "~", ".orig", ".rej")
 FORBIDDEN_FRAGMENTS = (
     ".git/", ".github", ".gitignore", "index.html", "course.html",
     "examples/", "docs/", "scripts/", "packaging/", "contributing",
-    "changelog", ".ds_store", "thumbs.db", ".env", "id_rsa", "id_ed25519",
+    "changelog", "cli/", "evals/", "tests/", ".py",
+    ".ds_store", "thumbs.db", ".env", "id_rsa", "id_ed25519",
     ".pem", ".key", ".p12", ".pfx", "secret", "credential",
 )
 

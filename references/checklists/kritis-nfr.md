@@ -97,10 +97,7 @@ Automatische Prüfliste für nicht-funktionale Anforderungen in KRITIS-reguliert
 
 ### Legacy-Kompatibilität
 
-Für Projekte die noch mit dem bisherigen Schweregrad-System arbeiten, gilt folgendes Mapping:
-
-| Legacy-Schweregrad | F-Stufen-Äquivalent | Gate-Ergebnis |
-|--------------------|---------------------|---------------|
-| BLOCKER | F4 | FAIL |
-| MAJOR | F3 | CONDITIONAL |
-| MINOR | F1 | INFO |
+F-Stufen sind das einzige Schweregrad-Vokabular dieser Checkliste und aller Module. Das
+Eingangs-Mapping für alte `specforge.json`-Dateien ohne `severity_model` steht an genau einer
+Stelle: `references/enforcement/enforcement-engine.md`, Abschnitt "Abwärtskompatibilität
+(Legacy-Mapping)". Dort und nur dort ist es normativ.

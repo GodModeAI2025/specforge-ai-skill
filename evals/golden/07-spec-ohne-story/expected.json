@@ -1,0 +1,13 @@
+{
+  "beschreibung": "Spec mit Kopf und Gliederung, aber ohne einzige Story.",
+  "belegt": "Ein Lauf ohne Pruefgegenstand ist kein bestandener Lauf. Vor diesem Fall meldete der Checker '0/0 Stories' und Exit 0, womit ein abgeschnittenes Artefakt und ein falscher Pfad das Gate passierten.",
+  "exit_code": 1,
+  "ergebnis": "FAIL",
+  "befunde": [
+    {
+      "check": "no_stories",
+      "severity": "F4",
+      "subject": "spec.md"
+    }
+  ]
+}

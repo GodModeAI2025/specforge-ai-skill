@@ -1,0 +1,7 @@
+{
+  "beschreibung": "Dieselbe Spec wie Fall 03, aber ohne den Marker: die IRM-01-Luecke ist nirgends dokumentiert.",
+  "belegt": "Haelt eine Grenze fest, kein gewuenschtes Verhalten. Der Linter liest NFR-Luecken aus den Markern der Spec; eine Anforderung, die niemand als fehlend markiert hat, sieht er nicht, und der Lauf endet mit PASS und Exit 0. Wer die Vollstaendigkeitspruefung braucht, braucht den NFR-Scan der Session gegen die Checkliste. Faellt dieser Fall eines Tages auf Exit 1, ist das kein Fehler, sondern eine neue Faehigkeit, und der Fall wird umgeschrieben.",
+  "exit_code": 0,
+  "ergebnis": "PASS",
+  "befunde": []
+}

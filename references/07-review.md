@@ -9,9 +9,9 @@
 
 ## Profil-Steuerung
 
-- **KRITIS:** Alle 3 Ebenen Pflicht; STRIDE vollständig (alle 6 Kategorien); GP-Score ≥ 9/10; Keine offenen BLOCKER/MAJOR erlaubt
-- **Standard:** Ebene 1 + 2 Pflicht; Ebene 3 für SEC-Stories; GP-Score ≥ 8/10; BLOCKER müssen gelöst, MAJOR dokumentiert
-- **Startup:** Ebene 1 Pflicht; Ebene 2 + 3 empfohlen; GP-Score ≥ 6/10; Soft-Empfehlungen statt Blocker
+- **KRITIS:** Alle 3 Ebenen Pflicht; STRIDE vollständig (alle 6 Kategorien); GP-Score ≥ 9/10; Keine offenen F4- oder F3-Befunde erlaubt
+- **Standard:** Ebene 1 + 2 Pflicht; Ebene 3 für SEC-Stories; GP-Score ≥ 8/10; F4 muss gelöst sein, F3 braucht dokumentierte Risiko-Akzeptanz
+- **Startup:** Ebene 1 Pflicht; Ebene 2 + 3 empfohlen; GP-Score ≥ 6/10; Soft-Empfehlungen statt F4
 
 ## Ablauf (deterministisch)
 
@@ -33,14 +33,14 @@ Jede Ebene wird vollständig durchlaufen. Keine Ebene darf übersprungen werden,
 
 | # | Kriterium | Prüfung | Schweregrad bei Verstoß |
 |---|-----------|---------|------------------------|
-| RQ-01 | Eindeutigkeit | Keine vagen Begriffe aus Blocklist (enforcement-engine.md) | BLOCKER (AP-04) |
-| RQ-02 | Testbarkeit | Konkretes Pass/Fail-Kriterium vorhanden | MAJOR |
-| RQ-03 | EARS-Konformität | Explizit benanntes EARS-Pattern; korrekte Syntax | MAJOR |
-| RQ-04 | Gherkin-Qualität | ≥2 Szenarien pro Story (Happy Path + Fehlerfall) | MAJOR (AP-06) |
-| RQ-05 | Atomarität | Ein Requirement = eine testbare Aussage | MINOR |
+| RQ-01 | Eindeutigkeit | Keine vagen Begriffe aus Blocklist (enforcement-engine.md) | F4 (AP-04) |
+| RQ-02 | Testbarkeit | Konkretes Pass/Fail-Kriterium vorhanden | F3 |
+| RQ-03 | EARS-Konformität | Explizit benanntes EARS-Pattern; korrekte Syntax | F4 |
+| RQ-04 | Gherkin-Qualität | ≥2 Szenarien pro Story (Gate G1); nur Happy Path trotz ≥2 Szenarien → AP-06 (F3) | F4 |
+| RQ-05 | Atomarität | Ein Requirement = eine testbare Aussage | F1 |
 | RQ-06 | Anti-Pattern-Freiheit | AP-01 bis AP-08 geprüft | Schweregrad laut AP-Tabelle |
-| RQ-07 | Annahmen-Markierung | Alle Annahmen als `[Annahme: ...]` gekennzeichnet | MAJOR (AP-03) |
-| RQ-08 | ID-Schema | SF-[Präfix]-[NNN] Format eingehalten | MINOR |
+| RQ-07 | Annahmen-Markierung | Alle Annahmen als `[Annahme: ...]` gekennzeichnet | F3 (AP-03) |
+| RQ-08 | ID-Schema | SF-[Präfix]-[NNN] Format eingehalten | F1 |
 
 #### Story-Quality-Score (SQS) — numerische Qualitätsbewertung
 
@@ -132,11 +132,11 @@ Schwellwerte:
 ### Phase 7d: Konsolidierung
 
 1. Findings aller 3 Ebenen zusammenführen
-2. Sortierung: BLOCKER → MAJOR → MINOR
+2. Sortierung: F4 → F3 → F2 → F1
 3. Gesamtbewertung ableiten:
-   - **Freigabefähig:** Keine BLOCKER, GP-Score ≥ Schwelle
-   - **Überarbeitung empfohlen:** Keine BLOCKER, aber MAJOR-Findings > 3 oder GP-Score knapp
-   - **Nicht freigabefähig:** BLOCKER vorhanden oder GP-Score < Schwelle
+   - **Freigabefähig:** Keine F4-Befunde, GP-Score ≥ Schwelle
+   - **Überarbeitung empfohlen:** Keine F4-Befunde, aber mehr als 3 F3-Befunde oder GP-Score knapp
+   - **Nicht freigabefähig:** F4-Befund vorhanden oder GP-Score < Schwelle
 
 ## Output: Review-Protokoll (deterministisch)
 
@@ -149,20 +149,20 @@ Schwellwerte:
 ### Ebene 1 — Requirement-Qualität
 | # | Kriterium | Bewertung | Schweregrad | Befund | Vorschlag |
 |---|-----------|----------|------------|--------|-----------|
-| RQ-01 | Eindeutigkeit | ✅/❌ | — / BLOCKER | [Befund] | [Vorschlag] |
+| RQ-01 | Eindeutigkeit | ✅/❌ | — / F4 | [Befund] | [Vorschlag] |
 
 ### Ebene 2 — Governance-Compliance
 | # | Golden Principle | Status | Schweregrad | Befund | Aktion |
 |---|-----------------|--------|------------|--------|--------|
-| GC-01 | GP-01 | ✅/❌/n.a. | — / MAJOR | [Befund] | [Aktion] |
+| GC-01 | GP-01 | ✅/❌/n.a. | — / F3 | [Befund] | [Aktion] |
 
 ### Ebene 3 — Security & Compliance
 | Kategorie | Geprüft | Befund | Schweregrad | Mitigation |
 |-----------|---------|--------|------------|-----------|
-| Spoofing | ✅/❌ | [Befund] | MAJOR | [Maßnahme] |
+| Spoofing | ✅/❌ | [Befund] | F3 | [Maßnahme] |
 
 ### Zusammenfassung
-**BLOCKER:** [Anzahl] | **MAJOR:** [Anzahl] | **MINOR:** [Anzahl]
+**F4:** [Anzahl] | **F3:** [Anzahl] | **F2:** [Anzahl] | **F1:** [Anzahl]
 **GP-Score:** [X/10] (Schwelle: [Y/10])
 **Gesamtbewertung:** [Freigabefähig / Überarbeitung empfohlen / Nicht freigabefähig]
 ```
@@ -171,12 +171,12 @@ Schwellwerte:
 
 | Regel | Enforcement | Schweregrad |
 |-------|-----------|------------|
-| Vage Begriffe aus Blocklist | Automatisch in Ebene 1 (RQ-01): "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
+| Vage Begriffe aus Blocklist | Automatisch in Ebene 1 (RQ-01): "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | F4 |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer; Review-interne Prüfung unbegrenzt | n.a. |
 | Anti-Pattern-Prüfung | AP-01–AP-08 + custom APs aus `references/custom/anti-patterns-custom.md` | Schweregrad laut AP-Tabelle |
-| Artefakt-Erzeugung als Datei | review-protocol.md als separate Datei, nicht inline | MAJOR |
-| Gherkin-Minimum | ≥2 Szenarien pro Story (RQ-04) — Unterschreitung = MAJOR (AP-06) | MAJOR |
-| EARS-Pflicht | Jede Story hat explizit benanntes Pattern (RQ-03) | MAJOR |
+| Artefakt-Erzeugung als Datei | review-protocol.md als separate Datei, nicht inline | F2 |
+| Gherkin-Minimum | ≥2 Szenarien pro Story (RQ-04) — Unterschreitung blockiert Gate G1 | F4 |
+| EARS-Pflicht | Jede Story hat explizit benanntes Pattern (RQ-03) | F4 |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md Schweregrad-Tabelle | n.a. |
 
 ## Erweiterbarkeit
@@ -196,7 +196,7 @@ Schwellwerte:
 | Kein Input / leerer Input | → Fehlermeldung: "Bitte spec.md oder Requirements übergeben" |
 | specforge.json fehlt | → Standard-Profil anwenden, Hinweis ausgeben |
 | Profil-Wechsel mid-session | → Review mit neuem Profil-Scope wiederholen |
-| Input ohne EARS-Format | → Ebene 1 RQ-03 als MAJOR markieren, Reformulierung vorschlagen |
+| Input ohne EARS-Format | → Ebene 1 RQ-03 als F4 markieren, Reformulierung vorschlagen |
 | Fehlende Referenzdateien | → Klare Fehlermeldung: "[Datei] nicht gefunden — Prüfpunkt übersprungen, als FAIL gewertet" |
 | Mixed-Language Input | → Sprachverhalten gemäß Orchestrator (DE/EN nachfragen) |
 | Widersprüchliche Anforderungen | → Als AP-03 (Implizite Annahmen) + eigenständiges Finding dokumentieren |

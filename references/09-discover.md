@@ -10,9 +10,9 @@
 
 ## Profil-Steuerung
 
-- **KRITIS:** Beide QS-Schleifen Pflicht (keine Ausnahme); STRIDE + KRITIS-NFRs in generierter Spec; Keine offenen BLOCKER/MAJOR nach QS-2
-- **Standard:** Beide QS-Schleifen Pflicht; STRIDE für SEC-relevante Stories; MAJOR darf dokumentiert mitgenommen werden
-- **Startup:** QS-Schleife 1 (Vollständigkeit) Pflicht; QS-Schleife 2 (Stringenz) empfohlen; Soft-Findings statt Blocker
+- **KRITIS:** Beide QS-Schleifen Pflicht (keine Ausnahme); STRIDE + KRITIS-NFRs in generierter Spec; Keine offenen F4- oder F3-Befunde nach QS-2
+- **Standard:** Beide QS-Schleifen Pflicht; STRIDE für SEC-relevante Stories; F3 darf mit dokumentierter Risiko-Akzeptanz mitgenommen werden
+- **Startup:** QS-Schleife 1 (Vollständigkeit) Pflicht; QS-Schleife 2 (Stringenz) empfohlen; Soft-Findings statt F4
 
 ## Ablauf (deterministisch)
 
@@ -85,11 +85,11 @@ Vollwertige spec.md mit **identischem Qualitätsanspruch** wie Modus 1 (Specify)
 
 | Prüfpunkt | Was wird geprüft | Schweregrad |
 |-----------|-----------------|------------|
-| QS1-01 | Jeder API-Endpoint hat Story | MAJOR |
-| QS1-02 | Jede Business Rule hat Story | MAJOR |
-| QS1-03 | Jeder Datenfluss ist dokumentiert | MINOR |
-| QS1-04 | Alle Auth/Authz-Pfade abgebildet | MAJOR (bei KRITIS: BLOCKER) |
-| QS1-05 | Error-Handling-Pfade als Unwanted-Stories | MAJOR (AP-06) |
+| QS1-01 | Jeder API-Endpoint hat Story | F3 |
+| QS1-02 | Jede Business Rule hat Story | F3 |
+| QS1-03 | Jeder Datenfluss ist dokumentiert | F1 |
+| QS1-04 | Alle Auth/Authz-Pfade abgebildet | F3 (KRITIS: F4) |
+| QS1-05 | Error-Handling-Pfade als Unwanted-Stories | F3 (AP-06) |
 
 **Loop:** Wiederholen bis keine FEHLT-Einträge mehr vorhanden.
 
@@ -113,23 +113,23 @@ Vollwertige spec.md mit **identischem Qualitätsanspruch** wie Modus 1 (Specify)
 
 | Prüfpunkt | Was wird geprüft | Schweregrad |
 |-----------|-----------------|------------|
-| QS2-01 | Begriffe konsistent (gleicher Begriff = gleiche Bedeutung überall) | MAJOR |
-| QS2-02 | Keine widersprüchlichen Requirements | BLOCKER |
-| QS2-03 | Ist/Soll-Delta dokumentiert (was ist im Code, was fehlt) | MAJOR |
+| QS2-01 | Begriffe konsistent (gleicher Begriff = gleiche Bedeutung überall) | F3 (AP-08) |
+| QS2-02 | Keine widersprüchlichen Requirements | F4 |
+| QS2-03 | Ist/Soll-Delta dokumentiert (was ist im Code, was fehlt) | F3 |
 | QS2-04 | GP-Compliance laut Profil | Schweregrad laut GP |
-| QS2-05 | EARS-Pattern korrekt gewählt (deterministisch nach Entscheidungsbaum) | MINOR |
-| QS2-06 | Keine verwaisten Stories (Story ohne Code-Evidenz = Soll, kennzeichnen) | MINOR |
+| QS2-05 | EARS-Pattern korrekt gewählt (deterministisch nach Entscheidungsbaum) | F1 |
+| QS2-06 | Keine verwaisten Stories (Story ohne Code-Evidenz = Soll, kennzeichnen) | F1 |
 
-**Loop:** Wiederholen bis keine BLOCKER/MAJOR-Findings (KRITIS/Standard) bzw. keine BLOCKER (Startup).
+**Loop:** Wiederholen bis keine F4- oder F3-Befunde offen sind (KRITIS/Standard) bzw. keine F4-Befunde (Startup).
 
 **Output pro Iteration:**
 ```markdown
 ## QS-2 Konsistenz: Iteration [N]
 | # | Prüfpunkt | Status | Schweregrad | Befund | Fix |
 |---|-----------|--------|------------|--------|-----|
-| QS2-01 | Begriffskonsistenz | ✅/❌ | — / MAJOR | [Befund] | [Fix] |
+| QS2-01 | Begriffskonsistenz | ✅/❌ | — / F3 | [Befund] | [Fix] |
 
-**Offene Findings:** BLOCKER: [X] | MAJOR: [Y] | MINOR: [Z]
+**Offene Befunde:** F4: [W] | F3: [X] | F2: [Y] | F1: [Z]
 **Status:** [PASS / Nächste Iteration nötig]
 ```
 
@@ -146,11 +146,11 @@ Vollwertige spec.md mit **identischem Qualitätsanspruch** wie Modus 1 (Specify)
 
 | Gate | Prüfung | Schweregrad bei Fail |
 |------|---------|---------------------|
-| G0-RE | Discovery-Protokoll erzeugt? Quellen dokumentiert? | BLOCKER |
-| G1-RE | 5W-Analyse komplett? Alle 5 Dimensionen mit Konfidenz? | BLOCKER |
-| G2-RE | spec.md erzeugt? EARS + Gherkin? Qualität = Forward-Path? | BLOCKER |
-| G3-RE | QS-1 bestanden (Vollständigkeit)? QS-2 bestanden (Konsistenz)? | BLOCKER |
-| G4-RE | Finalisierung — spec.md konsistent, Ist/Soll-Delta dokumentiert? | BLOCKER |
+| G0-RE | Discovery-Protokoll erzeugt? Quellen dokumentiert? | F4 |
+| G1-RE | 5W-Analyse komplett? Alle 5 Dimensionen mit Konfidenz? | F4 |
+| G2-RE | spec.md erzeugt? EARS + Gherkin? Qualität = Forward-Path? | F4 |
+| G3-RE | QS-1 bestanden (Vollständigkeit)? QS-2 bestanden (Konsistenz)? | F4 |
+| G4-RE | Finalisierung — spec.md konsistent, Ist/Soll-Delta dokumentiert? | F4 |
 
 Nach G4-RE: Übergang in Forward-Path ab G2 (Clarify) oder G3 (Plan).
 
@@ -158,13 +158,13 @@ Nach G4-RE: Übergang in Forward-Path ab G2 (Clarify) oder G3 (Plan).
 
 | Regel | Enforcement | Schweregrad |
 |-------|-----------|------------|
-| Vage Begriffe aus Blocklist | Jede erzeugte Story gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
+| Vage Begriffe aus Blocklist | Jede erzeugte Story gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | F4 |
 | Fragen-Budget | Stakeholder-Befragung: max. 5 Fragen/Runde; sonstige Interaktion: max. 3 Fragen/Runde | n.a. |
 | Anti-Pattern-Prüfung | AP-01–AP-08 + custom APs bei jeder Story-Erzeugung in Phase 9c | Schweregrad laut AP-Tabelle |
-| EARS-Pflicht | Jede Story hat explizit benanntes Pattern (wie Forward-Path) | MAJOR |
-| Gherkin-Minimum | ≥2 Szenarien pro Story (Happy Path + Fehlerfall) | MAJOR (AP-06) |
-| QS-Schleifen nicht überspringbar | KRITIS: beide Pflicht; Standard: beide Pflicht; Startup: QS-1 Pflicht | BLOCKER bei Skip |
-| Artefakt-Erzeugung als Datei | Alle Artefakte als separate .md-Dateien, nicht inline | MAJOR |
+| EARS-Pflicht | Jede Story hat explizit benanntes Pattern (wie Forward-Path) | F4 |
+| Gherkin-Minimum | ≥2 Szenarien pro Story (Gate G1) | F4 |
+| QS-Schleifen nicht überspringbar | KRITIS: beide Pflicht; Standard: beide Pflicht; Startup: QS-1 Pflicht | F4 bei Skip ohne F5-Protokoll |
+| Artefakt-Erzeugung als Datei | Alle Artefakte als separate .md-Dateien, nicht inline | F2 |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md | n.a. |
 
 ## Erweiterbarkeit
@@ -215,6 +215,6 @@ Nach G4-RE: Übergang in Forward-Path ab G2 (Clarify) oder G3 (Plan).
 ## Pflicht: Beide QS-Schleifen durchlaufen — kein Abkürzen.
 
 QS-Schleifen-Intensität richtet sich nach Profil:
-- **KRITIS:** Beide Schleifen strikt, keine offenen BLOCKER/MAJOR nach Abschluss
-- **Standard:** Beide Schleifen, MAJOR darf dokumentiert mitgenommen werden
+- **KRITIS:** Beide Schleifen strikt, keine offenen F4- oder F3-Befunde nach Abschluss
+- **Standard:** Beide Schleifen, F3 darf mit dokumentierter Risiko-Akzeptanz mitgenommen werden
 - **Startup:** Schleife 1 (Vollständigkeit) Pflicht, Schleife 2 (Stringenz) empfohlen

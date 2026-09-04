@@ -1,0 +1,15 @@
+{
+  "profile": "kritis",
+  "perspective": null,
+  "severity_model": {
+    "F4": "FAIL", "F3": "CONDITIONAL", "F2": "WARNING",
+    "F1": "INFO", "F0": "PASS", "F5": "SKIP"
+  },
+  "checks_config": {
+    "G1": {
+      "ears_coverage": { "severity": "F4" },
+      "gherkin_minimum": { "severity": "F4" }
+    }
+  },
+  "audit": true
+}

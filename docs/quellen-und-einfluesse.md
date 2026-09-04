@@ -17,7 +17,7 @@ Zurück zum [README](../README.md).
 | Cynefin Framework (Dave Snowden, 1999) | Phase 0 — Komplexitätseinschätzung vor Modus-Wahl |
 | Impact Mapping (Gojko Adzic, 2012) | Phase 0 — Zielorientierte Scope-Validierung |
 | Socratic Method (Platon/Sokrates) | Clarify-Modus — Sokratische Spezifikationsklärung |
-| Five Whys (Taiichi Ohno, Toyota) | BLOCKER-Analyse in Clarify |
+| Five Whys (Taiichi Ohno, Toyota) | F4-Analyse in Clarify |
 | MECE Principle (Barbara Minto, McKinsey) | Analyze-Modus — Konsistenzprüfung über 5 Dimensionen |
 | Devil's Advocate + Steelmanning | Stakeholder-Simulation — systematische Gegenargumentation |
 | Morphological Box (Fritz Zwicky, 1940er) | Plan-Modus — Systematische Lösungsraum-Exploration |

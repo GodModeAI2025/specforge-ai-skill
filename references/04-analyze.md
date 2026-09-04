@@ -5,7 +5,7 @@
 
 ## Profil-Steuerung
 
-- **KRITIS:** Analyze Pflicht; Loop bis Blocker-frei UND GP-Score ≥ 9/10; Alle 5+1 Dimensionen; Custom Checks falls konfiguriert
+- **KRITIS:** Analyze Pflicht; Loop bis kein F4-Befund mehr offen ist UND GP-Score ≥ 9/10; Alle 5+1 Dimensionen; Custom Checks falls konfiguriert
 - **Standard:** Analyze empfohlen; Loop bis GP-Score ≥ 8/10; Dimensionen 1–5; Custom optional
 - **Startup:** Analyze optional; GP-Score ≥ 6/10; Dimensionen 1–3 Pflicht, 4–5 empfohlen
 
@@ -25,11 +25,11 @@ Die Analyze-Phase nutzt spezialisierte Checker-Perspektiven, die unabhängig und
 
 | # | Dimension | Prüft | Schweregrad bei Lücke |
 |---|-----------|-------|-----------------------|
-| 1 | Spec ↔ Plan | Jedes Requirement hat Entsprechung im Plan; ADRs vorhanden (GP-03) | MAJOR |
-| 2 | Plan ↔ Tasks | Jede Plan-Komponente hat Task; Reihenfolge respektiert Abhängigkeiten | MAJOR |
-| 3 | Spec ↔ Tasks | Jede Story durch Task abgedeckt; keine verwaisten Tasks/Requirements (AP-05, AP-07) | BLOCKER |
+| 1 | Spec ↔ Plan | Jedes Requirement hat Entsprechung im Plan; ADRs vorhanden (GP-03) | F3 (KRITIS: F4) |
+| 2 | Plan ↔ Tasks | Jede Plan-Komponente hat Task; Reihenfolge respektiert Abhängigkeiten | F3 |
+| 3 | Spec ↔ Tasks | Jede Story durch Task abgedeckt; keine verwaisten Tasks/Requirements (AP-05, AP-07) | F4 |
 | 4 | Governance | GP-Compliance laut Profil; ExecPlans (GP-04); Folder Convention (GP-07); stale Marker (GP-06) | Schweregrad laut GP |
-| 5 | Security & Compliance | STRIDE; NFRs; NIS2; DSGVO — Scope laut Profil | MAJOR (KRITIS: BLOCKER) |
+| 5 | Security & Compliance | STRIDE; NFRs; NIS2; DSGVO — Scope laut Profil | F3 (KRITIS: F4) |
 | 6 | Custom | Projektspezifische Prüfregeln (nur wenn `custom_checklists` in specforge.json) | Konfigurierbar |
 | 7 | Story-Quality | Numerischer SQS pro Story (Titel, Description, Gherkin, SOPHIST, EARS) — Details in 07-review.md | F3 (SQS < 2.0), F2 (SQS 2.0–2.9), F1 (SQS 3.0–3.9) |
 
@@ -47,7 +47,7 @@ Alle Checker arbeiten unabhängig. Jeder Checker erzeugt einen eigenständigen B
 1. Checker-Reports zusammenführen
 2. Bei Widersprüchen zwischen Checkern: höherer Schweregrad gewinnt
 3. GP-Score berechnen: `Erfüllte GPs / Aktive GPs laut Profil`
-4. Sortierung: BLOCKER → MAJOR → MINOR
+4. Sortierung: F4 → F3 → F2 → F1
 
 ## Output: Konsolidierter Analyze-Report (deterministisch)
 
@@ -57,29 +57,29 @@ Alle Checker arbeiten unabhängig. Jeder Checker erzeugt einen eigenständigen B
 **Scope:** Dimensionen [1–6] / [1–5] / [1–3]
 
 ### Checker-Ergebnisse
-| Checker | Status | Befunde (B/M/m) | Blocker |
-|---------|--------|-----------------|---------|
-| Consistency | ✅/⚠️/❌ | X/Y/Z | [Anzahl] |
-| GP Auditor | [Score]/10 | X/Y/Z | [Anzahl] |
-| Security | ✅/⚠️/❌ | X/Y/Z | [Anzahl] |
-| Custom | ✅/n.a. | X/Y/Z | — |
+| Checker | Status | Befunde (F4/F3/F2/F1) |
+|---------|--------|----------------------|
+| Consistency | ✅/⚠️/❌ | W/X/Y/Z |
+| GP Auditor | [Score]/10 | W/X/Y/Z |
+| Security | ✅/⚠️/❌ | W/X/Y/Z |
+| Custom | ✅/n.a. | W/X/Y/Z |
 
 ### Detailbefunde
 | # | Checker | Schweregrad | Befund | Betroffene Artefakte | Empfohlene Aktion |
 |---|---------|------------|--------|---------------------|------------------|
-| A-001 | Consistency | BLOCKER | Orphan Task T-005 | tasks.md | Spec-Referenz ergänzen |
+| A-001 | Consistency | F4 | Orphan Task T-005 | tasks.md | Spec-Referenz ergänzen |
 
 ### Gesamtbewertung
 **Implementierungs-Readiness:** [Bereit / Überarbeitung nötig / Nicht bereit]
 **GP-Score:** [X/10] (Schwelle: [Y/10])
-**BLOCKER:** [Anzahl] | **MAJOR:** [Anzahl] | **MINOR:** [Anzahl]
+**F4:** [Anzahl] | **F3:** [Anzahl] | **F2:** [Anzahl] | **F1:** [Anzahl]
 ```
 
 ## Phase Gate G4: Analyze → Implement (automatisch prüfen)
 
 ```
 ── Gate G4: Analyze → Implement ────────────
-[ ] Keine BLOCKER-Befunde offen
+[ ] Keine F4-Befunde offen
 [ ] GP-Score ≥ Profil-Schwelle (KRITIS: 9, Standard: 8, Startup: 6)
 [ ] STRIDE vollständig (laut Profil)
 [ ] Custom-Checks bestanden (falls vorhanden)

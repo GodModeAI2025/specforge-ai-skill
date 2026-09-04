@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Einstiegspunkt fuer den Aufruf 'specforge check <pfad>'.
+
+Bewusst ohne Installation: das Repo ist ein Markdown-Skill, kein
+Python-Projekt, und ein Linter, der erst ein pip install braucht, wird in
+einer fremden Pipeline nicht benutzt. Der Aufruf lautet:
+
+    python3 cli/specforge check specs/mein-feature/spec.md
+
+Aequivalent, wenn cli/ im PYTHONPATH liegt:
+
+    python3 -m specforge_check specs/mein-feature/spec.md
+"""
+
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from specforge_check.__main__ import main  # noqa: E402
+
+USAGE = """Aufruf: specforge <befehl> [optionen]
+
+Befehle:
+  check <pfad>   spec.md oder Verzeichnis gegen die SpecForge-Regeln pruefen
+
+'specforge check --help' zeigt die Optionen."""
+
+
+def run(argv):
+    if len(argv) < 2 or argv[1] in ("-h", "--help", "help"):
+        print(USAGE)
+        return 0 if len(argv) > 1 else 3
+    if argv[1] != "check":
+        sys.stderr.write("FEHLER: unbekannter Befehl %r\n\n" % argv[1])
+        sys.stderr.write(USAGE + "\n")
+        return 3
+    return main(argv[2:])
+
+
+if __name__ == "__main__":
+    sys.exit(run(sys.argv))

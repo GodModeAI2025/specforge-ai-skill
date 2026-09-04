@@ -1,0 +1,10 @@
+{
+  "profile": "kritis",
+  "perspective": "regulated_entity",
+  "severity_model": {
+    "F4": "FAIL", "F3": "CONDITIONAL", "F2": "WARNING",
+    "F1": "INFO", "F0": "PASS", "F5": "SKIP"
+  },
+  "extensions": ["@dorra"],
+  "audit": true
+}

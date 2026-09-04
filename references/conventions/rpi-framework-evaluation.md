@@ -41,7 +41,7 @@ Ein LLM-Prompt (Skill) ist ein "weicher" Vertrag – der Agent kann ihn im Eifer
 
 1. **Der Plan Fidelity Diff-Checker:**
    * *Warum:* LLMs sind schlecht darin, exakte Datei-Diffs gegen eine Markdown-Liste zu validieren.
-   * *Plugin-Idee:* Ein Hook in der Ausführungs-Engine. Bevor eine Datei via `Write/Edit` geschrieben wird, prüft ein hart codiertes Plugin (AST-Parser oder Regex), ob diese Datei explizit in der `plan.md` freigegeben wurde. Wenn nicht → harter System-Blocker.
+   * *Plugin-Idee:* Ein Hook in der Ausführungs-Engine. Bevor eine Datei via `Write/Edit` geschrieben wird, prüft ein hart codiertes Plugin (AST-Parser oder Regex), ob diese Datei explizit in der `plan.md` freigegeben wurde. Wenn nicht → harter System-Stopp.
 2. **State Machine für die "Prompt Diet" (Phasen-Orchestrierung):**
    * *Warum:* Dem LLM zu sagen "Bitte stoppe hier und warte auf den User" ist extrem fehleranfällig.
    * *Plugin-Idee:* Ein SpecForge-Plugin orchestriert die Phasen (Research → Outline → Plan → Implement). Das Plugin injiziert dem Agenten jeweils *nur* den Prompt für die aktuelle Phase. Der Agent kann technisch gar nicht in die nächste Phase springen, bis der Nutzer "Approve Outline" klickt.

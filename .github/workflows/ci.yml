@@ -29,11 +29,23 @@ jobs:
       - name: Checklisten und Manifeste pruefen
         run: python scripts/check-checklists.py
 
+      - name: Schweregrad-Dialekt pruefen
+        run: python scripts/check-severity-dialect.py
+
       - name: Zahlenangaben in README und Landingpage pruefen
         run: python scripts/check-docs-numbers.py
 
       - name: Versionsangaben und Artefaktname pruefen
         run: python scripts/check-version.py
+
+      - name: Linter-Tests ausfuehren
+        run: python -m unittest discover -s tests -v
+
+      - name: Linter gegen die Fixtures fahren
+        run: python scripts/check-linter-fixtures.py
+
+      - name: Golden Specs pruefen
+        run: python evals/run_static.py
 
       - name: Release-Artefakt bauen
         run: python scripts/package-skill.py dist/specforge-skill.zip

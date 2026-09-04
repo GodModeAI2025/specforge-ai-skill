@@ -87,7 +87,7 @@ Scenario: [Edge Case / Fehlerfall]
 - Blockiert: [SF-XXX-NNN]
 
 #### Offene Fragen
-- [Frage mit Schweregrad: BLOCKER | MAJOR | MINOR]
+- [Frage mit F-Stufe: F4 | F3 | F2 | F1]
 
 #### GP-Compliance
 - [Betroffene Golden Principles mit Status]
@@ -151,7 +151,7 @@ Dieses Modell beschreibt die Fachdomäne in der Sprache der Stakeholder. Technis
 - [ ] NFR-Kategorien vollständig geprüft
 - [ ] STRIDE für security-relevante Stories durchgeführt
 - [ ] Keine vagen Begriffe ohne Quantifizierung
-- [ ] Keine offenen BLOCKER-Fragen
+- [ ] Keine offenen F4-Fragen
 - [ ] Constitution-Compliance geprüft
 - [ ] GP-Compliance pro Story dokumentiert
 - [ ] Abhängigkeiten zwischen Stories dokumentiert

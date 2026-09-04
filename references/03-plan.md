@@ -156,7 +156,7 @@ Nicht jeder Task durchläuft alle 8 Schritte — markieren, welche relevant sind
 - Jeder Task hat Gherkin ACs (≥2 Szenarien, AP-06)
 - Jeder Task hat Spec-Referenz (GP-02, AP-05 Scope Creep)
 - NFR-Tasks explizit ausweisen mit Kategorie (AVA/SEC/AUD/PER/DAT/OPS)
-- **GP-04: Tasks mit 5+ Dateien → ExecPlan-Pflicht (EP-*.md)** — Verstoß = MAJOR
+- **GP-04: Tasks mit 5+ Dateien → ExecPlan-Pflicht (EP-*.md)** — Verstoß = F2
   - ExecPlan enthält: Änderungsreihenfolge, Abhängigkeiten, Rollback-Strategie, Checkpoint
   - ExecPlan-Pfad: `plans/active/EP-*.md`
 - Definition-of-Ready-Prüfung pro Task:
@@ -192,12 +192,12 @@ Empfehlung: IMMER Analyze nach Tasks ausführen.
 
 | Regel | Enforcement | Schweregrad |
 |-------|-----------|------------|
-| Vage Begriffe in plan.md/tasks.md | Jedes Artefakt gegen Blocklist: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
+| Vage Begriffe in plan.md/tasks.md | Jedes Artefakt gegen Blocklist: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | F4 |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer | n.a. |
-| ExecPlan-Pflicht (GP-04) | Automatisch bei Tasks mit 5+ Dateien | MAJOR |
-| ADR-Pflicht (GP-03) | Automatisch bei modulübergreifenden Entscheidungen | MAJOR (KRITIS: BLOCKER) |
+| ExecPlan-Pflicht (GP-04) | Automatisch bei Tasks mit 5+ Dateien | F2 |
+| ADR-Pflicht (GP-03) | Automatisch bei modulübergreifenden Entscheidungen | F3 (KRITIS: F4) |
 | Anti-Pattern-Prüfung | AP-01–AP-08 bei jedem Task | Schweregrad laut AP-Tabelle |
-| Artefakte als Dateien | plan.md, tasks.md, research.md als Dateien, nicht inline | MAJOR |
+| Artefakte als Dateien | plan.md, tasks.md, research.md als Dateien, nicht inline | F2 |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md | n.a. |
 
 ## Erweiterbarkeit
@@ -217,7 +217,7 @@ Empfehlung: IMMER Analyze nach Tasks ausführen.
 | spec.md fehlt | → Fehlermeldung: "spec.md nicht gefunden — Clarify (Modus 2) oder Specify (Modus 1) zuerst ausführen" |
 | specforge.json fehlt | → Standard-Profil anwenden, Hinweis ausgeben |
 | Keine ADR-Entscheidungen identifizierbar | → Hinweis: "Keine modulübergreifenden Entscheidungen erkannt — ADR optional" |
-| Task mit 5+ Dateien ohne ExecPlan | → MAJOR-Finding, ExecPlan-Erstellung anbieten |
+| Task mit 5+ Dateien ohne ExecPlan | → F2-Befund, ExecPlan-Erstellung anbieten |
 | Research-Quellen nicht erreichbar | → Befund dokumentieren, Konfidenz auf "Niedrig" setzen |
 | Profil-Wechsel mid-session | → Plan-Scope anpassen (Research Pflicht/Optional, ADR-Tiefe) |
 | Brownfield ohne ARCHITECTURE.md | → ARCHITECTURE.md aus Code ableiten (Discover-Aspekte) |

@@ -1,0 +1,13 @@
+{
+  "beschreibung": "Beratungsprojekt ohne IKT-Risikomanagement-Framework, als F2 eingestuft. Perspektive advisory.",
+  "belegt": "Die zur Perspektive passende Einstufung passiert das Gate: F2 ergibt WARNING und einen Pflicht-Task vor Go-Live, keine Risiko-Akzeptanz durch das Leitungsorgan. Genau das war mit dem frueheren, dreistufigen Vokabular nicht darstellbar, dessen mittlere Stufe sich zu F3 uebersetzt.",
+  "exit_code": 0,
+  "ergebnis": "WARNING",
+  "befunde": [
+    {
+      "check": "nfr_gap",
+      "severity": "F2",
+      "subject": "IRM-01"
+    }
+  ]
+}

@@ -128,7 +128,7 @@ SpecForge prüft diese Checkliste und gibt ein Pass/Fail-Ergebnis aus:
 [ ] Constitution: vorhanden und referenziert
 [ ] specforge.json: vorhanden mit Profil
 [ ] STRIDE: laut Profil geprüft
-[ ] Keine offenen BLOCKER-Fragen
+[ ] Keine offenen F4-Fragen
 ── Ergebnis: PASS | FAIL (Befunde) ─────────
 ```
 
@@ -142,15 +142,15 @@ SpecForge prüft diese Checkliste und gibt ein Pass/Fail-Ergebnis aus:
 
 | Regel | Enforcement | Schweregrad |
 |-------|-----------|------------|
-| Vage Begriffe aus Blocklist | Jede Story gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | BLOCKER |
-| EARS-Pflicht | Jede Story hat explizit benanntes EARS-Pattern | MAJOR |
-| Gherkin-Minimum | ≥2 Szenarien pro Story (Happy Path + Fehlerfall) → AP-06 | MAJOR |
+| Vage Begriffe aus Blocklist | Jede Story gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | F4 |
+| EARS-Pflicht | Jede Story hat explizit benanntes EARS-Pattern | F4 |
+| Gherkin-Minimum | ≥2 Szenarien pro Story (Gate G1); nur Happy Path trotz ≥2 Szenarien → AP-06 (F3) | F4 |
 | Anti-Pattern-Prüfung | AP-01–AP-08 bei jeder Story-Erzeugung prüfen | Schweregrad laut AP-Tabelle |
 | Offene-Punkte-Marker | Fehlende Details als `[Offen: ...]` markieren statt Story zu blockieren | F3 (nach Clarify) |
 | Fragen-Budget | Max. 3 Fragen pro Runde an den Nutzer | n.a. |
-| Artefakt-Erzeugung als Datei | spec.md, constitution.md, specforge.json als Dateien, nicht inline | MAJOR |
+| Artefakt-Erzeugung als Datei | spec.md, constitution.md, specforge.json als Dateien, nicht inline | F2 |
 | Schweregrad-Zuweisung | Deterministisch nach enforcement-engine.md | n.a. |
-| ID-Schema | SF-[Präfix]-[NNN] Format (z.B. SF-FUNC-001) | MINOR |
+| ID-Schema | SF-[Präfix]-[NNN] Format (z.B. SF-FUNC-001) | F1 |
 
 ## Erweiterbarkeit
 

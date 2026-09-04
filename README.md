@@ -139,7 +139,7 @@ SpecForge wird:
 "Kläre die offenen Fragen in meiner Spec."
 ```
 
-SpecForge scannt die spec.md nach Lücken, vagen Begriffen und unbestätigten Annahmen. Fragen werden mit Schweregrad (BLOCKER / MAJOR / MINOR) priorisiert.
+SpecForge scannt die spec.md nach Lücken, vagen Begriffen und unbestätigten Annahmen. Fragen werden mit F-Stufe (F4 bis F1) priorisiert.
 
 ### Modus 3: Plan & Tasks — Von Spec zum Backlog
 
@@ -162,7 +162,7 @@ Neu in v3: Brownfield-vs-Greenfield-Erkennung, Explore-Phase mit parallelen Arch
 "Prüfe die Konsistenz meiner Artefakte."
 ```
 
-5-Dimensionen-Check: Spec↔Plan, Plan↔Tasks, Spec↔Tasks, GP-Compliance, Security/Compliance. Re-Analyze-Loop (max. 5 Iterationen) bis keine Blocker mehr offen sind.
+5-Dimensionen-Check: Spec↔Plan, Plan↔Tasks, Spec↔Tasks, GP-Compliance, Security/Compliance. Re-Analyze-Loop (max. 5 Iterationen) bis kein F4-Befund mehr offen ist.
 
 ### Modus 5: Checklist — Quality Gates
 
@@ -372,8 +372,8 @@ Die 10 Fachmodule folgen weitgehend derselben Struktur. Wo eine Sektion fehlt od
 SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Version wegräumt:
 
 - **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten, Zahlen- und Versionsangaben konsistent und baut das Release-Paket bei jedem Lauf, damit ein kaputtes Paket vor dem Tag auffällt. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
-- **Enforcement wirkt nur in der Session.** Phase Gates, F-Stufen und Anti-Pattern-Erkennung greifen, solange Claude den Skill geladen hat. Es gibt keinen Linter, der eine fertige `spec.md` außerhalb der Session prüft, und keinen Exit-Code für eine Pipeline.
-- **Zwei Schweregrad-Dialekte nebeneinander.** `enforcement-engine.md` und Modus 10 arbeiten mit F-Stufen, mehrere ältere Module noch mit BLOCKER/MAJOR/MINOR. Das Mapping am Ende von `references/checklists/kritis-nfr.md` deckt drei der sechs Stufen ab. Solange das so ist, hängt die gemeldete Stufe davon ab, welches Modul antwortet.
+- **Der Linter prüft Struktur, nicht Bedeutung.** `specforge check` erkennt fehlende EARS-Pattern, zu wenige Gherkin-Szenarien, Begriffe aus der Blocklist und Traceability-Lücken. Ob die EARS-Formulierung inhaltlich zum Pattern passt, ob ein NFR-Zielwert realistisch ist und ob die STRIDE-Bewertung zu Ende gedacht wurde, entscheidet weiterhin die Session oder ein Mensch. Der Linter meldet solche Punkte nicht als bestanden, sondern gar nicht.
+- **F-Stufen sind Konvention, nicht Typprüfung.** Alle Module, Checklisten und Templates sprechen F0 bis F5; `scripts/check-severity-dialect.py` hält das in der CI fest. Ob Claude im Einzelfall die richtige Stufe vergibt, prüft das Skript nicht. Es prüft nur, dass keine zweite Skala danebensteht.
 - **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.
 - **Das Paket ist ein Archiv aus Markdown.** Es installiert nichts und aktualisiert sich nicht. Ein kopierter Ordner erfährt nicht, dass es ein neueres Release gibt; der Abgleich läuft über die `VERSION` im Paket gegen die Releases im Repository.
 - **Deutsch als Arbeitssprache.** Der Skill antwortet englisch auf englische Eingaben, die Referenzdateien und Checklisten bleiben deutsch.
@@ -384,12 +384,89 @@ SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Versi
 
 Offen, in dieser Reihenfolge:
 
-1. **Schweregrade vereinheitlichen:** BLOCKER/MAJOR/MINOR in den Modulen auf F-Stufen umstellen, damit derselbe Mangel in jedem Modus dieselbe Stufe bekommt.
-2. **Beispiel-Spezifikationen ins Repo:** hier liegen nur Templates und Eingabe-Prompts, keine fertige Spec, an der sich ein Ergebnis messen ließe.
-3. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
-4. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
-5. **Erstes Release veröffentlichen:** Packaging-Skript, Paketprüfung und Release-Workflow liegen im Repo, der Tag `v3.2.0` ist noch nicht gesetzt. Bis dahin läuft `releases/latest/download/` ins Leere.
-6. **Englische Fassung** des Payloads.
+1. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
+2. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
+3. **Composite Action ausliefern:** `.github/actions/specforge-check/` liegt im Repo, ist aber erst über ein Tag ab dem nächsten Release als `uses:` erreichbar. Bis dahin ruft ein fremdes Repository den Linter über einen eigenen Checkout auf.
+4. **Englische Fassung** des Payloads.
+
+---
+
+## `specforge check`: Enforcement außerhalb der Session
+
+Die Phase Gates greifen, solange Claude den Skill geladen hat. Für alles danach, also Pull
+Request, Pipeline und Pre-Commit-Hook, liegt derselbe Regelsatz als Linter im Repo. Er braucht
+Python 3.8 oder neuer und sonst nichts: keine Installation, keine Abhängigkeit.
+
+```bash
+python3 cli/specforge check specs/mein-feature/spec.md
+```
+
+Liegt eine `tasks.md` neben der Spec, prüft der Linter zusätzlich die Traceability. Fehlt sie,
+läuft AP-07 nicht, und das steht in der Ausgabe: Gate G4 erscheint mit `SKIP` und nennt die beiden
+Prüfpunkte, die niemand angesehen hat; im JSON stehen sie unter `skipped_checks`. Am Exit-Code
+ändert das nichts, denn eine Spezifikation vor der Plan-Phase hat legitim noch keine `tasks.md`.
+Eine gelöschte oder falsch abgelegte Datei soll aber nicht wie ein bestandener Lauf aussehen. Eine
+`specforge.json` wird ab der Spec aufwärts gesucht und ausgewertet; `checks_config` überschreibt
+die Default-F-Stufen, perspektivenabhängig wie in der Session.
+
+Das Feld `extensions` nennt die Pakete unter `references/custom/`, die gelten sollen. Die
+Schreibweise des Namens spielt keine Rolle (`@dora`, `@DORA`, `dora`), ein unbekannter Name ist ein
+Aufrufproblem mit Exit 3 statt einer stillschweigend übergangenen Prüfung. Fehlt das Feld, gelten
+alle vorhandenen Pakete; `[]` heißt ausdrücklich: keine Extension.
+
+| Prüfpunkt | F-Stufe | Herkunft |
+|-----------|---------|----------|
+| Keine Story im erkannten Format (leere oder formatfremde Datei) | F4 | [docs/spec-format.md](docs/spec-format.md) |
+| EARS-Pattern fehlt oder ist unbekannt | F4 | Gate G1 |
+| Weniger als 2 Gherkin-Szenarien je Story | F4 | Gate G1 |
+| Begriff aus der AP-04-Blocklist | F4 | Anti-Pattern AP-04 |
+| SOPHIST-Trigger (`ggf.`, `zeitnah`, `etc.`) | F3 | Anti-Pattern AP-08 |
+| Offene `[Annahme:]`- oder `[Offen:]`-Marker (nur mit `--nach-clarify`) | F3 | SKILL.md, globale Regel 11 |
+| Task ohne Story-Referenz, Story ohne Task | F3 | Anti-Pattern AP-07 |
+| ID folgt nicht `SF-{Präfix}-{NNN}` | F1 | Modus 1 und 7 |
+| Doppelt vergebene Story-ID | F4 | Nachverfolgbarkeit |
+
+Exit-Codes: `0` sauber, `1` mindestens ein F4-Befund, `2` ein F3-Befund ohne dokumentierte
+Risiko-Akzeptanz, `3` Aufrufproblem. Eine Akzeptanz nach dem CONDITIONAL-Protokoll wird mit
+`--risiko-akzeptanz datei.md` übergeben und hebt Exit 2 auf.
+
+Der Linter liest die Datei als Protokoll, nicht als Fließtext. Ein Block hebt einen F3-Befund nur
+auf, wenn seine Überschrift `## Risiko-Akzeptanz: <Betreff>` den Betreff des Befunds als eigenes
+Wort nennt, alle Pflichtfelder aus
+[enforcement-engine.md I.5](references/enforcement/enforcement-engine.md) ausgefüllt sind (Gate,
+Prüfpunkt, F-Stufe, Risiko, Akzeptiert durch, Kompensation, Frist, Datum), die F-Stufe zum Befund
+passt und die Frist als Datum `YYYY-MM-DD` in der Zukunft liegt. Was daran fehlt, steht als eigene
+Zeile unter `Risiko-Akzeptanz:` in der Ausgabe. Eine Datei, die den Prüfpunkt nur erwähnt, ist
+keine Freigabe.
+
+Das gelesene Format ist in [docs/spec-format.md](docs/spec-format.md) beschrieben. Für fremde
+Repositories liegt eine Composite Action unter `.github/actions/specforge-check/`, ein
+Beispiel-Workflow in [docs/ci-example.yml](docs/ci-example.yml). Die Action ist erst ab dem
+nächsten Release über ein Tag erreichbar; im aktuellen Release `v3.2.0` gibt es sie noch nicht.
+
+### Golden Specs
+
+Unter `evals/golden/` liegen acht vollständige Spezifikationen mit ihrem erwarteten Ergebnis.
+Sie sind zugleich die ersten echten Specs im Repo, denn bis dahin gab es nur Templates, und der
+Regressionstest für den Linter:
+
+```bash
+python3 evals/run_static.py
+```
+
+Das Paar aus Fall 03 und 06 zeigt, was die Perspektive im Linter bewirkt: identische `spec.md`,
+zwei `specforge.json`, die sich nur in der Perspektive unterscheiden. Die als F4 markierte
+DORA-Lücke ist für ein Finanzunternehmen richtig eingestuft und bleibt ein einzelner Befund; für
+ein Beratungsprojekt sieht `@dora` F2 vor, und die zu harte Einstufung kommt als zweiter Befund
+`nfr_severity` dazu. Fall 04 zeigt die dazu passende mildere Einstufung, die das Gate mit einem
+Pflicht-Task vor Go-Live passiert. Das frühere, dreistufige Vokabular konnte diesen Unterschied
+nicht abbilden; die Umstellung ist in
+[docs/f-stufen-entscheidung.md](docs/f-stufen-entscheidung.md) begründet.
+
+Was der Linter dabei prüft, ist die Selbsteinstufung des Autors gegen das Manifest der Extension.
+Die F-Stufe einer Lücke liest er aus dem Marker `[NFR-Lücke F{n}: ...]`; eine Anforderung, die
+niemand als fehlend markiert hat, bemerkt er nicht. Fall 08 hält diese Grenze fest. Details in
+[evals/README.md](evals/README.md).
 
 ---
 
@@ -399,6 +476,8 @@ Offen, in dieser Reihenfolge:
 |----------|--------|
 | [docs/skill-als-blaupause.md](docs/skill-als-blaupause.md) | SpecForge als Muster für eigene Claude-Skills: Frontmatter, Modi, Output-Templates, Qualitätsregeln |
 | [docs/quellen-und-einfluesse.md](docs/quellen-und-einfluesse.md) | Herkunft der Methoden: Spec Kit, EARS, Gherkin, STRIDE, Cynefin und die übrigen |
+| [docs/spec-format.md](docs/spec-format.md) | Das maschinenlesbare Format der `spec.md`: Story-Kopf, Pattern-Feld, Scenario-Blöcke, Marker |
+| [docs/f-stufen-entscheidung.md](docs/f-stufen-entscheidung.md) | Warum F0 bis F5 der einzige Schweregrad-Dialekt ist und welcher Prüfpunkt sich dabei verschoben hat |
 | [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md) | Schema, Validierung und Kandidatenliste für eigene Regulierungs-Checklisten |
 
 ---

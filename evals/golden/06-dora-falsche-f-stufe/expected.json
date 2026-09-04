@@ -1,0 +1,18 @@
+{
+  "beschreibung": "Dieselbe Spec wie Fall 03, dieselbe F4-Einstufung, Perspektive advisory.",
+  "belegt": "Die andere Haelfte des Perspektiven-Paars und der Beleg fuer die F-Stufen-Tabelle: identische spec.md, nur die Perspektive gewechselt, und der Befund nfr_severity kommt hinzu. Fuer advisory sieht @dora F2 vor, F4 blockiert haerter als das Regelwerk verlangt. Der Linter prueft dabei die Einstufung des Autors gegen das Manifest; die Stufe der Luecke selbst stammt weiterhin aus dem Marker.",
+  "exit_code": 1,
+  "ergebnis": "FAIL",
+  "befunde": [
+    {
+      "check": "nfr_gap",
+      "severity": "F4",
+      "subject": "IRM-01"
+    },
+    {
+      "check": "nfr_severity",
+      "severity": "F3",
+      "subject": "IRM-01"
+    }
+  ]
+}
