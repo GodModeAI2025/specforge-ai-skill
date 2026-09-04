@@ -28,8 +28,8 @@ Zeilenzahlen werden nicht mehr behauptet, weil sie sich mit jeder
 Inhaltsaenderung verschieben. Das Skript meldet es, wenn eine solche Angabe
 zurueckkommt.
 
-Die Versionstabelle im README ist ein Changelog. Was dort steht, beschreibt
-den Stand einer alten Version und wird nicht geprueft.
+Die Versionsgeschichte steht in CHANGELOG.md und wird nicht geprueft. Was
+dort steht, beschreibt den Stand einer alten Version und bleibt so stehen.
 
 Exit 0 wenn alles stimmt, sonst 1. Nur Standardbibliothek.
 """
@@ -56,8 +56,6 @@ CHECKLIST_KEYWORDS = (
     ("nis2", "references/checklists/kritis-nfr.md"),
 )
 KEYWORD_WINDOW = 120
-
-CHANGELOG_SECTION = "Versionierung"
 
 
 def repo_root():
@@ -97,16 +95,9 @@ def checkpoint_counts(root):
 
 
 def markdown_segments(text):
-    """Zeilen des README ausserhalb des Changelogs, als (offset-text, zeile)."""
-    segments = []
-    section = ""
-    for number, line in enumerate(text.split("\n"), 1):
-        if line.startswith("## "):
-            section = line[3:].strip()
-        if section == CHANGELOG_SECTION:
-            continue
-        segments.append((line, number))
-    return segments
+    """Zeilen des README als (zeilentext, zeilennummer)."""
+    return [(line, number)
+            for number, line in enumerate(text.split("\n"), 1)]
 
 
 def html_segment(text):
