@@ -1,4 +1,7 @@
 # SpecForge — Specs schmieden, nicht schreiben
+
+[![CI](https://github.com/GodModeAI2025/specforge-ai-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/GodModeAI2025/specforge-ai-skill/actions/workflows/ci.yml)
+
 **Spec-Driven Requirements Engineering als KI-Skill für Claude.**
 
 SpecForge kombiniert [GitHub Spec Kit](https://github.com/github/spec-kit), Harness-Patterns (Golden Principles, Spec-First Chain, STRIDE, Folder Convention) mit EARS-Syntax, Gherkin Acceptance Criteria und automatischen KRITIS/NIS2-NFRs zu einem modularen, selbsttragenden Skill-System.
@@ -148,7 +151,7 @@ Neu in v3: Brownfield-vs-Greenfield-Erkennung, Explore-Phase mit parallelen Arch
 "Erstelle eine DSGVO-Compliance-Checklist."
 ```
 
-4 Checklist-Typen: Spec-Readiness (Typ A), Compliance (Typ B), Security (Typ C), Domain-spezifisch (Typ D). Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
+4 Checklist-Typen: Spec-Readiness (Typ A), Plan-Readiness (Typ B), Custom (Typ C), Domain (Typ D). Wiederverwendbare Prüflisten — "Unit Tests für Prosa".
 
 ### Modus 6: Stakeholder-Simulation
 
@@ -187,6 +190,15 @@ Neu in v3: 7 Management-Funktionen (Traceability Matrix, SFC-Audit, ExecPlan-Üb
 ```
 
 Reverse Spec: Vom bestehenden System rückwärts zur vollwertigen spec.md. Zwei verpflichtende QS-Schleifen — erst Vollständigkeitsprüfung, dann Konsistenz- und Stringenzprüfung. Neu in v3: 5W-Analyse als Pflichtblock, QS-Loops mit max. 5 Iterationen und Terminierung, eigene RE Gates (G0-RE bis G4-RE).
+
+### Modus 10: Derive — Testfälle aus Acceptance Criteria
+
+```
+"Leite Testfälle aus den Gherkin-Szenarien ab."
+"Erstelle die Testabdeckungsmatrix für dieses Feature."
+```
+
+Aus jedem Gherkin-Szenario wird ein Testfall `[Story-ID]-TC[NNN]` mit Vorbedingung, Aktion, erwartetem Ergebnis und Testdaten. Dazu die Testabdeckungsmatrix und eine Traceability-Prüfung Story zu Testfall. 6 Testfall-Typen, Pflicht-Scope je Profil.
 
 ---
 
@@ -261,60 +273,64 @@ design/                ← Wireframes, Datenmodelle, Diagramme
 
 ## Skill-Architektur
 
-SpecForge v3 ist als **Multi-File-Skill** aufgebaut — ein Orchestrator (SKILL.md) dispatcht zu 9 Fachmodulen und 9 Support-Dateien in einer `references/`-Verzeichnisstruktur:
+SpecForge ist als **Multi-File-Skill** aufgebaut: ein Orchestrator (`SKILL.md`) dispatcht zu 10 Fachmodulen und 13 Support-Dateien unter `references/`.
 
 ```
 specforge/
-├── SKILL.md                              (395 Zeilen — Orchestrator)
+├── SKILL.md                          Orchestrator: Dispatch, Gates, Pre-Flight
 └── references/
-    ├── 01-specify.md                     (163 Zeilen)
-    ├── 02-clarify.md                     (159 Zeilen)
-    ├── 03-plan.md                        (242 Zeilen)
-    ├── 04-analyze.md                     (141 Zeilen)
-    ├── 05-checklist.md                   (132 Zeilen)
-    ├── 06-stakeholder-sim.md             (155 Zeilen)
-    ├── 07-review.md                      (173 Zeilen)
-    ├── 08-management.md                  (199 Zeilen)
-    ├── 09-discover.md                    (215 Zeilen)
+    ├── 01-specify.md                 Modus 1: Specify
+    ├── 02-clarify.md                 Modus 2: Clarify
+    ├── 03-plan.md                    Modus 3: Plan & Tasks
+    ├── 04-analyze.md                 Modus 4: Analyze
+    ├── 05-checklist.md               Modus 5: Checklist
+    ├── 06-stakeholder-sim.md         Modus 6: Stakeholder-Simulation
+    ├── 07-review.md                  Modus 7: Review
+    ├── 08-management.md              Modus 8: Management & Traceability
+    ├── 09-discover.md                Modus 9: Discover
+    ├── 10-derive.md                  Modus 10: Derive
     ├── checklists/
-    │   ├── ears-syntax.md                (79 Zeilen)
-    │   ├── golden-principles.md          (100 Zeilen)
-    │   ├── kritis-nfr.md                (95 Zeilen)
-    │   └── stride-guide.md              (127 Zeilen)
+    │   ├── ears-syntax.md
+    │   ├── golden-principles.md
+    │   ├── kritis-nfr.md             41 Prüfpunkte, KRITIS/NIS2
+    │   └── stride-guide.md
     ├── templates/
-    │   ├── spec-template.md              (181 Zeilen)
-    │   └── constitution-template.md      (154 Zeilen)
+    │   ├── spec-template.md
+    │   └── constitution-template.md
     ├── conventions/
-    │   ├── folder-convention.md          (105 Zeilen)
-    │   └── spec-first-chain.md           (102 Zeilen)
-    └── enforcement/
-        └── enforcement-engine.md         (226 Zeilen)
+    │   ├── folder-convention.md
+    │   └── spec-first-chain.md
+    ├── enforcement/
+    │   └── enforcement-engine.md
+    └── custom/
+        ├── @dora/                    manifest.md + 58 Prüfpunkte
+        └── @bait/                    manifest.md + 8 Prüfpunkte, Stub
 ```
 
-**19 Dateien, 3.143 Zeilen total.**
+**Skill-Payload: 24 Dateien.** Orchestrator + 10 Fachmodule + 13 Support-Dateien. Die Angaben prüft die CI gegen den Verzeichnisbaum, siehe `scripts/check-docs-numbers.py`.
 
 ### Warum Multi-File?
 
-- **Separation of Concerns** — Orchestrator bleibt kompakt (395 Zeilen), Module werden nur bei Bedarf geladen
+- **Separation of Concerns** — Orchestrator bleibt kompakt, Module werden nur bei Bedarf geladen
 - **Wartbarkeit** — einzelne Module unabhängig aktualisierbar
 - **Erweiterbarkeit** — neue Modi, Checklisten oder Profile über `references/custom/` hinzufügbar
 - **Audit-freundlich** — jede Datei unabhängig bewertbar und testbar
-- **Context-Window-effizient** — statt 3.143 Zeilen auf einmal lädt Claude nur Orchestrator + benötigtes Modul
+- **Context-Window-effizient** — Claude lädt Orchestrator plus benötigtes Modul, nicht den ganzen Payload
 
-### Was jedes Modul enthält (Standard-Sektionen)
+### Was die Fachmodule enthalten (Standard-Sektionen)
 
-Jedes der 9 Fachmodule (M01–M09) folgt einer einheitlichen Struktur:
+Die 10 Fachmodule folgen weitgehend derselben Struktur. Wo eine Sektion fehlt oder anders heißt, sagt es die Tabelle:
 
 | Sektion | Beschreibung |
 |---------|-------------|
-| Profil-Steuerung | KRITIS/Standard/Startup-spezifisches Verhalten |
-| Ablauf (deterministisch) | Nummerierte Phasen mit konkreten Schritten |
-| Output-Template | Markdown-Template für erzeugte Artefakte |
-| Stringenz-Regeln (Enforcement) | Tabellarische Regeln mit Schweregraden |
-| Erweiterbarkeit | Custom-Extension-Punkte mit Pfaden |
-| Fehlerbehandlung | Tabellarische Edge-Case-Behandlung (≥5 Fälle) |
-| GP-Mapping | Zuordnung relevanter Golden Principles |
-| Erzeugte Artefakte | Artefakt-Tabelle mit Pfaden |
+| Profil-Steuerung | KRITIS/Standard/Startup-spezifisches Verhalten. Eigene Sektion in acht Modulen; `01-specify.md` behandelt die Profilwahl als Ablaufschritt, `02-clarify.md` unter „Wann Pflicht vs. Optional (profilabhängig)“ |
+| Ablauf (deterministisch) | Nummerierte Phasen mit konkreten Schritten. Eigene Überschrift in fünf Modulen; `01-specify.md`, `02-clarify.md`, `03-plan.md` und `10-derive.md` gliedern direkt nach Phasen, `08-management.md` nach Funktionen |
+| Output-Template | Markdown-Template für erzeugte Artefakte, in allen zehn Modulen vorhanden. Eigene Sektion „Output: …“ nur in `04-analyze.md`, `05-checklist.md`, `06-stakeholder-sim.md` und `07-review.md` |
+| Stringenz-Regeln (Enforcement) | Tabellarische Regeln mit Schweregraden. Fehlt in `04-analyze.md` und `05-checklist.md` |
+| Erweiterbarkeit | Custom-Extension-Punkte mit Pfaden. Fehlt in `04-analyze.md` und `05-checklist.md` |
+| Fehlerbehandlung | Tabellarische Edge-Case-Behandlung, vier bis neun Fälle je nach Modul |
+| GP-Mapping | Zuordnung relevanter Golden Principles. Fehlt in `01-specify.md`, `02-clarify.md` und `07-review.md` |
+| Erzeugte Artefakte | Artefakt-Tabelle mit Pfaden. In `02-clarify.md` heißt die Sektion „Erzeugte/aktualisierte Artefakte“ |
 
 ### Orchestrator-Features (SKILL.md)
 
@@ -323,7 +339,7 @@ Jedes der 9 Fachmodule (M01–M09) folgt einer einheitlichen Struktur:
 | Pre-Flight Checks | specforge.json laden, Profil-Resolution, Referenz-Verfügbarkeit |
 | Dispatch-Tabelle | Modus → Modul-Mapping mit Trigger-Keywords |
 | Profil-Resolution Cascade | CLI-Flag → specforge.json → Nutzer-Frage → Standard |
-| Calendar Versioning | `v<YYMM>` mit Suffix (`-green`, `-yellow`) für Audit-Status |
+| Artefakt-Versionierung | `YYYY.MM.DD.N` im `version:`-Feld jedes erzeugten Artefakts |
 | Session-Retrospektive | Automatische Zusammenfassung am Session-Ende |
 | Erweiterbarkeit | 8 Built-in Extension Points (EARS, Profile, APs, GPs, Modi, ...) |
 | Fehlerbehandlung | KRITISCH vs. OPTIONAL Referenzen mit spezifischem Verhalten |
@@ -331,151 +347,54 @@ Jedes der 9 Fachmodule (M01–M09) folgt einer einheitlichen Struktur:
 
 ---
 
-## Eigenen Skill nach diesem Muster erstellen
+## Grenzen
 
-SpecForge kann als Blaupause für eigene Skills dienen. Hier die Methodik:
+SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Version wegräumt:
 
-### 1. Frontmatter definieren
-```yaml
----
-name: MeinSkill
-description: Kurzbeschreibung mit Trigger-Keywords. Verwende diesen Skill
-  IMMER bei: keyword1, keyword2, keyword3. Auch bei "natürlichsprachlicher
-  Trigger", "weiterer Trigger".
----
-```
-
-**Regeln für gute Trigger:**
-- Technische Begriffe UND natürlichsprachliche Formulierungen
-- "Verwende diesen Skill IMMER bei:" signalisiert Claude den Aktivierungszeitpunkt
-- "Auch bei:" für indirekte Trigger ("prüfe meine X", "was fehlt bei Y")
-
-### 2. Session-Isolation festlegen
-
-Entscheide: Darf der Skill auf Memories/Vorwissen zugreifen oder ist jede Session ein Blank Slate?
-
-```markdown
-## Wissensquellen
-MeinSkill arbeitet ausschließlich mit:
-1. Session-Kontext
-2. Eigenrecherche via Web Search
-3. Skill-eigene Referenzen
-```
-
-### 3. Modi definieren
-
-Jeder Modus hat:
-- **Trigger:** Woran erkennt der Skill, dass dieser Modus gemeint ist?
-- **Phasen:** Welche Schritte werden durchlaufen?
-- **Artefakte:** Was wird erzeugt?
-- **Abschlusskriterium:** Wann ist der Modus fertig?
-
-```markdown
-### Modus N: [Name]
-**Trigger:** [Beschreibung]
-**Phase Na: [Schritt]**
-1. ...
-2. ...
-**Erzeugte Artefakte:**
-- ...
-```
-
-### 4. Output-Formate als Templates definieren
-
-Gib Claude exakte Templates mit Platzhaltern:
-
-```markdown
-## Output-Format: [Artefakt-Typ]
-\```markdown
-### [ID] [Titel]
-**Typ**: ...
-**Priorität**: ...
-#### Abschnitt
-[Inhalt]
-\```
-```
-
-### 5. Qualitätsregeln als enforceable Constraints
-
-Nicht "versuche X" sondern "X ist Pflicht":
-
-```markdown
-## Qualitätsregeln (immer aktiv)
-1. **Regel** — Enforcement-Beschreibung
-2. **Regel** — Enforcement-Beschreibung
-```
-
-### 6. Interaktionsregeln für Gesprächsführung
-
-```markdown
-## Interaktionsregeln
-1. Max. N Fragen pro Runde
-2. Nach [Aktion] einmal validieren
-3. Smarte Annahmen mit `[Annahme: ...]` kennzeichnen
-```
-
-### 7. Referenzen als separate Dateien
-
-Statt alles inline: Module in `references/` auslagern und per Dispatch-Tabelle referenzieren:
-
-```markdown
-## Dispatch-Tabelle
-| Modus | Modul | Laden |
-|-------|-------|-------|
-| 1: Specify | references/01-specify.md | Bei Modus-Aktivierung |
-```
-
-### 8. Standardisierte Modul-Sektionen
-
-Jedes Modul sollte enthalten: Profil-Steuerung, Ablauf, Output-Template, Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping, Erzeugte Artefakte.
-
-### 9. Skill testen
-
-Teste jeden Modus mit:
-- Minimalem Input (erkennt der Skill den Modus?)
-- Komplexem Input (erzeugt er alle Artefakte?)
-- Edge Cases (was passiert bei fehlendem Kontext?)
-- Sprachtest (Deutsch → Deutsch, Englisch → Englisch?)
+- **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten und Zahlenangaben konsistent. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
+- **Enforcement wirkt nur in der Session.** Phase Gates, F-Stufen und Anti-Pattern-Erkennung greifen, solange Claude den Skill geladen hat. Es gibt keinen Linter, der eine fertige `spec.md` außerhalb der Session prüft, und keinen Exit-Code für eine Pipeline.
+- **Zwei Schweregrad-Dialekte nebeneinander.** `enforcement-engine.md` und Modus 10 arbeiten mit F-Stufen, mehrere ältere Module noch mit BLOCKER/MAJOR/MINOR. Das Mapping am Ende von `references/checklists/kritis-nfr.md` deckt drei der sechs Stufen ab. Solange das so ist, hängt die gemeldete Stufe davon ab, welches Modul antwortet.
+- **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.
+- **Kein Release-Artefakt.** Kein Tag, kein Paket, kein Download. Installation heißt: Verzeichnis kopieren.
+- **Deutsch als Arbeitssprache.** Der Skill antwortet englisch auf englische Eingaben, die Referenzdateien und Checklisten bleiben deutsch.
 
 ---
 
-## Quellen & Einflüsse
+## Roadmap
 
-| Quelle | Beitrag zu SpecForge |
-|--------|---------------------|
-| [GitHub Spec Kit](https://github.com/github/spec-kit) | Spec-Driven Development Workflow, Slash-Commands, Phasenmodell |
-| Harness-Patterns | Golden Principles, Spec-First Chain, Folder Convention, Reviewer-Agenten, Hook-Architektur |
-| [EARS](https://ieeexplore.ieee.org/document/5328509) | Easy Approach to Requirements Syntax — 5 Requirement-Patterns |
-| [Gherkin](https://cucumber.io/docs/gherkin/) | Acceptance Criteria als Given/When/Then |
-| [STRIDE](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats) | Threat Modeling Framework — 6 Bedrohungskategorien |
-| KRITIS / NIS2 / DSGVO | Regulatorischer Rahmen für kritische Infrastrukturen |
-| Cynefin Framework (Dave Snowden, 1999) | Phase 0 — Komplexitätseinschätzung vor Modus-Wahl |
-| Impact Mapping (Gojko Adzic, 2012) | Phase 0 — Zielorientierte Scope-Validierung |
-| Socratic Method (Platon/Sokrates) | Clarify-Modus — Sokratische Spezifikationsklärung |
-| Five Whys (Taiichi Ohno, Toyota) | BLOCKER-Analyse in Clarify |
-| MECE Principle (Barbara Minto, McKinsey) | Analyze-Modus — Konsistenzprüfung über 5 Dimensionen |
-| Devil's Advocate + Steelmanning | Stakeholder-Simulation — systematische Gegenargumentation |
-| Morphological Box (Fritz Zwicky, 1940er) | Plan-Modus — Systematische Lösungsraum-Exploration |
-| Pugh Matrix (Stuart Pugh, 1991) | Plan-Modus — Strukturierte Technologiebewertung |
-| DDD taktisches Design (Eric Evans, 2003) | Datenmodell in spec.md |
-| BLUF + Pyramid Principle (US-Militär / Barbara Minto) | Spec-Zusammenfassungen |
-| MoSCoW (Dai Clegg, DSDM) | Story-Priorisierung |
-| ADR nach Nygard (Michael Nygard, 2011) | Architecture Decision Records |
+Offen, in dieser Reihenfolge:
+
+1. **Schweregrade vereinheitlichen:** BLOCKER/MAJOR/MINOR in den Modulen auf F-Stufen umstellen, damit derselbe Mangel in jedem Modus dieselbe Stufe bekommt.
+2. **Beispiel-Spezifikationen ins Repo:** hier liegen nur Templates und Eingabe-Prompts, keine fertige Spec, an der sich ein Ergebnis messen ließe.
+3. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
+4. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
+5. **Release mit Tag:** damit eine Version zitierbar wird und die Landingpage auf etwas Festes zeigen kann.
+6. **Englische Fassung** des Payloads.
+
+---
+
+## Weiterführende Dokumente
+
+| Dokument | Inhalt |
+|----------|--------|
+| [docs/skill-als-blaupause.md](docs/skill-als-blaupause.md) | SpecForge als Muster für eigene Claude-Skills: Frontmatter, Modi, Output-Templates, Qualitätsregeln |
+| [docs/quellen-und-einfluesse.md](docs/quellen-und-einfluesse.md) | Herkunft der Methoden: Spec Kit, EARS, Gherkin, STRIDE, Cynefin und die übrigen |
+| [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md) | Schema, Validierung und Kandidatenliste für eigene Regulierungs-Checklisten |
 
 ---
 
 ## Versionierung
 
-| Version | Datum | Änderung |
-|---------|-------|---------|
-| 1.0 | 2025-10 | Initial: Specify, Plan, Tasks, Review, Stakeholder-Sim, Management |
-| 2.0 | 2026-03 | +Clarify, +Analyze, +Checklist, +Research, +Quickstart. SpecKit v3 Alignment. RE Butler entfernt. Single-File-Architektur. |
-| 2.1 | 2026-03 | +Phase 0 (Cynefin + Impact Mapping), 15 methodische Frameworks mit Aktivieren-Eingrenzen-Prüfen-Muster, Sokratische Klärung, MECE-Analyse, Devil's Advocate + Steelmanning, Morphological Box + Pugh Matrix, DDD-Datenmodell, BLUF-Zusammenfassungen. |
-| 2.2 | 2026-03 | +Modus 9 Discover (Bestandsdokumentation & Reverse Spec). Zwei verpflichtende QS-Schleifen: Vollständigkeit + Konsistenz/Stringenz. Rückwärts-Validierung. discovery-protocol.md und migration-delta.md als neue Artefakte. |
-| 2.3 | 2026-03 | +Anhang I Enforcement Engine: State Machine (INIT→COMPLETE), Phase Gates G0–G8, Skip-Protokoll, Vage-Begriffe-Scanner, Anti-Pattern-Erkennung. +5W-Pflichtblock für Reverse-Engineering. +Artefakt-Vollständigkeits-Check. +Session-Status-Anzeige. 21 Interaktions- + 26 Qualitätsregeln. |
-| 3.0 (v202-green) | 2026-03 | **Architektur-Wechsel: Single-File → Multi-File.** Orchestrator (SKILL.md, 395 Zeilen) + 9 Fachmodule + 9 Support-Dateien = 19 Dateien, 3.143 Zeilen. Jedes Modul erhält standardisierte Sektionen: Stringenz-Regeln, Erweiterbarkeit, Fehlerbehandlung, GP-Mapping. Orchestrator mit Pre-Flight Checks, Profil-Resolution Cascade, Calendar Versioning, Audit Trail, Session-Retrospektive, 8 Built-in Extension Points. Deterministische Rollenauswahl (M06), GP-Score-Formel (M07), 7 Management-Funktionen (M08), QS-Loops mit Terminierung (M09). Autoresearch-optimiert: 600 Assertions, 6 Dimensionen, 68%→80% Score über 5 Iterationen. |
-| 3.1 | 2026-03 | **DORA-Integration & F-Stufen-System.** +F-Stufen (F0–F5) nach PrüfbV §27 ersetzen binäres Pass/Fail. +CONDITIONAL als dritter Gate-Ausgang (Risiko-Akzeptanz). +Perspektive als orthogonale Dimension zu Profil (Lieferkettenrolle). +Manifest-Auto-Detection für Extensions. +DORA-Extension (58 Prüfpunkte, 6 Kategorien, 3 Perspektiven). +BAIT-Stub (8 Prüfpunkte). +CONTRIBUTING-CHECKLISTS.md mit Schema, Validierung und Kandidatenliste. +Erweiterter Audit Trail mit F-Stufen und Perspektive. |
-| 3.2 | 2026-03 | **Qualitätserweiterungen aus RE-Skill-Analyse.** +AP-08 SOPHIST-Verletzung (Passiv, Negation, Generik, unvollständige Aufzählung, implizite Zeitangabe) mit SOPHIST-Blocklist. +`[Offen: ...]`-Marker für unvollständige Stories (F3 nach Clarify). +Story-Quality-Score (SQS) als numerische Qualitätsbewertung (0–5) in Review und Analyze. +Modus 10 Derive: Testfall-Ableitung aus Gherkin-Szenarien mit Testabdeckungsmatrix, 6 Testfall-Typen, Traceability. +MCP-Kontext-Pre-Flight in Specify für externe Quellen (Figma, GitHub, Confluence, Jira). |
+SpecForge führt zwei Versionen, und nur diese zwei:
+
+| Gegenstand | Schema | Ort |
+|------------|--------|-----|
+| Skill-Version | `MAJOR.MINOR`, aktuell 3.2 | [CHANGELOG.md](CHANGELOG.md), Badge auf der Landingpage |
+| Artefakt-Version | `YYYY.MM.DD.N`, N = laufende Nummer am selben Tag | `version:`-Feld im Header jeder erzeugten `spec.md`, `constitution.md` und `plan.md` |
+
+Verbindlich ist die Artefakt-Versionierung in [SKILL.md](SKILL.md), Abschnitt Versionierung. Die Templates unter `references/templates/` geben dasselbe Schema vor. Die früher genannte Schreibweise `v<YYMM>-green` war ein Audit-Status, keine Version, und wird nicht mehr verwendet.
+
+Die Versionsgeschichte von 1.0 bis 3.2 steht in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

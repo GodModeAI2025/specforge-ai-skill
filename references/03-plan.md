@@ -206,7 +206,7 @@ Empfehlung: IMMER Analyze nach Tasks ausführen.
 |-------------------|-----|-----|
 | Neue Task-Typen | Relevanz-Matrix in spec-first-chain.md erweitern | Convention |
 | Branchenspezifische Plan-Checklisten | `references/custom/@branche-compliance/plan-checks.md` | Custom Extension |
-| Neue Anti-Patterns | AP-08+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
+| Neue Anti-Patterns | AP-09+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
 | Custom Research-Templates | `references/custom/research-template-custom.md` | Custom Extension |
 | Neue Architektur-Bewertungsmethoden | `references/custom/architecture-methods.md` | Custom Extension |
 

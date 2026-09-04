@@ -157,7 +157,7 @@ SpecForge prüft diese Checkliste und gibt ein Pass/Fail-Ergebnis aus:
 | Erweiterungspunkt | Wie | Wo |
 |-------------------|-----|-----|
 | Neue EARS-Patterns | `references/custom/ears-patterns-custom.md` | Custom Extension |
-| Neue Anti-Patterns | AP-08+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
+| Neue Anti-Patterns | AP-09+ in `references/custom/anti-patterns-custom.md` | Custom Extension |
 | Neue NFR-Kategorien | `references/custom/nfr-custom.md` | Custom Extension |
 | Branchenspezifische Checklisten | `references/custom/@branche-compliance/` | Custom Extension |
 | Neue GP-Checks | GP-11+ in `references/custom/golden-principles-custom.md` | Custom Extension |
