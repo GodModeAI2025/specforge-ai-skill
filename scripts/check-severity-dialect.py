@@ -19,9 +19,12 @@ Das Skript prueft drei Dinge:
    Versionsnotation MAJOR.MINOR.PATCH ist keine Schweregrad-Angabe und wird
    vorher aus dem Text genommen. Gesucht wird ohne Ruecksicht auf Gross- und
    Kleinschreibung, denn "Ein Blocker im Gate" ist die naheliegende deutsche
-   Schreibweise und war bis dahin unsichtbar. Ausgenommen sind die
-   Meldekategorien "Major Incident" und "Klassifikation als Major" aus DORA
-   Art. 19: dort ist Major ein Vorfalltyp und keine Schwere.
+   Schreibweise und war bis dahin unsichtbar. Ausgenommen sind zwei
+   woertliche Begriffe aus DORA Art. 19, gross geschrieben und sonst nichts:
+   "Major Incident" samt Bindestrich- und Pluralform und "Klassifikation als
+   Major". Dort ist Major ein Vorfalltyp und keine Schwere. Die deutsche
+   Einstufungsformel "gilt als Major" faellt nicht darunter und wird
+   gemeldet.
 2. Die Kurzform der alten Skala, die Spalte "(B/M/m)", kommt nirgends mehr
    vor. Sie ist derselbe zweite Dialekt in drei Buchstaben und wurde von der
    Suche nach den ausgeschriebenen Werten nie gesehen.
@@ -59,10 +62,14 @@ SHORT_SCALE_RE = re.compile(r"\(\s*B\s*/\s*M\s*/\s*m\s*\)")
 SEMVER_RE = re.compile(r"\{?MAJOR\}?\.\{?MINOR\}?(?:\.\{?PATCH\}?)?", re.I)
 # Fachbegriffe der Regulierung. DORA Art. 19 fuehrt den "Major Incident" als
 # Meldekategorie; das Wort bezeichnet dort einen Vorfalltyp und nicht die
-# Schwere eines Befunds. Diese Liste ist so kurz wie moeglich zu halten:
-# jeder weitere Eintrag ist eine Stelle, an der der zweite Dialekt
+# Schwere eines Befunds. Ausgenommen sind nur die beiden woertlichen
+# Begriffe, und bewusst ohne IGNORECASE: ein weiter gefasstes "als Major"
+# haette genau die deutsche Einstufungsformel freigegeben ("gilt als Major",
+# "wird als major eingestuft"), also den Satzbau, in dem der zweite Dialekt
+# im Fliesstext ueberhaupt auftritt. Diese Liste ist so kurz wie moeglich zu
+# halten: jeder weitere Eintrag ist eine Stelle, an der der zweite Dialekt
 # zurueckkommen kann.
-FACHBEGRIFF_RE = re.compile(r"Major[- ]Incidents?|als Major\b", re.I)
+FACHBEGRIFF_RE = re.compile(r"Major[- ]Incidents?|Klassifikation als Major")
 F_LEVEL_RE = re.compile(r"\bF\s?(\d+)\b")
 
 SKIP_DIRS = (".git", "dist", "node_modules", "__pycache__")
