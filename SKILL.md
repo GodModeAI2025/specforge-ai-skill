@@ -232,8 +232,13 @@ Referenzdateien sind in zwei Kategorien eingeteilt:
 **OPTIONAL (Fehlen = Skip mit Warnung):**
 - `references/checklists/stride-guide.md` — STRIDE übersprungen (außer KRITIS: dort KRITISCH)
 - `references/checklists/kritis-nfr.md` — KRITIS-NFRs übersprungen (außer KRITIS-Profil: dort KRITISCH)
-- `references/custom/*.md` — Custom-Checks übersprungen
+- `references/custom/*.md` und `references/custom/@*/**/*.md` — Custom-Checks übersprungen
 - `references/conventions/folder-convention.md` — Folder-Check übersprungen
+- Jeder weitere Pfad unterhalb `references/custom/` — noch nicht angelegter Erweiterungspunkt, Skip mit Warnung
+
+**Nicht gelistete Pfade:** Ein `references/`-Pfad außerhalb von `references/custom/`, der in keiner der beiden Listen steht (etwa die Modul-Dateien der Dispatch-Tabelle), gilt als Core. Fehlt er, wird das für den Modus, der ihn lädt, wie KRITISCH behandelt.
+
+**Ausnahme innerhalb von `references/custom/`:** Dateien, die eine vorhandene `manifest.md` unter `Enthaltene Checklisten` auflistet, gehören fest zum Extension-Paket. Sie dürfen nicht fehlen; ihr Fehlen ist ein Paketfehler, kein offener Erweiterungspunkt.
 
 **Fehlerfall-Verhalten:**
 - KRITISCHE Referenz fehlt → Gate FAIL mit Fehlermeldung: `"[Datei] nicht gefunden — Prüfung nicht möglich. Bitte references/-Ordner prüfen."`
