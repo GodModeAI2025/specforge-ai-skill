@@ -1,0 +1,13 @@
+{
+  "beschreibung": "Beratungsprojekt ohne IKT-Risikomanagement-Framework. Perspektive advisory.",
+  "belegt": "Der Fall, an dem das alte Vokabular scheiterte: seine mittlere Stufe ergibt F3 und damit eine Risiko-Akzeptanz durch das Leitungsorgan, die F-Stufen-Tabelle von @dora sieht F2 vor. Das Gate ist passierbar, der Pflicht-Task bleibt.",
+  "exit_code": 0,
+  "ergebnis": "WARNING",
+  "befunde": [
+    {
+      "check": "nfr_gap",
+      "severity": "F2",
+      "subject": "IRM-01"
+    }
+  ]
+}

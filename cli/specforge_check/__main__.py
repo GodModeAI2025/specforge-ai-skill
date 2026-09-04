@@ -26,10 +26,10 @@ if __package__ in (None, ""):
     sys.path.insert(0, os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))))
     from specforge_check import config as config_mod
-    from specforge_check import report, rules, spec as spec_mod
+    from specforge_check import extensions, report, rules, spec as spec_mod
 else:
     from . import config as config_mod
-    from . import report, rules, spec as spec_mod
+    from . import extensions, report, rules, spec as spec_mod
 
 ACCEPT_BLOCK_RE = re.compile(r"^##\s+Risiko-Akzeptanz\s*:", re.M)
 
@@ -88,6 +88,9 @@ def build_parser():
                              "beanstanden")
     parser.add_argument("--risiko-akzeptanz", dest="acceptance",
                         help="Datei mit CONDITIONAL-Akzeptanz-Protokollen")
+    parser.add_argument("--extensions", dest="extensions",
+                        help="Wurzel mit references/custom/ (sonst dieses "
+                             "Repository)")
     parser.add_argument("--json", dest="as_json", action="store_true",
                         help="Befunde als JSON statt als Gate-Ausgabe")
     return parser
@@ -112,7 +115,12 @@ def main(argv=None):
     document = spec_mod.parse_spec(spec_path)
     tasks = spec_mod.parse_tasks(tasks_path) if tasks_path else None
 
-    findings = rules.run(document, tasks, configuration, args.after_clarify)
+    root = args.extensions or os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.abspath(__file__))))
+    packages = extensions.load(root, configuration.data.get("extensions"))
+
+    findings = rules.run(document, tasks, configuration, args.after_clarify,
+                         packages)
     accepted = accepted_findings(findings, load_acceptance(args.acceptance))
 
     if args.as_json:
@@ -123,6 +131,8 @@ def main(argv=None):
               % (configuration.profile or "nicht gesetzt",
                  configuration.perspective or "nicht gesetzt",
                  config_path or "keine"))
+        print("Extensions: %s"
+              % (", ".join(sorted(packages)) if packages else "keine"))
         if configuration.legacy:
             print("Hinweis: specforge.json ohne severity_model — "
                   "Legacy-Werte werden beim Einlesen einmal uebersetzt.")

@@ -146,12 +146,19 @@ Schritt 4 bleibt Handarbeit in der Session.
 - [ ] Trigger-Begriffe sind spezifisch genug (keine generischen Begriffe wie "Sicherheit")?
 - [ ] Perspektiven-Mapping stimmt mit Checkliste überein?
 
-### Schritt 4: Smoke-Test
+### Schritt 4: Smoke-Test und Golden-Fälle
 
 - [ ] Modus 5 (Checklist) mit der neuen Extension gegen eine Minimal-Spec ausführen
 - [ ] Mindestens 1 NFR-Lücke korrekt erkannt und mit F-Stufe markiert?
 - [ ] Perspektive-Abfrage funktioniert (wenn Pflicht-Abfrage definiert)?
 - [ ] Extension wird bei Trigger-Begriff automatisch geladen?
+- [ ] Mindestens zwei Golden-Fälle unter `evals/golden/` abgelegt: derselbe fehlende Prüfpunkt
+      einmal aus der strengsten und einmal aus der mildesten Perspektive, je mit `expected.json`?
+- [ ] `python3 evals/run_static.py` läuft grün?
+
+Der zweite Punkt ist der eigentliche Beleg dafür, dass die F-Stufen-Zuordnung des Manifests
+funktioniert. Eine Extension, deren Perspektiven-Spalten nie unterschiedliche Ergebnisse
+erzeugen, braucht keine Perspektiven.
 
 ---
 

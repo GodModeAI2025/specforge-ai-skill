@@ -1,0 +1,18 @@
+{
+  "beschreibung": "Beratungsprojekt, das dieselbe Luecke wie Fall 04 als F4 einstuft.",
+  "belegt": "Eine zu hart eingestufte Luecke ist selbst ein Befund. Genau so entsteht ein Gate, das strenger blockiert als das Regelwerk verlangt.",
+  "exit_code": 1,
+  "ergebnis": "FAIL",
+  "befunde": [
+    {
+      "check": "nfr_gap",
+      "severity": "F4",
+      "subject": "IRM-01"
+    },
+    {
+      "check": "nfr_severity",
+      "severity": "F3",
+      "subject": "IRM-01"
+    }
+  ]
+}

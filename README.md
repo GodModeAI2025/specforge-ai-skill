@@ -424,6 +424,22 @@ Das gelesene Format ist in [docs/spec-format.md](docs/spec-format.md) beschriebe
 Repositories liegt eine Composite Action unter `.github/actions/specforge-check/`, ein
 Beispiel-Workflow in [docs/ci-example.yml](docs/ci-example.yml).
 
+### Golden Specs
+
+Unter `evals/golden/` liegen sechs vollständige Spezifikationen mit ihrem erwarteten Ergebnis.
+Sie sind die ersten echten Specs im Repo — bis dahin gab es nur Templates — und zugleich der
+Regressionstest für den Linter:
+
+```bash
+python3 evals/run_static.py
+```
+
+Das Paar aus Fall 03 und 04 zeigt, wozu die F-Stufen da sind: dieselbe fehlende
+DORA-Anforderung ergibt für ein Finanzunternehmen F4 und blockiert, für ein Beratungsprojekt F2
+und erzeugt einen Pflicht-Task vor Go-Live. Das frühere, dreistufige Vokabular konnte diesen
+Unterschied nicht abbilden; die Umstellung ist in
+[docs/f-stufen-entscheidung.md](docs/f-stufen-entscheidung.md) begründet. Details in [evals/README.md](evals/README.md).
+
 ---
 
 ## Weiterführende Dokumente

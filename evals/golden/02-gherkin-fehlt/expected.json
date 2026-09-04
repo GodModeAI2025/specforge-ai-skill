@@ -1,0 +1,13 @@
+{
+  "beschreibung": "Eine Story mit einem einzigen Szenario. Gate G1 blockiert.",
+  "belegt": "Das Gherkin-Minimum ist F4 und nicht F3. Vor der Vereinheitlichung fuehrten vier Module dazu die mittlere Stufe des alten Vokabulars, die sich zu F3 uebersetzt.",
+  "exit_code": 1,
+  "ergebnis": "FAIL",
+  "befunde": [
+    {
+      "check": "gherkin_minimum",
+      "severity": "F4",
+      "subject": "SF-OPS-001"
+    }
+  ]
+}

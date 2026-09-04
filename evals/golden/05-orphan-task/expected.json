@@ -1,0 +1,13 @@
+{
+  "beschreibung": "tasks.md mit einem Task ohne Story-Referenz.",
+  "belegt": "AP-07 ist F3, nicht F4: das Gate ist mit dokumentierter Risiko-Akzeptanz passierbar. Exit 2 unterscheidet diesen Fall von einem blockierenden Befund.",
+  "exit_code": 2,
+  "ergebnis": "CONDITIONAL",
+  "befunde": [
+    {
+      "check": "orphan_task",
+      "severity": "F3",
+      "subject": "T-002"
+    }
+  ]
+}

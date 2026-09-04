@@ -44,6 +44,9 @@ jobs:
       - name: Linter gegen die Fixtures fahren
         run: python scripts/check-linter-fixtures.py
 
+      - name: Golden Specs pruefen
+        run: python evals/run_static.py
+
       - name: Release-Artefakt bauen
         run: python scripts/package-skill.py dist/specforge-skill.zip
 

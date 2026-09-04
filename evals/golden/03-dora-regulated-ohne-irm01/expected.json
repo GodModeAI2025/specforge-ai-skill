@@ -1,0 +1,13 @@
+{
+  "beschreibung": "Finanzunternehmen ohne IKT-Risikomanagement-Framework. Perspektive regulated_entity.",
+  "belegt": "Dieselbe Luecke wie in Fall 04, andere Perspektive, andere Stufe. Fuer regulated_entity fuehrt die F-Stufen-Tabelle von @dora F4, das Gate blockiert.",
+  "exit_code": 1,
+  "ergebnis": "FAIL",
+  "befunde": [
+    {
+      "check": "nfr_gap",
+      "severity": "F4",
+      "subject": "IRM-01"
+    }
+  ]
+}

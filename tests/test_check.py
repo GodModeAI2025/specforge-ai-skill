@@ -22,6 +22,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "cli"))
 
 from specforge_check import config as config_mod  # noqa: E402
+from specforge_check import extensions  # noqa: E402
 from specforge_check import rules, severity, spec as spec_mod  # noqa: E402
 from specforge_check.__main__ import main  # noqa: E402
 
@@ -211,6 +212,85 @@ class ExitCodeTest(unittest.TestCase):
         self.assertEqual(data["stories"], ["SF-OPS-001"])
         self.assertEqual(data["findings"][0]["severity"], "F4")
         self.assertEqual(data["findings"][0]["check"], "gherkin_minimum")
+
+
+class ExtensionTest(unittest.TestCase):
+    def setUp(self):
+        self.packages = extensions.load(ROOT)
+
+    def test_dora_tabelle_wird_gelesen(self):
+        self.assertIn("@dora", self.packages)
+        self.assertIn("IRM", self.packages["@dora"])
+
+    def test_perspektive_bestimmt_die_stufe(self):
+        """Dieselbe Kategorie, drei Perspektiven, drei Stufen."""
+        self.assertEqual(
+            extensions.allowed_levels(self.packages, "IRM",
+                                      "regulated_entity"), {"F4"})
+        self.assertEqual(
+            extensions.allowed_levels(self.packages, "IRM", "advisory"),
+            {"F2"})
+
+    def test_mehrdeutige_zelle_laesst_beide_stufen_zu(self):
+        """'F4 (CTPP) / F3' ist eine Bedingung, kein Tippfehler."""
+        nur_dora = extensions.load(ROOT, ["@dora"])
+        self.assertEqual(
+            extensions.allowed_levels(nur_dora, "IRM", "ict_provider"),
+            {"F3", "F4"})
+
+    def test_kollidierendes_kuerzel_vereinigt_die_stufen(self):
+        """IRM fuehren @dora und @bait mit verschiedener Bedeutung.
+
+        Sind beide aktiv, ist das Kuerzel nicht eindeutig. Der Checker
+        beanstandet dann nur, was keine der beiden Extensions vorsieht.
+        """
+        self.assertIn("IRM", self.packages["@dora"])
+        self.assertIn("IRM", self.packages["@bait"])
+        self.assertEqual(
+            extensions.allowed_levels(self.packages, "IRM", "advisory"),
+            {"F2"})
+        self.assertEqual(
+            extensions.allowed_levels(self.packages, "IRM", "ict_provider"),
+            {"F3", "F4"})
+
+    def test_unbekannte_kategorie_bleibt_ungeprueft(self):
+        self.assertIsNone(
+            extensions.allowed_levels(self.packages, "ZZZ", "advisory"))
+
+    def test_default_spalte_greift_ohne_perspektive(self):
+        self.assertEqual(
+            extensions.allowed_levels(self.packages, "GOV", None), {"F3"})
+
+
+class NfrLueckeTest(unittest.TestCase):
+    """Der Fall, an dem das Legacy-Mapping scheiterte.
+
+    Dieselbe fehlende Anforderung bekommt je nach Perspektive F4 oder F2.
+    Ueber BLOCKER/MAJOR/MINOR waren beide Werte nicht darstellbar.
+    """
+
+    def _run(self, name):
+        path = os.path.join(ROOT, "evals", "golden", name, "spec.md")
+        document = spec_mod.parse_spec(path)
+        configuration = config_mod.load(config_mod.find(path))
+        packages = extensions.load(ROOT)
+        return rules.run(document, None, configuration, False, packages)
+
+    def test_regulated_entity_blockiert(self):
+        findings = self._run("03-dora-regulated-ohne-irm01")
+        self.assertEqual([(f.check, f.level, f.subject) for f in findings],
+                         [("nfr_gap", "F4", "IRM-01")])
+
+    def test_advisory_erzeugt_pflicht_task(self):
+        findings = self._run("04-dora-advisory-ohne-irm01")
+        self.assertEqual([(f.check, f.level, f.subject) for f in findings],
+                         [("nfr_gap", "F2", "IRM-01")])
+
+    def test_zu_harte_einstufung_ist_ein_befund(self):
+        findings = self._run("06-dora-falsche-f-stufe")
+        self.assertEqual([(f.check, f.level) for f in findings],
+                         [("nfr_gap", "F4"), ("nfr_severity", "F3")])
+        self.assertIn("verlangt F2", findings[1].message)
 
 
 class KonfigurationsWirkungTest(unittest.TestCase):

@@ -1,0 +1,10 @@
+{
+  "profile": "standard",
+  "perspective": "advisory",
+  "severity_model": {
+    "F4": "FAIL", "F3": "CONDITIONAL", "F2": "WARNING",
+    "F1": "INFO", "F0": "PASS", "F5": "SKIP"
+  },
+  "extensions": ["@dora"],
+  "audit": true
+}

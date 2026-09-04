@@ -21,12 +21,14 @@ LABELS = {
     "id_unique": "ID-Eindeutigkeit",
     "orphan_task": "Orphan Task (AP-07)",
     "orphan_story": "Orphan Spec (AP-07)",
+    "nfr_gap": "NFR-Luecke",
+    "nfr_severity": "F-Stufe der NFR-Luecke",
 }
 
 GATES = (
     ("G1", "Specify → Clarify",
      ("id_schema", "id_unique", "ears_coverage", "gherkin_minimum",
-      "vague_terms", "sophist", "open_marker")),
+      "vague_terms", "sophist", "open_marker", "nfr_gap", "nfr_severity")),
     ("G4", "Analyze → Implement", ("orphan_task", "orphan_story")),
 )
 

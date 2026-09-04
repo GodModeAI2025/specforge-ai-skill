@@ -14,6 +14,11 @@ im Payload:
   id_unique         F4  doppelte ID bricht die Nachverfolgbarkeit
   orphan_task       F3  AP-07, references/08-management.md TM-02
   orphan_story      F3  AP-07, references/08-management.md
+  nfr_severity      F3  falsch eingestufte NFR-Luecke, Gate G1 NFR-Scan
+
+Die Regel nfr_gap hat keine Default-Stufe. Ihre F-Stufe steht im Marker
+selbst ([NFR-Lücke F4: IRM-01 — ...]), so wie enforcement-engine.md das
+NFR-Luecken-Format festlegt.
 
 Wer einen anderen Wert braucht, setzt ihn in checks_config, nicht hier.
 """
@@ -59,7 +64,11 @@ DEFAULTS = {
     "id_unique": "F4",
     "orphan_task": "F3",
     "orphan_story": "F3",
+    "nfr_severity": "F3",
 }
+
+# Kategorie-Praefix einer NFR-Luecke: IRM-01, DAT-03, AVA-02.
+NFR_ID_RE = re.compile(r"^([A-Z]{2,5})-(\d{2})\b")
 
 GHERKIN_MINIMUM = 2
 
@@ -234,7 +243,44 @@ def check_traceability(spec, tasks, config):
     return findings
 
 
-def run(spec, tasks, config, after_clarify=False):
+def check_nfr_gaps(spec, config, packages):
+    """Dokumentierte NFR-Luecken und ihre F-Stufe.
+
+    Eine Luecke ist ein Befund in der Stufe, die der Marker nennt. Zusaetzlich
+    wird die Stufe gegen die F-Stufen-Tabelle der aktiven Extension geprueft:
+    dieselbe Kategorie bekommt je nach Perspektive eine andere Stufe, und
+    genau das ist der Punkt, an dem eine pauschale Einstufung ein Gate zu
+    hart oder zu weich macht.
+    """
+    from .extensions import allowed_levels
+    findings = []
+    severity_level = level_for(config, "nfr_severity")
+    for story in spec.stories:
+        for number, level, text in story.nfr_gaps:
+            identifier = text.split("—")[0].strip()
+            match = NFR_ID_RE.match(identifier)
+            category = match.group(1) if match else None
+            findings.append(Finding(
+                "nfr_gap", level, identifier or story.id,
+                "NFR-Luecke in Story %s" % story.id, number,
+                "Anforderung spezifizieren oder F5 mit Begruendung "
+                "dokumentieren"))
+            if not category or not packages:
+                continue
+            allowed = allowed_levels(packages, category,
+                                     config.perspective)
+            if allowed and level not in allowed:
+                findings.append(Finding(
+                    "nfr_severity", severity_level, identifier,
+                    "als %s eingestuft, die Perspektive %s verlangt %s"
+                    % (level, config.perspective or "_default",
+                       " oder ".join(sorted(allowed))), number,
+                    "F-Stufe aus der F-Stufen-Zuordnung der Extension "
+                    "uebernehmen"))
+    return findings
+
+
+def run(spec, tasks, config, after_clarify=False, packages=None):
     findings = []
     findings.extend(check_ids(spec, config))
     findings.extend(check_ears(spec, config))
@@ -242,5 +288,6 @@ def run(spec, tasks, config, after_clarify=False):
     findings.extend(check_vague(spec, config))
     findings.extend(check_sophist(spec, config))
     findings.extend(check_markers(spec, config, after_clarify))
+    findings.extend(check_nfr_gaps(spec, config, packages or {}))
     findings.extend(check_traceability(spec, tasks, config))
     return findings

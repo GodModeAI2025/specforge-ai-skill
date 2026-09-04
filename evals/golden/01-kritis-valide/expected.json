@@ -1,0 +1,7 @@
+{
+  "beschreibung": "Vollstaendige KRITIS-Spec mit zwei Stories und passender tasks.md. Gate G1 und die Traceability-Pruefung bleiben ohne Befund.",
+  "belegt": "Der Forward-Path laesst sich ohne Befund durchlaufen. Ohne diesen Fall wuerde die Suite nur zeigen, dass der Checker etwas findet, nicht dass er das Richtige findet.",
+  "exit_code": 0,
+  "ergebnis": "PASS",
+  "befunde": []
+}
