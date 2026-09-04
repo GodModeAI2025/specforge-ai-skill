@@ -401,7 +401,11 @@ Python 3.8 oder neuer und sonst nichts: keine Installation, keine Abhängigkeit.
 python3 cli/specforge check specs/mein-feature/spec.md
 ```
 
-Liegt eine `tasks.md` neben der Spec, prüft der Linter zusätzlich die Traceability. Eine
+Liegt eine `tasks.md` neben der Spec, prüft der Linter zusätzlich die Traceability. Fehlt sie,
+läuft AP-07 nicht, und das steht in der Ausgabe: Gate G4 erscheint mit `SKIP` und nennt die beiden
+Prüfpunkte, die niemand angesehen hat; im JSON stehen sie unter `skipped_checks`. Am Exit-Code
+ändert das nichts, denn eine Spezifikation vor der Plan-Phase hat legitim noch keine `tasks.md`.
+Eine gelöschte oder falsch abgelegte Datei soll aber nicht wie ein bestandener Lauf aussehen. Eine
 `specforge.json` wird ab der Spec aufwärts gesucht und ausgewertet; `checks_config` überschreibt
 die Default-F-Stufen, perspektivenabhängig wie in der Session.
 

@@ -26,12 +26,21 @@ LABELS = {
     "nfr_severity": "F-Stufe der NFR-Luecke",
 }
 
+# Die AP-07-Pruefpunkte. Sie brauchen eine tasks.md; ohne sie hat dieser
+# Lauf sie nicht angesehen.
+TRACEABILITY_CHECKS = ("orphan_task", "orphan_story")
+
+# Die Stufe "nicht anwendbar". Symbol und Gate-Ergebnis stehen in
+# severity.GATE und werden von dort geholt, damit die F-Stufen-Tabelle aus
+# enforcement-engine.md genau eine Abbildung im Code hat.
+SKIP_LEVEL = "F5"
+
 GATES = (
     ("G1", "Specify → Clarify",
      ("no_stories", "id_schema", "id_unique", "ears_coverage",
       "gherkin_minimum", "vague_terms", "sophist", "open_marker",
       "nfr_gap", "nfr_severity")),
-    ("G4", "Analyze → Implement", ("orphan_task", "orphan_story")),
+    ("G4", "Analyze → Implement", TRACEABILITY_CHECKS),
 )
 
 RULE = "─"
@@ -60,11 +69,25 @@ def render(spec, findings, tasks, accepted):
         by_check.setdefault(finding.check, []).append(finding)
 
     for gate, title, checks in GATES:
-        active = [c for c in checks if c in by_check]
-        if gate == "G4" and tasks is None:
-            continue
         out.append(line("Gate %s: %s" % (gate, title)))
+        if gate == "G4" and tasks is None:
+            # Frueher fiel das Gate hier kommentarlos aus der Ausgabe. Eine
+            # geloeschte oder falsch abgelegte tasks.md nahm damit die
+            # AP-07-Pruefung heraus, und uebrig blieb ein Bericht, der nach
+            # bestandenem Lauf aussah. Das Gate steht jetzt da und sagt,
+            # dass es nichts geprueft hat.
+            symbol, result = _symbol(SKIP_LEVEL)
+            out.append("%s [%s] keine tasks.md gefunden: %s nicht geprueft"
+                       % (symbol, SKIP_LEVEL,
+                          " und ".join(LABELS[c] for c in checks)))
+            out.append("   └─ tasks.md neben die spec.md legen oder mit "
+                       "--tasks angeben; dieser Lauf sagt nichts ueber die "
+                       "Nachverfolgbarkeit")
+            out.append(line("Ergebnis: %s" % result))
+            out.append("")
+            continue
         printed = False
+        skipped = False
         for check in checks:
             hits = by_check.get(check)
             if not hits:
@@ -90,13 +113,15 @@ def render(spec, findings, tasks, accepted):
             if empty:
                 # "Alle Pruefpunkte erfuellt" bei null Pruefgegenstaenden
                 # ist eine Aussage ueber nichts. Sie wird hier nicht
-                # gemacht.
-                out.append("⏭️ [F5] Nichts Pruefbares gefunden: %s" % scope)
+                # gemacht, und das Ergebnis heisst dann auch nicht PASS.
+                out.append("%s [%s] Nichts Pruefbares gefunden: %s"
+                           % (_symbol(SKIP_LEVEL)[0], SKIP_LEVEL, scope))
+                skipped = True
             else:
                 out.append("✅ [F0] Alle Pruefpunkte erfuellt: %s" % scope)
         levels = [f.level for f in findings
                   if f.check in checks and f not in accepted]
-        result = gate_result(levels)
+        result = _symbol(SKIP_LEVEL)[1] if skipped else gate_result(levels)
         out.append(line("Ergebnis: %s" % result))
         out.append("")
 
@@ -108,10 +133,21 @@ def _symbol(level):
     return symbol, result
 
 
-def as_json(spec, findings, accepted, acceptance_messages=()):
+def skipped_checks(tasks):
+    """Pruefpunkte, die dieser Lauf nicht angesehen hat.
+
+    Ohne tasks.md laeuft AP-07 nicht. Wer die Ausgabe als JSON
+    weiterverarbeitet, soll das an der Ausgabe sehen und nicht daran, dass
+    zwei Pruefpunkte in findings fehlen.
+    """
+    return [] if tasks is not None else list(TRACEABILITY_CHECKS)
+
+
+def as_json(spec, findings, accepted, acceptance_messages=(), tasks=None):
     return json.dumps({
         "spec": spec.path,
         "stories": [story.id for story in spec.stories],
+        "skipped_checks": skipped_checks(tasks),
         "acceptance_problems": list(acceptance_messages),
         "findings": [{
             "check": finding.check,

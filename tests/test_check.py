@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.join(ROOT, "cli"))
 from specforge_check import acceptance  # noqa: E402
 from specforge_check import config as config_mod  # noqa: E402
 from specforge_check import extensions  # noqa: E402
+from specforge_check import report  # noqa: E402
 from specforge_check import rules, severity, spec as spec_mod  # noqa: E402
 from specforge_check.__main__ import main  # noqa: E402
 
@@ -449,6 +450,64 @@ class KonfigurationsWirkungTest(unittest.TestCase):
         document = spec_mod.parse_spec(fixture("02-gherkin-fehlt", "spec.md"))
         findings = rules.run(document, None, configuration)
         self.assertEqual([f.level for f in findings], ["F2"])
+
+
+class AusgabeTest(unittest.TestCase):
+    """Ein Gate, das nicht lief, muss in der Ausgabe stehen.
+
+    Ohne tasks.md fiel Gate G4 frueher kommentarlos aus dem Bericht. Eine
+    geloeschte oder falsch abgelegte Datei nahm damit die AP-07-Pruefung
+    heraus, und was uebrig blieb, sah aus wie ein sauberer Lauf.
+    """
+
+    def _teile(self, mit_tasks):
+        document = spec_mod.parse_spec(fixture("04-orphan-task", "spec.md"))
+        tasks = (spec_mod.parse_tasks(fixture("04-orphan-task", "tasks.md"))
+                 if mit_tasks else None)
+        findings = rules.run(document, tasks, config_mod.Config())
+        return document, tasks, findings
+
+    def _ergebnisse(self, zeilen):
+        """Gate-Titel -> Ergebnis, aus den gerenderten Zeilen gelesen."""
+        gefunden = {}
+        gate = None
+        for zeile in zeilen:
+            if "Gate G" in zeile:
+                gate = zeile.split("Gate ")[1].split(":")[0]
+            elif "Ergebnis:" in zeile and gate:
+                gefunden[gate] = zeile.split("Ergebnis: ")[1].split(" ")[0]
+        return gefunden
+
+    def test_fehlende_tasks_datei_steht_in_der_ausgabe(self):
+        document, tasks, findings = self._teile(False)
+        zeilen = report.render(document, findings, tasks, [])
+        text = "\n".join(zeilen)
+        self.assertIn("Gate G4", text)
+        self.assertIn("keine tasks.md gefunden", text)
+        self.assertEqual(self._ergebnisse(zeilen)["G4"], "SKIP")
+
+    def test_gate_g1_bleibt_davon_unberuehrt(self):
+        document, tasks, findings = self._teile(False)
+        zeilen = report.render(document, findings, tasks, [])
+        self.assertEqual(self._ergebnisse(zeilen)["G1"], "PASS")
+
+    def test_mit_tasks_datei_wird_wieder_geprueft(self):
+        document, tasks, findings = self._teile(True)
+        zeilen = report.render(document, findings, tasks, [])
+        text = "\n".join(zeilen)
+        self.assertNotIn("keine tasks.md gefunden", text)
+        self.assertEqual(self._ergebnisse(zeilen)["G4"], "CONDITIONAL")
+
+    def test_json_nennt_die_nicht_gelaufenen_pruefpunkte(self):
+        document, tasks, findings = self._teile(False)
+        daten = json.loads(report.as_json(document, findings, [], (), tasks))
+        self.assertEqual(daten["skipped_checks"],
+                         ["orphan_task", "orphan_story"])
+
+    def test_json_ist_leer_wenn_alles_lief(self):
+        document, tasks, findings = self._teile(True)
+        daten = json.loads(report.as_json(document, findings, [], (), tasks))
+        self.assertEqual(daten["skipped_checks"], [])
 
 
 if __name__ == "__main__":

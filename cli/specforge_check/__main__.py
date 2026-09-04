@@ -112,7 +112,7 @@ def main(argv=None):
 
     if args.as_json:
         print(report.as_json(document, findings, accepted,
-                             acceptance_messages))
+                             acceptance_messages, tasks))
     else:
         print("specforge check %s" % spec_path)
         print("Profil: %s · Perspektive: %s · Konfiguration: %s"
