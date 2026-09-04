@@ -293,7 +293,7 @@ design/                ← Wireframes, Datenmodelle, Diagramme
 
 ## Skill-Architektur
 
-SpecForge ist als **Multi-File-Skill** aufgebaut: ein Orchestrator (`SKILL.md`) dispatcht zu 10 Fachmodulen und 15 Support-Dateien unter `references/`.
+SpecForge ist als **Multi-File-Skill** aufgebaut: ein Orchestrator (`SKILL.md`) dispatcht zu 10 Fachmodulen und den Support-Dateien unter `references/`.
 
 ```
 specforge/
@@ -327,7 +327,7 @@ specforge/
         └── @bait/                    manifest.md + 8 Prüfpunkte, Stub
 ```
 
-**Skill-Payload: 26 Dateien.** Orchestrator + 10 Fachmodule + 15 Support-Dateien. Die Angaben prüft die CI gegen den Verzeichnisbaum, siehe `scripts/check-docs-numbers.py`.
+**Skill-Payload:** Orchestrator plus 10 Fachmodule und die Support-Dateien unter `references/`. Die Zahl der Fachmodule und die Prüfpunktzahlen prüft die CI gegen den Verzeichnisbaum, siehe `scripts/check-docs-numbers.py`.
 
 ### Warum Multi-File?
 
