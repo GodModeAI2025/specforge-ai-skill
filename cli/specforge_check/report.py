@@ -108,10 +108,11 @@ def _symbol(level):
     return symbol, result
 
 
-def as_json(spec, findings, accepted):
+def as_json(spec, findings, accepted, acceptance_messages=()):
     return json.dumps({
         "spec": spec.path,
         "stories": [story.id for story in spec.stories],
+        "acceptance_problems": list(acceptance_messages),
         "findings": [{
             "check": finding.check,
             "severity": finding.level,

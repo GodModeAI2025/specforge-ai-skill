@@ -224,9 +224,14 @@ Jeder F5-Befund (nicht anwendbar) erfordert eine dokumentierte Begründung. Bei 
 **Risiko:** [Beschreibung des Risikos bei Akzeptanz]
 **Akzeptiert durch:** [Name/Rolle des Leitungsorgans]
 **Kompensation:** [Geplante Maßnahmen zur Risikoreduktion]
-**Frist:** [Bis wann muss der Mangel behoben sein?]
+**Frist:** [YYYY-MM-DD, bis wann der Mangel behoben sein muss]
 **Datum:** [YYYY-MM-DD]
 ```
+
+Alle acht Felder sind Pflicht. Ein Block, dem eines fehlt, ist keine Akzeptanz, sondern eine
+Notiz. Frist und Datum tragen ein Datum im Format `YYYY-MM-DD`; eine abgelaufene Frist beendet
+die Akzeptanz, ohne dass jemand sie zurückziehen muss. `specforge check --risiko-akzeptanz`
+prüft genau das und meldet jeden Block, der die Bedingungen nicht erfüllt.
 
 ---
 

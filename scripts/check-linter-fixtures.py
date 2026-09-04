@@ -20,6 +20,7 @@ import subprocess
 import sys
 
 # Fixture -> (Exit-Code, zusaetzliche Argumente, [(Pruefpunkt, F-Stufe), ...])
+# {fixture} in den Argumenten wird durch das Fixture-Verzeichnis ersetzt.
 ERWARTUNG = {
     "01-valide": (0, [], []),
     "02-gherkin-fehlt": (1, [], [
@@ -42,6 +43,22 @@ ERWARTUNG = {
     "04-orphan-task": (2, [], [
         ("orphan_task", "F3"),
     ]),
+    "04-orphan-task-akzeptiert": (0, [
+        "--risiko-akzeptanz", "{fixture}/risiko-akzeptanz.md"], [
+        ("orphan_task", "F3"),
+    ]),
+    "04-orphan-task-abgelehnt": (2, [
+        "--risiko-akzeptanz", "{fixture}/risiko-abgelehnt.md"], [
+        ("orphan_task", "F3"),
+    ]),
+    "04-orphan-task-unvollstaendig": (2, [
+        "--risiko-akzeptanz", "{fixture}/risiko-unvollstaendig.md"], [
+        ("orphan_task", "F3"),
+    ]),
+    "04-orphan-task-abgelaufen": (2, [
+        "--risiko-akzeptanz", "{fixture}/risiko-abgelaufen.md"], [
+        ("orphan_task", "F3"),
+    ]),
     "05-leer": (1, [], [
         ("no_stories", "F4"),
     ]),
@@ -55,15 +72,24 @@ def repo_root():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+# Varianten desselben Fixtures: anderer Aufruf, dasselbe Verzeichnis.
+VARIANTEN = ("-nach-clarify", "-akzeptiert", "-abgelehnt",
+             "-unvollstaendig", "-abgelaufen")
+
+
 def fixture_dir(root, name):
     """'03-vage-begriffe-nach-clarify' zeigt auf dasselbe Verzeichnis."""
-    base = name.replace("-nach-clarify", "")
+    base = name
+    for suffix in VARIANTEN:
+        base = base.replace(suffix, "")
     return os.path.join(root, "tests", "fixtures", base)
 
 
 def run(root, name, extra):
+    directory = fixture_dir(root, name)
+    arguments = [item.replace("{fixture}", directory) for item in extra]
     command = [sys.executable, os.path.join(root, "cli", "specforge"),
-               "check", fixture_dir(root, name), "--json"] + extra
+               "check", directory, "--json"] + arguments
     process = subprocess.run(command, capture_output=True, text=True)
     return process
 

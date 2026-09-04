@@ -1,8 +1,7 @@
 # Risiko-Akzeptanzen: Rollenverwaltung
 
-Fixture. Die Frist liegt bewusst weit in der Zukunft: eine Testdatei, deren
-Ergebnis sich an einem Stichtag von selbst dreht, prueft ab diesem Tag etwas
-anderes als vorher.
+Fixture fuer die abgelaufene Frist. Der Block ist vollstaendig, seine Frist
+liegt in der Vergangenheit. Eine Freigabe auf Zeit endet mit der Zeit.
 
 ## Risiko-Akzeptanz: orphan_task T-002
 
@@ -12,5 +11,5 @@ anderes als vorher.
 **Risiko:** Die Protokollansicht ist nicht auf eine Anforderung zurückführbar.
 **Akzeptiert durch:** Leitung Betrieb
 **Kompensation:** Story wird mit der nächsten Spec-Version nachgezogen.
-**Frist:** 2099-12-31
-**Datum:** 2026-09-04
+**Frist:** 2020-01-01
+**Datum:** 2019-12-02

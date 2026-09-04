@@ -10,7 +10,10 @@ inputs:
     required: false
     default: 'false'
   risiko-akzeptanz:
-    description: Datei mit CONDITIONAL-Akzeptanz-Protokollen
+    description: >-
+      Datei mit Bloecken nach dem CONDITIONAL-Akzeptanz-Protokoll. Ein Block
+      hebt einen F3-Befund nur auf, wenn alle Pflichtfelder ausgefuellt sind
+      und die Frist nicht abgelaufen ist.
     required: false
     default: ''
 

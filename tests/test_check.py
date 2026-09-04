@@ -11,6 +11,7 @@ und ein Test, der erst ein pip install braucht, laeuft in einer fremden
 Pipeline nicht.
 """
 
+import datetime
 import io
 import json
 import os
@@ -21,6 +22,7 @@ from contextlib import redirect_stdout
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "cli"))
 
+from specforge_check import acceptance  # noqa: E402
 from specforge_check import config as config_mod  # noqa: E402
 from specforge_check import extensions  # noqa: E402
 from specforge_check import rules, severity, spec as spec_mod  # noqa: E402
@@ -229,6 +231,11 @@ class ExitCodeTest(unittest.TestCase):
                            fixture("04-orphan-task", "risiko-akzeptanz.md")])
         self.assertEqual(code, 0)
 
+    def test_fehlende_akzeptanzdatei_ist_exit_3(self):
+        code, _ = run_cli([fixture("04-orphan-task"), "--risiko-akzeptanz",
+                           fixture("04-orphan-task", "gibt-es-nicht.md")])
+        self.assertEqual(code, 3)
+
     def test_fehlender_pfad_exit_3(self):
         code, _ = run_cli([os.path.join(FIXTURES, "gibt-es-nicht")])
         self.assertEqual(code, 3)
@@ -240,6 +247,63 @@ class ExitCodeTest(unittest.TestCase):
         self.assertEqual(data["stories"], ["SF-OPS-001"])
         self.assertEqual(data["findings"][0]["severity"], "F4")
         self.assertEqual(data["findings"][0]["check"], "gherkin_minimum")
+
+
+class RisikoAkzeptanzTest(unittest.TestCase):
+    """Eine Freigabe, die kein Dokument verlangt, ist keine Freigabe."""
+
+    HEUTE = datetime.date(2026, 9, 5)
+
+    def _findings(self):
+        document = spec_mod.parse_spec(fixture("04-orphan-task", "spec.md"))
+        tasks = spec_mod.parse_tasks(fixture("04-orphan-task", "tasks.md"))
+        return rules.run(document, tasks, config_mod.Config())
+
+    def _apply(self, datei):
+        return acceptance.apply(self._findings(),
+                                fixture("04-orphan-task", datei), self.HEUTE)
+
+    def test_vollstaendiger_block_akzeptiert(self):
+        accepted, messages = self._apply("risiko-akzeptanz.md")
+        self.assertEqual([f.check for f in accepted], ["orphan_task"])
+        self.assertEqual(messages, [])
+
+    def test_ablehnung_akzeptiert_nicht(self):
+        """Die Datei nennt Pruefpunkt und Betreff und verweigert trotzdem."""
+        accepted, messages = self._apply("risiko-abgelehnt.md")
+        self.assertEqual(accepted, [])
+        self.assertEqual(len(messages), 1)
+        self.assertIn("keine gueltige Akzeptanz", messages[0])
+
+    def test_fehlende_pflichtfelder_akzeptieren_nicht(self):
+        accepted, messages = self._apply("risiko-unvollstaendig.md")
+        self.assertEqual(accepted, [])
+        self.assertIn("Akzeptiert durch", messages[0])
+        self.assertIn("Kompensation", messages[0])
+
+    def test_abgelaufene_frist_akzeptiert_nicht(self):
+        accepted, messages = self._apply("risiko-abgelaufen.md")
+        self.assertEqual(accepted, [])
+        self.assertIn("abgelaufen", messages[0])
+
+    def test_frist_am_stichtag_gilt_noch(self):
+        blocks = acceptance.parse(fixture("04-orphan-task",
+                                          "risiko-abgelaufen.md"))
+        self.assertEqual(blocks[0].problems(datetime.date(2020, 1, 1)), [])
+        self.assertEqual(blocks[0].problems(datetime.date(2020, 1, 2)), [
+            "Frist 2020-01-01 ist am 2020-01-02 abgelaufen"])
+
+    def test_betreff_wird_als_ganzes_wort_gelesen(self):
+        self.assertTrue(acceptance.names("orphan_task T-002", "T-002"))
+        self.assertFalse(acceptance.names("orphan_task T-0021", "T-002"))
+
+    def test_falsche_f_stufe_im_block_akzeptiert_nicht(self):
+        blocks = acceptance.parse(fixture("04-orphan-task",
+                                          "risiko-akzeptanz.md"))
+        finding = self._findings()[0]
+        self.assertTrue(acceptance.matches(blocks[0], finding))
+        finding.level = "F4"
+        self.assertFalse(acceptance.matches(blocks[0], finding))
 
 
 class ExtensionTest(unittest.TestCase):

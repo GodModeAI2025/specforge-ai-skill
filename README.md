@@ -421,6 +421,15 @@ Exit-Codes: `0` sauber, `1` mindestens ein F4-Befund, `2` ein F3-Befund ohne dok
 Risiko-Akzeptanz, `3` Aufrufproblem. Eine Akzeptanz nach dem CONDITIONAL-Protokoll wird mit
 `--risiko-akzeptanz datei.md` übergeben und hebt Exit 2 auf.
 
+Der Linter liest die Datei als Protokoll, nicht als Fließtext. Ein Block hebt einen F3-Befund nur
+auf, wenn seine Überschrift `## Risiko-Akzeptanz: <Betreff>` den Betreff des Befunds als eigenes
+Wort nennt, alle Pflichtfelder aus
+[enforcement-engine.md I.5](references/enforcement/enforcement-engine.md) ausgefüllt sind (Gate,
+Prüfpunkt, F-Stufe, Risiko, Akzeptiert durch, Kompensation, Frist, Datum), die F-Stufe zum Befund
+passt und die Frist als Datum `YYYY-MM-DD` in der Zukunft liegt. Was daran fehlt, steht als eigene
+Zeile unter `Risiko-Akzeptanz:` in der Ausgabe. Eine Datei, die den Prüfpunkt nur erwähnt, ist
+keine Freigabe.
+
 Das gelesene Format ist in [docs/spec-format.md](docs/spec-format.md) beschrieben. Für fremde
 Repositories liegt eine Composite Action unter `.github/actions/specforge-check/`, ein
 Beispiel-Workflow in [docs/ci-example.yml](docs/ci-example.yml). Die Action ist erst ab dem
