@@ -2,6 +2,11 @@
 
 **Trigger:** spec.md existiert und Clarify ist abgeschlossen (oder bewusst übersprungen).
 
+**Prompt Diet & Execution Rules (RPI Framework):**
+- **Outline First:** Bevor du die detaillierte `plan.md` schreibst, präsentiere dem Nutzer zwingend eine High-Level Outline und kläre offene Fragen (Back-and-Forth).
+- **Iterativer Loop:** Fehlt dir Kontext? Stoppe die Planung und wechsle zurück in die Code-Recherche (Modus 9). Rate niemals Code-Strukturen!
+- Max. 40 Instruktionen pro Schritt.
+
 ---
 
 ## Profil-Steuerung
@@ -58,6 +63,8 @@
 ## Phase 3a: Plan
 
 Erzeugt `plan.md` mit:
+
+**WICHTIG (RPI-Framework):** Jeder Plan MUSS zwingend mit der Sektion `## 0. Research Summary & Context` beginnen. Fasse hier objektiv zusammen, was du in der Codebasis gelesen hast, BEVOR du Implementierungsschritte vorschlägst.
 - Technische Architekturentscheidungen → ADR in `specs/decisions/`
 - **Technisches Datenmodell** (WIE — abgeleitet vom fachlichen Modell in spec.md):
   - Persistenz-Strategie (RDBMS, Document Store, Event Store)

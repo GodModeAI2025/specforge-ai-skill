@@ -3,6 +3,10 @@
 **Trigger:** Bestehende Requirements, Specs oder Stories als Input.
 **Methode:** 3-Ebenen-Prüfkatalog mit deterministischer Schweregrad-Zuordnung.
 
+**Prompt Diet & Execution Rules (RPI Framework):**
+- Gehe strikt Phase für Phase vor. Präsentiere Zwischenergebnisse, bevor du den kompletten Review abschließt.
+- Max. 40 Instruktionen auf einmal verarbeiten.
+
 ## Profil-Steuerung
 
 - **KRITIS:** Alle 3 Ebenen Pflicht; STRIDE vollständig (alle 6 Kategorien); GP-Score ≥ 9/10; Keine offenen BLOCKER/MAJOR erlaubt
@@ -39,6 +43,12 @@ Jede Ebene wird vollständig durchlaufen. Keine Ebene darf übersprungen werden,
 | RQ-08 | ID-Schema | SF-[Präfix]-[NNN] Format eingehalten | MINOR |
 
 #### Story-Quality-Score (SQS) — numerische Qualitätsbewertung
+
+#### Ebene 1.5 — Plan Fidelity Check (Bei Code-Review)
+
+Wenn Code *nach* einem Plan (z.B. `plan.md`) implementiert wurde, vergleiche den generierten Code zwingend mit dem Plan.
+- Jede Datei/Logik, die geändert wurde, aber *nicht* im Plan stand, ist "Drift" (eigenmächtiges Handeln).
+- **Schweregrad bei Drift:** Zwingend **F3 (CONDITIONAL)**. Erfordert explizite Risiko-Akzeptanz vom Nutzer.
 
 Zusätzlich zur binären Prüfung (bestanden/nicht bestanden) erzeugt der Review einen numerischen **Story-Quality-Score (SQS)** pro Story. Der SQS misst *Formulierungsqualität*, nicht Governance-Compliance (das ist der GP-Score).
 
