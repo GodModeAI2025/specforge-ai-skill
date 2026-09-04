@@ -26,6 +26,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Tag gegen die Versionsquelle pruefen
+        env:
+          TAG: ${{ github.ref_name }}
+        run: python scripts/check-version.py --tag "$TAG"
+
       - name: Artefakt bauen
         run: python scripts/package-skill.py dist/specforge-skill.zip
 

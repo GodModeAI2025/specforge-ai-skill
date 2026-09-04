@@ -366,7 +366,7 @@ Die 10 Fachmodule folgen weitgehend derselben Struktur. Wo eine Sektion fehlt od
 
 SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Version wegräumt:
 
-- **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten und Zahlenangaben konsistent. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
+- **Die CI prüft den Skill, nicht die Ergebnisse.** Der Workflow in `.github/workflows/ci.yml` hält Referenzpfade, Frontmatter, Checklisten, Zahlen- und Versionsangaben konsistent und baut das Release-Paket bei jedem Lauf, damit ein kaputtes Paket vor dem Tag auffällt. Ob eine damit erzeugte Spezifikation fachlich taugt, beurteilt weiterhin ein Mensch.
 - **Enforcement wirkt nur in der Session.** Phase Gates, F-Stufen und Anti-Pattern-Erkennung greifen, solange Claude den Skill geladen hat. Es gibt keinen Linter, der eine fertige `spec.md` außerhalb der Session prüft, und keinen Exit-Code für eine Pipeline.
 - **Zwei Schweregrad-Dialekte nebeneinander.** `enforcement-engine.md` und Modus 10 arbeiten mit F-Stufen, mehrere ältere Module noch mit BLOCKER/MAJOR/MINOR. Das Mapping am Ende von `references/checklists/kritis-nfr.md` deckt drei der sechs Stufen ab. Solange das so ist, hängt die gemeldete Stufe davon ab, welches Modul antwortet.
 - **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.

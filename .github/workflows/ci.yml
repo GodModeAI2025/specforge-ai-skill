@@ -31,3 +31,12 @@ jobs:
 
       - name: Zahlenangaben in README und Landingpage pruefen
         run: python scripts/check-docs-numbers.py
+
+      - name: Versionsangaben und Artefaktname pruefen
+        run: python scripts/check-version.py
+
+      - name: Release-Artefakt bauen
+        run: python scripts/package-skill.py dist/specforge-skill.zip
+
+      - name: Release-Artefakt pruefen
+        run: python scripts/check-package.py dist/specforge-skill.zip
