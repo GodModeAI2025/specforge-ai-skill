@@ -27,10 +27,17 @@ Geprueft wird:
    hiesse anders, und der Download bliebe 404.
 6. Die Workflows bauen und pruefen genau diesen Dateinamen, und der
    Release-Workflow haengt an Tags v*.
-7. docs/ci-example.yml pinnt die Composite Action auf denselben Tag. Ein
-   veralteter Pin dort schickt fremde Pipelines auf eine Referenz, die es
-   nicht gibt, und faellt in diesem Repo sonst nie auf.
-8. Mit --tag: der uebergebene Tag ist der aus der Versionsquelle. Der
+7. docs/ci-example.yml existiert, enthaelt mindestens eine uses-Zeile auf
+   die Composite Action, und jede davon lautet
+   <repo>/.github/actions/specforge-check@<Tag der Versionsquelle>. Geprueft
+   wird also der Pin selbst, nicht nur ein zufaellig vorhandener Tag: '@main'
+   ist ein Fehler, eine geloeschte uses-Zeile ebenso, eine geloeschte Datei
+   ebenso. Der Kommentar in derselben Datei nennt den ungepinnten Stand von
+   main als das Risiko, gegen das die Pruefung schuetzt.
+8. Die Zahl der geprueften Angaben liegt nicht unter MINDESTENS_GEPRUEFT.
+   Ein Zaehler, der still faellt, weil eine Angabe verschwunden ist, meldet
+   nichts; eine Untergrenze meldet es.
+9. Mit --tag: der uebergebene Tag ist der aus der Versionsquelle. Der
    Release-Workflow ruft das so auf, damit ein vertipptes Tag kein Release
    erzeugt.
 
@@ -78,6 +85,23 @@ WORKFLOWS = (
 # Beispiel fuer fremde Repositories. Der Tag darin pinnt die Composite
 # Action und muss mitwandern.
 EXAMPLE_WORKFLOW = os.path.join("docs", "ci-example.yml")
+
+# Die Referenz, mit der ein fremdes Repository die Action einbindet. Der
+# Pfad ist fest, nur der Tag dahinter wandert.
+ACTION_PATH = "GodModeAI2025/specforge-ai-skill/.github/actions/specforge-check"
+ACTION_USES_RE = re.compile(
+    r"uses:\s*" + re.escape(ACTION_PATH) + r"@(\S+)")
+
+# Dateien, die die Action einbinden duerfen. Die erste ist Pflicht, in den
+# uebrigen wird jede vorhandene Referenz mitgeprueft.
+ACTION_SOURCES = (EXAMPLE_WORKFLOW, "README.md", "index.html", "SKILL.md")
+
+# Untergrenze fuer die Zahl der geprueften Angaben. Sie stammt aus einem
+# Lauf auf gruenem Stand und faengt den Fall, dass eine Angabe still
+# verschwindet: der Zaehler faellt dann unter die Grenze, statt sich
+# unbemerkt zu verkleinern. Wer eine Angabe absichtlich entfernt, zieht die
+# Zahl hier nach und begruendet das im Commit.
+MINDESTENS_GEPRUEFT = 19
 
 
 def read(path):
@@ -163,6 +187,29 @@ def main(argv):
     example = os.path.join(root, EXAMPLE_WORKFLOW)
     if os.path.isfile(example):
         tag_sources.append((EXAMPLE_WORKFLOW, read(example)))
+    else:
+        errors.append(
+            "%s fehlt. Ueber diese Datei binden fremde Repositorien die "
+            "Action ein; ohne sie prueft niemand den Pin." % EXAMPLE_WORKFLOW)
+
+    # Der Pin selbst, nicht nur ein irgendwo stehender Tag.
+    pinned = 0
+    for relative in ACTION_SOURCES:
+        path = os.path.join(root, relative)
+        if not os.path.isfile(path):
+            continue
+        for reference in ACTION_USES_RE.findall(read(path)):
+            pinned += 1
+            checked += 1
+            if reference != tag:
+                errors.append(
+                    "%s: Action gepinnt auf '%s@%s', die Versionsquelle sagt "
+                    "'%s'" % (relative, ACTION_PATH, reference, tag))
+    if pinned == 0:
+        errors.append(
+            "%s: keine Zeile 'uses: %s@<Tag>'. Ohne Pin laeuft die Pruefung "
+            "in fremden Pipelines gegen den jeweiligen Stand von main."
+            % (EXAMPLE_WORKFLOW, ACTION_PATH))
 
     checked += check_all("README.md", readme, CURRENT_RE, skill,
                          "die Skill-Version", errors)
@@ -200,6 +247,12 @@ def main(argv):
         errors.append("%s: fehlende Berechtigung contents: write"
                       % WORKFLOWS[1])
 
+    if checked < MINDESTENS_GEPRUEFT:
+        errors.append(
+            "Nur %d Angaben geprueft, erwartet mindestens %d. Eine Angabe "
+            "ist verschwunden, oder die Untergrenze ist nicht nachgezogen."
+            % (checked, MINDESTENS_GEPRUEFT))
+
     if tag_argument is not None:
         checked += 1
         if tag_argument != tag:
@@ -214,8 +267,11 @@ def main(argv):
           % (len(history), history[-1] if history else "-"))
     if tag_argument is not None:
         print("Uebergebener Tag:        %s" % tag_argument)
+    print("Action-Pin:              %d Referenz(en) auf %s@%s"
+          % (pinned, ACTION_PATH, tag))
     print("Gepruefte Angaben:       %d in CHANGELOG.md, README.md, "
-          "index.html, den Workflows und %s" % (checked, EXAMPLE_WORKFLOW))
+          "index.html, den Workflows und %s (mindestens %d)"
+          % (checked, EXAMPLE_WORKFLOW, MINDESTENS_GEPRUEFT))
 
     if errors:
         print("")
