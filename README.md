@@ -43,6 +43,26 @@ SpecForge ist ein Claude-Skill (Cowork Plugin / Project Knowledge), der Requirem
 
 ## Installation
 
+Der Skill ist ein Ordner. Es gibt zwei Wege, an ihn zu kommen; ab dann sind die
+drei Varianten gleich.
+
+**Aus dem Release-Archiv:**
+
+```bash
+curl -L -O https://github.com/GodModeAI2025/specforge-ai-skill/releases/latest/download/specforge-skill.zip
+unzip specforge-skill.zip
+```
+
+Das ergibt den Ordner `specforge/` mit `SKILL.md`, `references/`, `LICENSE`,
+`TRADEMARK.md`, einer `VERSION` und einem README, das ohne das Repo auskommt.
+Der Dateiname bleibt über Releases hinweg gleich, `releases/latest/download/`
+zeigt also immer auf das aktuelle Paket. Der Link greift ab dem ersten
+veröffentlichten Tag; solange keiner gesetzt ist, antwortet GitHub mit 404.
+Gebaut wird das Archiv von `scripts/package-skill.py`, das auch lokal läuft.
+
+**Aus dem Repository:** klonen und `SKILL.md` samt `references/` als Ordner
+verwenden. Diesen Weg nimmt, wer am Skill selbst arbeitet.
+
 ### Variante 1: Claude.ai — Als Projekt-Knowledge
 
 1. Öffne ein Claude-Projekt unter [claude.ai](https://claude.ai)
@@ -350,7 +370,7 @@ SpecForge ist Prompt-Text, kein Programm. Daraus folgen Grenzen, die keine Versi
 - **Enforcement wirkt nur in der Session.** Phase Gates, F-Stufen und Anti-Pattern-Erkennung greifen, solange Claude den Skill geladen hat. Es gibt keinen Linter, der eine fertige `spec.md` außerhalb der Session prüft, und keinen Exit-Code für eine Pipeline.
 - **Zwei Schweregrad-Dialekte nebeneinander.** `enforcement-engine.md` und Modus 10 arbeiten mit F-Stufen, mehrere ältere Module noch mit BLOCKER/MAJOR/MINOR. Das Mapping am Ende von `references/checklists/kritis-nfr.md` deckt drei der sechs Stufen ab. Solange das so ist, hängt die gemeldete Stufe davon ab, welches Modul antwortet.
 - **Keine Rechtsberatung.** Die KRITIS-, DORA- und BAIT-Checklisten sind Arbeitshilfen mit Verweis auf die Rechtsquelle. Sie ersetzen keine aufsichtsrechtliche Prüfung. `@bait` ist ausdrücklich ein Stub.
-- **Kein Release-Artefakt.** Kein Tag, kein Paket, kein Download. Installation heißt: Verzeichnis kopieren.
+- **Das Paket ist ein Archiv aus Markdown.** Es installiert nichts und aktualisiert sich nicht. Ein kopierter Ordner erfährt nicht, dass es ein neueres Release gibt; der Abgleich läuft über die `VERSION` im Paket gegen die Releases im Repository.
 - **Deutsch als Arbeitssprache.** Der Skill antwortet englisch auf englische Eingaben, die Referenzdateien und Checklisten bleiben deutsch.
 
 ---
@@ -363,7 +383,7 @@ Offen, in dieser Reihenfolge:
 2. **Beispiel-Spezifikationen ins Repo:** hier liegen nur Templates und Eingabe-Prompts, keine fertige Spec, an der sich ein Ergebnis messen ließe.
 3. **`@bait` vervollständigen:** vom Stub auf die Kapitel der BaFin-Rundschreiben 10/2017 (BA) und 10/2021 (BA).
 4. **Weitere Regulierungen:** MaRisk, PCI-DSS 4.0, EnWG/IT-Sicherheitskatalog. Priorisierung in [CONTRIBUTING-CHECKLISTS.md](CONTRIBUTING-CHECKLISTS.md), Abschnitt 5.
-5. **Release mit Tag:** damit eine Version zitierbar wird und die Landingpage auf etwas Festes zeigen kann.
+5. **Erstes Release veröffentlichen:** Packaging-Skript, Paketprüfung und Release-Workflow liegen im Repo, der Tag `v3.2.0` ist noch nicht gesetzt. Bis dahin läuft `releases/latest/download/` ins Leere.
 6. **Englische Fassung** des Payloads.
 
 ---
@@ -380,12 +400,22 @@ Offen, in dieser Reihenfolge:
 
 ## Versionierung
 
-SpecForge führt zwei Versionen, und nur diese zwei:
+SpecForge führt zwei Versionen, dazu den Tag, unter dem eine davon veröffentlicht wird:
 
 | Gegenstand | Schema | Ort |
 |------------|--------|-----|
-| Skill-Version | `MAJOR.MINOR`, aktuell 3.2 | [CHANGELOG.md](CHANGELOG.md), Badge auf der Landingpage |
+| Skill-Version | `MAJOR.MINOR`, aktuell 3.2 | [CHANGELOG.md](CHANGELOG.md), Abschnitt Aktuelles Release; Badge auf der Landingpage |
+| Release-Tag | `v{MAJOR}.{MINOR}.{PATCH}`, aktuell `v3.2.0` | derselbe Abschnitt; darauf reagiert `.github/workflows/release.yml` |
 | Artefakt-Version | `YYYY.MM.DD.N`, N = laufende Nummer am selben Tag | `version:`-Feld im Header jeder erzeugten `spec.md`, `constitution.md` und `plan.md` |
+
+Der Tag ist keine dritte Version, sondern die Skill-Version mit einer
+Patch-Stelle. Sie zählt Korrekturen, die den Funktionsumfang nicht verändern.
+Ein Funktionsschritt erhöht die Skill-Version, nicht die Patch-Stelle.
+
+Gepflegt wird die Version an genau einer Stelle: in der Tabelle unter
+"Aktuelles Release" in [CHANGELOG.md](CHANGELOG.md). Packaging-Skript und
+Release-Workflow lesen sie dort, `scripts/check-version.py` prüft dieses README,
+die Landingpage und den Artefaktnamen dagegen.
 
 Verbindlich ist die Artefakt-Versionierung in [SKILL.md](SKILL.md), Abschnitt Versionierung. Die Templates unter `references/templates/` geben dasselbe Schema vor. Die früher genannte Schreibweise `v<YYMM>-green` war ein Audit-Status, keine Version, und wird nicht mehr verwendet.
 
