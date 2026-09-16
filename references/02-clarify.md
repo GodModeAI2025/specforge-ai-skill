@@ -33,6 +33,23 @@ Spec systematisch nach Lücken scannen (MECE-vollständig):
 - Fehlende Abhängigkeitsdeklarationen zwischen Stories
 - Implizite Annahmen über Systemgrenzen/Schnittstellen
 
+### Zurückstellen an die Plan-Phase (eng begrenzt)
+
+"Klärt sich im Plan" ist kein Grund, eine Lücke aus der Fragen-Queue zu nehmen. Zurückgestellt werden
+darf nur, was zum HOW gehört und damit ohnehin nicht in die Spec gehört (AP-01):
+
+- Umsetzungsweg (Verfahren, Algorithmus, Bibliothek)
+- Technologie- oder Produktvergleich
+- Zerlegung in Tasks
+
+Ausnahme: Hat die HOW-Frage Architektur- oder Schnittstellen-Impact (F4, z. B. das Auth-Verfahren in SF-SEC-001),
+bleibt sie in Clarify und blockiert Gate G2.
+
+Alles andere bleibt Clarify-Gegenstand, auch wenn die Antwort erst später belastbar wird: NFRs und ihre
+Zielwerte, Gherkin-ACs, Fehler- und Unwanted-Szenarien, Grenzfälle, leere und Randzustände,
+Schnittstellen- und Systemgrenzen. Reicht das Fragen-Budget nicht, gilt die Regel aus der
+Fehlerbehandlung: als `[Annahme: ...]` markieren und in die nächste Runde nehmen, nicht an Plan abgeben.
+
 ---
 
 ## Phase 2b: Sokratische Befragung
@@ -113,6 +130,7 @@ Clarify ist abgeschlossen wenn:
 [ ] [F3]-Fragen mit Risiko-Akzeptanz dokumentiert oder gelöst
 [ ] Vage Begriffe durch quantifizierte Werte ersetzt
 [ ] [Annahme: ...]-Marker bestätigt oder verworfen
+[ ] An Plan zurückgestellt nur Umsetzungsweg, Technologievergleich, Task-Zerlegung
 ── Ergebnis: PASS | FAIL (Befunde) ─────────
 ```
 
@@ -125,6 +143,7 @@ Clarify ist abgeschlossen wenn:
 | Vage Begriffe aus Blocklist | Jede Clarification gegen Blocklist prüfen: "schnell", "viele", "einfach", "skalierbar", "sicher", "zuverlässig" → AP-04 | F4 |
 | Fragen-Budget | Max. 5 Fragen pro Runde (Clarify-spezifisch, sonst 3) | n.a. |
 | F4-Fragen vor Plan lösen | Offene F4-Fragen blockieren Gate G2 | F4 |
+| Zurückstellen begrenzt | Eine an Plan zurückgestellte Frage, die nicht Umsetzungsweg, Technologievergleich oder Task-Zerlegung betrifft, gilt als offen | F-Stufe der Frage |
 | Anti-Pattern-Prüfung | AP-01–AP-08 bei jeder Reformulierung | Schweregrad laut AP-Tabelle |
 | Artefakt-Aktualisierung als Datei | Clarifications in spec.md als Datei, nicht inline | F2 |
 | F-Stufen-Zuweisung | Deterministisch: Architektur- oder Schnittstellen-Impact = F4, Detailentscheidung mit Risikowirkung = F3, Detailfrage ohne Risikowirkung = F2, Verständnisfrage = F1, für dieses Projekt nicht anwendbar = F5 | n.a. |
