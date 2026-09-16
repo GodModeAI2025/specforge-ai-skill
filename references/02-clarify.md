@@ -42,6 +42,9 @@ darf nur, was zum HOW gehört und damit ohnehin nicht in die Spec gehört (AP-01
 - Technologie- oder Produktvergleich
 - Zerlegung in Tasks
 
+Ausnahme: Hat die HOW-Frage Architektur- oder Schnittstellen-Impact (F4, z. B. das Auth-Verfahren in SF-SEC-001),
+bleibt sie in Clarify und blockiert Gate G2.
+
 Alles andere bleibt Clarify-Gegenstand, auch wenn die Antwort erst später belastbar wird: NFRs und ihre
 Zielwerte, Gherkin-ACs, Fehler- und Unwanted-Szenarien, Grenzfälle, leere und Randzustände,
 Schnittstellen- und Systemgrenzen. Reicht das Fragen-Budget nicht, gilt die Regel aus der
