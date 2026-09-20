@@ -100,14 +100,16 @@ nur als durchgeführt, wenn das zugehörige Artefakt vorliegt:
 | 3 Fixture | Fixture existiert und passt zum aktuellen Schema (GP-01) | Fixture aus einer älteren Schema-Version |
 | 4 Provider | Benannte Provider-Dateien existieren mit der beschriebenen Änderung | Nur eine Absichtserklärung im Task |
 | 5 Consumer | Consumer nutzt das öffentliche Interface (GP-09) | Consumer greift weiter auf Provider-Interna zu |
-| 6 Tests | Testlauf mit Ergebnis (Datum, Umfang, Befund) | „Tests laufen grün“ ohne Lauf |
+| 6 Tests | Auffindbarer CI-Lauf oder Testreport mit Datum, Umfang und Befund | „Tests laufen grün“ ohne auffindbaren Lauf |
 | 7 Breaking Changes | Eintrag im API-Changelog mit Migrationshinweis | Breaking Change nur in der Commit-Message |
 | 8 ARCHITECTURE.md | Codemap/Invariants zeigen den neuen Stand | Datei unverändert (Gate G5, F3) |
 
 **Regeln:**
 - Jeder Task wird geprüft, auch ein vollständig abgehakter. Abgehakt heißt nicht belegt.
 - Lässt sich ein Beleg nicht prüfen (kein Zugriff, Artefakt außerhalb des Repos), gilt der Schritt als
-  **offen** und wird als Lücke geführt — nie als durchgeführt.
+  **offen** und wird als Lücke geführt — nie als durchgeführt. In der Lücken-Spalte steht dann
+  `nicht prüfbar` mit dem Grund, damit ein fehlender Zugriff nicht wie ein übersprungener Schritt gelesen
+  wird (gleiche Absicht wie die `[Annahme: ...]`-Markierung in Clarify).
 - Ein nachgezogener Beleg (Spec erst nach dem Code aktualisiert) schließt die Lücke inhaltlich, bleibt
   aber ein SFC-01-Verstoß (GP-02).
 
@@ -121,6 +123,7 @@ nur als durchgeführt, wenn das zugehörige Artefakt vorliegt:
 | T-001 | 1,2,3,4,6,8 | 1,2,3,4,6,8 | — | ✅ |
 | T-002 | 1,4,5,6 | 1,4,6 | 5 (Consumer) | ⚠️ |
 | T-003 | 1,2,3,4,6,8 | 1,2,3 | 4,6,8 (abgehakt, ohne Beleg) | ⚠️ |
+| T-004 | 1,4,6 | 1,4 | 6 (nicht prüfbar: CI außerhalb des Repos) | ⚠️ |
 
 **Chain-Compliance:** X/Y Tasks vollständig
 ```

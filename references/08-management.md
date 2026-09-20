@@ -63,7 +63,8 @@ Prüft ob die 8-Schritt-Kette (→ `references/conventions/spec-first-chain.md`)
 
 **Belegpflicht:** Geprüft wird jeder Task, auch ein vollständig abgehakter. Ein ✅ in tasks.md ist eine
 Behauptung, kein Beleg — maßgeblich ist das Artefakt (Belegtabelle in
-`references/conventions/spec-first-chain.md`). Ist ein Beleg nicht prüfbar, gilt der Schritt als Lücke.
+`references/conventions/spec-first-chain.md`). Ist ein Beleg nicht prüfbar, gilt der Schritt als Lücke
+und wird in der Lücken-Spalte als `nicht prüfbar` mit Grund ausgewiesen.
 
 **Output:**
 ```markdown
@@ -74,6 +75,7 @@ Behauptung, kein Beleg — maßgeblich ist das Artefakt (Belegtabelle in
 | T-001 | 1,2,3,4,6,8 | 1,2,3,4,6,8 | — | ✅ |
 | T-002 | 1,4,5,6 | 1,4,6 | 5 (Consumer) | ⚠️ F3 |
 | T-003 | 1,2,3,4,6,8 | 1,2,3 | 4,6,8 (abgehakt, ohne Beleg) | ⚠️ F3 |
+| T-004 | 1,4,6 | 1,4 | 6 (nicht prüfbar: CI außerhalb des Repos) | ⚠️ F3 |
 
 **Chain-Compliance:** [X/Y] Tasks vollständig ([Z%])
 ```
