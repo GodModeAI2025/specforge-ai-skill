@@ -88,15 +88,39 @@
 8. ⬜ ARCHITECTURE.md: User-Modul in Codemap ergänzen
 ```
 
+## Beleg pro Schritt (Enforcement)
+
+Das ✅ in der Task-Annotation ist eine Behauptung, kein Beleg. Für den Chain-Audit zählt ein Schritt
+nur als durchgeführt, wenn das zugehörige Artefakt vorliegt:
+
+| Schritt | Beleg | Kein Beleg |
+|---------|-------|-----------|
+| 1 Spec | Requirement-ID existiert in spec.md und deckt die Änderung ab | Task nennt eine ID, die es in spec.md nicht gibt |
+| 2 Schema | Endpoint/Feld/Event steht im Contract unter `contracts/` | Schema-Datei unverändert |
+| 3 Fixture | Fixture existiert und passt zum aktuellen Schema (GP-01) | Fixture aus einer älteren Schema-Version |
+| 4 Provider | Benannte Provider-Dateien existieren mit der beschriebenen Änderung | Nur eine Absichtserklärung im Task |
+| 5 Consumer | Consumer nutzt das öffentliche Interface (GP-09) | Consumer greift weiter auf Provider-Interna zu |
+| 6 Tests | Testlauf mit Ergebnis (Datum, Umfang, Befund) | „Tests laufen grün“ ohne Lauf |
+| 7 Breaking Changes | Eintrag im API-Changelog mit Migrationshinweis | Breaking Change nur in der Commit-Message |
+| 8 ARCHITECTURE.md | Codemap/Invariants zeigen den neuen Stand | Datei unverändert (Gate G5, F3) |
+
+**Regeln:**
+- Jeder Task wird geprüft, auch ein vollständig abgehakter. Abgehakt heißt nicht belegt.
+- Lässt sich ein Beleg nicht prüfen (kein Zugriff, Artefakt außerhalb des Repos), gilt der Schritt als
+  **offen** und wird als Lücke geführt — nie als durchgeführt.
+- Ein nachgezogener Beleg (Spec erst nach dem Code aktualisiert) schließt die Lücke inhaltlich, bleibt
+  aber ein SFC-01-Verstoß (GP-02).
+
 ## Chain-Audit (Modus 8)
 
 ```markdown
 ## Spec-First Chain Audit: [Feature-Name]
 
-| Task | Steps erwartet | Steps durchgeführt | Lücken | Status |
-|------|---------------|-------------------|--------|--------|
+| Task | Steps erwartet | Steps belegt | Lücken | Status |
+|------|---------------|-------------|--------|--------|
 | T-001 | 1,2,3,4,6,8 | 1,2,3,4,6,8 | — | ✅ |
 | T-002 | 1,4,5,6 | 1,4,6 | 5 (Consumer) | ⚠️ |
+| T-003 | 1,2,3,4,6,8 | 1,2,3 | 4,6,8 (abgehakt, ohne Beleg) | ⚠️ |
 
 **Chain-Compliance:** X/Y Tasks vollständig
 ```
